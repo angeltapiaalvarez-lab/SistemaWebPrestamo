@@ -20,10 +20,12 @@ class Roles extends Migration
                 'constraint' => '150',
             ],
             'permisos' => [
-                'type' => 'TEXT'
+                'type' => 'TEXT',
+                'null' => true,
             ],
             'estado' => [
-                'type' => 'INT'
+                'type' => 'INT',
+                'default' => '1',
             ],
             'created_at' => [
                 'type'       => 'DATETIME'

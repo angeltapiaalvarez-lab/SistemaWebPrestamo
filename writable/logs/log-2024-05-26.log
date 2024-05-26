@@ -1,0 +1,189 @@
+CRITICAL - 2024-05-26 19:57:00 --> The framework needs the following extension(s) installed and loaded: intl.
+in SYSTEMPATH\CodeIgniter.php on line 226.
+ 1 SYSTEMPATH\CodeIgniter.php(226): CodeIgniter\Exceptions\FrameworkException::forMissingExtension('intl')
+ 2 SYSTEMPATH\CodeIgniter.php(190): CodeIgniter\CodeIgniter->resolvePlatformExtensions()
+ 3 FCPATH\index.php(55): CodeIgniter\CodeIgniter->initialize()
+CRITICAL - 2024-05-26 19:58:59 --> The framework needs the following extension(s) installed and loaded: intl.
+in SYSTEMPATH\CodeIgniter.php on line 226.
+ 1 SYSTEMPATH\CodeIgniter.php(226): CodeIgniter\Exceptions\FrameworkException::forMissingExtension('intl')
+ 2 SYSTEMPATH\CodeIgniter.php(190): CodeIgniter\CodeIgniter->resolvePlatformExtensions()
+ 3 FCPATH\index.php(55): CodeIgniter\CodeIgniter->initialize()
+CRITICAL - 2024-05-26 18:19:24 --> Cannot declare class App\Database\Migrations\Admin, because the name is already in use
+in APPPATH\Database\Migrations\2024-02-17-212827_Admin.php on line 7.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+ERROR - 2024-05-26 18:25:24 --> Error connecting to the database: mysqli_sql_exception: Unknown database 'prestamos' in C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php:173
+Stack trace:
+#0 C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php(173): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'prestamos', 3306, '', 0)
+#1 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(574): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(1409): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#4 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(1428): CodeIgniter\Database\BaseConnection->listTables()
+#5 C:\xampp\htdocs\codeigniter\system\Database\MigrationRunner.php(768): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#6 C:\xampp\htdocs\codeigniter\system\Database\MigrationRunner.php(168): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 C:\xampp\htdocs\codeigniter\system\Commands\Database\Migrate.php(84): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 C:\xampp\htdocs\codeigniter\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\codeigniter\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\codeigniter\spark(97): CodeIgniter\CLI\Console->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Unknown database 'prestamos' in C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(574): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(1409): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#3 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(1428): CodeIgniter\Database\BaseConnection->listTables()
+#4 C:\xampp\htdocs\codeigniter\system\Database\MigrationRunner.php(768): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#5 C:\xampp\htdocs\codeigniter\system\Database\MigrationRunner.php(168): CodeIgniter\Database\MigrationRunner->ensureTable()
+#6 C:\xampp\htdocs\codeigniter\system\Commands\Database\Migrate.php(84): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#7 C:\xampp\htdocs\codeigniter\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Migrate->run(Array)
+#8 C:\xampp\htdocs\codeigniter\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('migrate', Array)
+#9 C:\xampp\htdocs\codeigniter\spark(97): CodeIgniter\CLI\Console->run()
+#10 {main}
+ERROR - 2024-05-26 18:26:10 --> Error connecting to the database: mysqli_sql_exception: Unknown database 'prestamos' in C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php:173
+Stack trace:
+#0 C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php(173): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'prestamos', 3306, '', 0)
+#1 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(574): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(1409): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#4 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(1428): CodeIgniter\Database\BaseConnection->listTables()
+#5 C:\xampp\htdocs\codeigniter\system\Database\MigrationRunner.php(768): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#6 C:\xampp\htdocs\codeigniter\system\Database\MigrationRunner.php(168): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 C:\xampp\htdocs\codeigniter\system\Commands\Database\Migrate.php(84): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 C:\xampp\htdocs\codeigniter\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\codeigniter\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\codeigniter\spark(97): CodeIgniter\CLI\Console->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Unknown database 'prestamos' in C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(574): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(1409): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#3 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(1428): CodeIgniter\Database\BaseConnection->listTables()
+#4 C:\xampp\htdocs\codeigniter\system\Database\MigrationRunner.php(768): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#5 C:\xampp\htdocs\codeigniter\system\Database\MigrationRunner.php(168): CodeIgniter\Database\MigrationRunner->ensureTable()
+#6 C:\xampp\htdocs\codeigniter\system\Commands\Database\Migrate.php(84): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#7 C:\xampp\htdocs\codeigniter\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Migrate->run(Array)
+#8 C:\xampp\htdocs\codeigniter\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('migrate', Array)
+#9 C:\xampp\htdocs\codeigniter\spark(97): CodeIgniter\CLI\Console->run()
+#10 {main}
+ERROR - 2024-05-26 19:09:08 --> mysqli_sql_exception: Unknown column 'update_at' in 'field list' in C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `co...', 0)
+#1 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `co...')
+#2 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `co...')
+#3 C:\xampp\htdocs\codeigniter\system\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `co...', Array, false)
+#4 C:\xampp\htdocs\codeigniter\app\Database\Seeds\AdminSeeder.php(25): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\AdminSeeder->run()
+#6 C:\xampp\htdocs\codeigniter\app\Database\Seeds\MainSeeder.php(11): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#7 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\MainSeeder->run()
+#8 C:\xampp\htdocs\codeigniter\system\Commands\Database\Seed.php(77): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#9 C:\xampp\htdocs\codeigniter\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Seed->run(Array)
+#10 C:\xampp\htdocs\codeigniter\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#11 C:\xampp\htdocs\codeigniter\spark(97): CodeIgniter\CLI\Console->run()
+#12 {main}
+ERROR - 2024-05-26 19:09:46 --> mysqli_sql_exception: Unknown column 'update_at' in 'field list' in C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `co...', 0)
+#1 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `co...')
+#2 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `co...')
+#3 C:\xampp\htdocs\codeigniter\system\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `co...', Array, false)
+#4 C:\xampp\htdocs\codeigniter\app\Database\Seeds\AdminSeeder.php(25): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\AdminSeeder->run()
+#6 C:\xampp\htdocs\codeigniter\app\Database\Seeds\MainSeeder.php(11): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#7 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\MainSeeder->run()
+#8 C:\xampp\htdocs\codeigniter\system\Commands\Database\Seed.php(77): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#9 C:\xampp\htdocs\codeigniter\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Seed->run(Array)
+#10 C:\xampp\htdocs\codeigniter\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#11 C:\xampp\htdocs\codeigniter\spark(97): CodeIgniter\CLI\Console->run()
+#12 {main}
+ERROR - 2024-05-26 19:11:39 --> mysqli_sql_exception: Unknown column 'apellido' in 'field list' in C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `co...', 0)
+#1 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `co...')
+#2 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `co...')
+#3 C:\xampp\htdocs\codeigniter\system\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `co...', Array, false)
+#4 C:\xampp\htdocs\codeigniter\app\Database\Seeds\UsuariosSeeder.php(26): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\UsuariosSeeder->run()
+#6 C:\xampp\htdocs\codeigniter\app\Database\Seeds\MainSeeder.php(13): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#7 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\MainSeeder->run()
+#8 C:\xampp\htdocs\codeigniter\system\Commands\Database\Seed.php(77): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#9 C:\xampp\htdocs\codeigniter\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Seed->run(Array)
+#10 C:\xampp\htdocs\codeigniter\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#11 C:\xampp\htdocs\codeigniter\spark(97): CodeIgniter\CLI\Console->run()
+#12 {main}
+ERROR - 2024-05-26 19:12:29 --> mysqli_sql_exception: Duplicate entry '123456789' for key 'identidad' in C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `co...', 0)
+#1 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `co...')
+#2 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `co...')
+#3 C:\xampp\htdocs\codeigniter\system\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `co...', Array, false)
+#4 C:\xampp\htdocs\codeigniter\app\Database\Seeds\AdminSeeder.php(25): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\AdminSeeder->run()
+#6 C:\xampp\htdocs\codeigniter\app\Database\Seeds\MainSeeder.php(11): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#7 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\MainSeeder->run()
+#8 C:\xampp\htdocs\codeigniter\system\Commands\Database\Seed.php(77): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#9 C:\xampp\htdocs\codeigniter\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Seed->run(Array)
+#10 C:\xampp\htdocs\codeigniter\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#11 C:\xampp\htdocs\codeigniter\spark(97): CodeIgniter\CLI\Console->run()
+#12 {main}
+ERROR - 2024-05-26 19:13:46 --> mysqli_sql_exception: Unknown column 'id-rol' in 'field list' in C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `us...', 0)
+#1 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `us...')
+#2 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `us...')
+#3 C:\xampp\htdocs\codeigniter\system\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `us...', Array, false)
+#4 C:\xampp\htdocs\codeigniter\app\Database\Seeds\UsuariosSeeder.php(26): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\UsuariosSeeder->run()
+#6 C:\xampp\htdocs\codeigniter\app\Database\Seeds\MainSeeder.php(13): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#7 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\MainSeeder->run()
+#8 C:\xampp\htdocs\codeigniter\system\Commands\Database\Seed.php(77): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#9 C:\xampp\htdocs\codeigniter\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Seed->run(Array)
+#10 C:\xampp\htdocs\codeigniter\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#11 C:\xampp\htdocs\codeigniter\spark(97): CodeIgniter\CLI\Console->run()
+#12 {main}
+ERROR - 2024-05-26 19:14:29 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`prestamo`.`usuarios`, CONSTRAINT `fk_roles` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) in C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `us...', 0)
+#1 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `us...')
+#2 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `us...')
+#3 C:\xampp\htdocs\codeigniter\system\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `us...', Array, false)
+#4 C:\xampp\htdocs\codeigniter\app\Database\Seeds\UsuariosSeeder.php(26): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\UsuariosSeeder->run()
+#6 C:\xampp\htdocs\codeigniter\app\Database\Seeds\MainSeeder.php(13): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#7 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\MainSeeder->run()
+#8 C:\xampp\htdocs\codeigniter\system\Commands\Database\Seed.php(77): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#9 C:\xampp\htdocs\codeigniter\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Seed->run(Array)
+#10 C:\xampp\htdocs\codeigniter\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#11 C:\xampp\htdocs\codeigniter\spark(97): CodeIgniter\CLI\Console->run()
+#12 {main}
+ERROR - 2024-05-26 19:15:19 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`prestamo`.`usuarios`, CONSTRAINT `fk_roles` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) in C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `us...', 0)
+#1 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `us...')
+#2 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `us...')
+#3 C:\xampp\htdocs\codeigniter\system\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `us...', Array, false)
+#4 C:\xampp\htdocs\codeigniter\app\Database\Seeds\UsuariosSeeder.php(26): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\UsuariosSeeder->run()
+#6 C:\xampp\htdocs\codeigniter\app\Database\Seeds\MainSeeder.php(13): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#7 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\MainSeeder->run()
+#8 C:\xampp\htdocs\codeigniter\system\Commands\Database\Seed.php(77): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#9 C:\xampp\htdocs\codeigniter\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Seed->run(Array)
+#10 C:\xampp\htdocs\codeigniter\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#11 C:\xampp\htdocs\codeigniter\spark(97): CodeIgniter\CLI\Console->run()
+#12 {main}
+ERROR - 2024-05-26 19:24:38 --> mysqli_sql_exception: Duplicate entry '123456789' for key 'identidad' in C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\codeigniter\system\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `co...', 0)
+#1 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `co...')
+#2 C:\xampp\htdocs\codeigniter\system\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `co...')
+#3 C:\xampp\htdocs\codeigniter\system\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `co...', Array, false)
+#4 C:\xampp\htdocs\codeigniter\app\Database\Seeds\AdminSeeder.php(25): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\AdminSeeder->run()
+#6 C:\xampp\htdocs\codeigniter\app\Database\Seeds\MainSeeder.php(11): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#7 C:\xampp\htdocs\codeigniter\system\Database\Seeder.php(146): App\Database\Seeds\MainSeeder->run()
+#8 C:\xampp\htdocs\codeigniter\system\Commands\Database\Seed.php(77): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#9 C:\xampp\htdocs\codeigniter\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Seed->run(Array)
+#10 C:\xampp\htdocs\codeigniter\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#11 C:\xampp\htdocs\codeigniter\spark(97): CodeIgniter\CLI\Console->run()
+#12 {main}
