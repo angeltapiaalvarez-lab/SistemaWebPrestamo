@@ -174,7 +174,7 @@ abstract class BaseResult implements ResultInterface
      */
     public function getResultArray(): array
     {
-        if ($this->resultArray !== []) {
+        if (! empty($this->resultArray)) {
             return $this->resultArray;
         }
 
@@ -214,7 +214,7 @@ abstract class BaseResult implements ResultInterface
      */
     public function getResultObject(): array
     {
-        if ($this->resultObject !== []) {
+        if (! empty($this->resultObject)) {
             return $this->resultObject;
         }
 
@@ -254,16 +254,14 @@ abstract class BaseResult implements ResultInterface
      *
      * If row doesn't exist, returns null.
      *
-     * @param int|string $n    The index of the results to return, or column name.
-     * @param string     $type The type of result object. 'array', 'object' or class name.
-     * @phpstan-param class-string|'array'|'object' $type
+     * @param int    $n    The index of the results to return
+     * @param string $type The type of result object. 'array', 'object' or class name.
      *
      * @return array|object|stdClass|null
      * @phpstan-return ($type is 'object' ? stdClass|null : ($type is 'array' ? array|null : object|null))
      */
     public function getRow($n = 0, string $type = 'object')
     {
-        // $n is a column name.
         if (! is_numeric($n)) {
             // We cache the row data for subsequent uses
             if (! is_array($this->rowData)) {
@@ -323,7 +321,7 @@ abstract class BaseResult implements ResultInterface
     public function getRowArray(int $n = 0)
     {
         $result = $this->getResultArray();
-        if ($result === []) {
+        if (empty($result)) {
             return null;
         }
 
@@ -344,7 +342,7 @@ abstract class BaseResult implements ResultInterface
     public function getRowObject(int $n = 0)
     {
         $result = $this->getResultObject();
-        if ($result === []) {
+        if (empty($result)) {
             return null;
         }
 
@@ -392,7 +390,7 @@ abstract class BaseResult implements ResultInterface
     {
         $result = $this->getResult($type);
 
-        return ($result === []) ? null : $result[0];
+        return (empty($result)) ? null : $result[0];
     }
 
     /**
@@ -404,7 +402,7 @@ abstract class BaseResult implements ResultInterface
     {
         $result = $this->getResult($type);
 
-        return ($result === []) ? null : $result[count($result) - 1];
+        return (empty($result)) ? null : $result[count($result) - 1];
     }
 
     /**
@@ -415,7 +413,7 @@ abstract class BaseResult implements ResultInterface
     public function getNextRow(string $type = 'object')
     {
         $result = $this->getResult($type);
-        if ($result === []) {
+        if (empty($result)) {
             return null;
         }
 
@@ -430,7 +428,7 @@ abstract class BaseResult implements ResultInterface
     public function getPreviousRow(string $type = 'object')
     {
         $result = $this->getResult($type);
-        if ($result === []) {
+        if (empty($result)) {
             return null;
         }
 

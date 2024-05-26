@@ -13,6 +13,7 @@ namespace CodeIgniter\Session\Handlers;
 
 use CodeIgniter\I18n\Time;
 use CodeIgniter\Session\Exceptions\SessionException;
+use Config\App as AppConfig;
 use Config\Session as SessionConfig;
 use Memcached;
 use ReturnTypeWillChange;
@@ -53,24 +54,31 @@ class MemcachedHandler extends BaseHandler
     /**
      * @throws SessionException
      */
-    public function __construct(SessionConfig $config, string $ipAddress)
+    public function __construct(AppConfig $config, string $ipAddress)
     {
         parent::__construct($config, $ipAddress);
 
-        $this->sessionExpiration = $config->expiration;
+        /** @var SessionConfig|null $session */
+        $session = config('Session');
+
+        $this->sessionExpiration = ($session instanceof SessionConfig)
+            ? $session->expiration : $config->sessionExpiration;
 
         if (empty($this->savePath)) {
             throw SessionException::forEmptySavepath();
         }
 
         // Add sessionCookieName for multiple session cookies.
-        $this->keyPrefix .= $config->cookieName . ':';
+        $this->keyPrefix .= ($session instanceof SessionConfig)
+            ? $session->cookieName : $config->sessionCookieName . ':';
 
         if ($this->matchIP === true) {
             $this->keyPrefix .= $this->ipAddress . ':';
         }
 
-        ini_set('memcached.sess_prefix', $this->keyPrefix);
+        if (! empty($this->keyPrefix)) {
+            ini_set('memcached.sess_prefix', $this->keyPrefix);
+        }
     }
 
     /**
@@ -123,7 +131,7 @@ class MemcachedHandler extends BaseHandler
             }
         }
 
-        if ($serverList === []) {
+        if (empty($serverList)) {
             $this->logger->error('Session: Memcached server pool is empty.');
 
             return false;

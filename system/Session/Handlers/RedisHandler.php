@@ -13,6 +13,7 @@ namespace CodeIgniter\Session\Handlers;
 
 use CodeIgniter\I18n\Time;
 use CodeIgniter\Session\Exceptions\SessionException;
+use Config\App as AppConfig;
 use Config\Session as SessionConfig;
 use Redis;
 use RedisException;
@@ -66,16 +67,28 @@ class RedisHandler extends BaseHandler
      *
      * @throws SessionException
      */
-    public function __construct(SessionConfig $config, string $ipAddress)
+    public function __construct(AppConfig $config, string $ipAddress)
     {
         parent::__construct($config, $ipAddress);
 
+        /** @var SessionConfig|null $session */
+        $session = config('Session');
+
         // Store Session configurations
-        $this->sessionExpiration = ($config->expiration === 0)
-            ? (int) ini_get('session.gc_maxlifetime')
-            : $config->expiration;
-        // Add sessionCookieName for multiple session cookies.
-        $this->keyPrefix .= $config->cookieName . ':';
+        if ($session instanceof SessionConfig) {
+            $this->sessionExpiration = empty($session->expiration)
+                ? (int) ini_get('session.gc_maxlifetime')
+                : (int) $session->expiration;
+            // Add sessionCookieName for multiple session cookies.
+            $this->keyPrefix .= $session->cookieName . ':';
+        } else {
+            // `Config/Session.php` is absence
+            $this->sessionExpiration = empty($config->sessionExpiration)
+                ? (int) ini_get('session.gc_maxlifetime')
+                : (int) $config->sessionExpiration;
+            // Add sessionCookieName for multiple session cookies.
+            $this->keyPrefix .= $config->sessionCookieName . ':';
+        }
 
         $this->setSavePath();
 
@@ -223,7 +236,7 @@ class RedisHandler extends BaseHandler
 
                 if (($pingReply === true) || ($pingReply === '+PONG')) {
                     if (isset($this->lockKey)) {
-                        $this->releaseLock();
+                        $this->redis->del($this->lockKey);
                     }
 
                     if (! $this->redis->close()) {
@@ -293,10 +306,7 @@ class RedisHandler extends BaseHandler
         $attempt = 0;
 
         do {
-            $ttl = $this->redis->ttl($lockKey);
-            assert(is_int($ttl));
-
-            if ($ttl > 0) {
+            if (($ttl = $this->redis->ttl($lockKey)) > 0) {
                 sleep(1);
 
                 continue;

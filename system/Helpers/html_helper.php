@@ -313,7 +313,7 @@ if (! function_exists('video')) {
             $video .= _space_indent() . $track . "\n";
         }
 
-        if ($unsupportedMessage !== '') {
+        if (! empty($unsupportedMessage)) {
             $video .= _space_indent()
                     . $unsupportedMessage
                     . "\n";
@@ -359,7 +359,7 @@ if (! function_exists('audio')) {
             $audio .= "\n" . _space_indent() . $track;
         }
 
-        if ($unsupportedMessage !== '') {
+        if (! empty($unsupportedMessage)) {
             $audio .= "\n" . _space_indent() . $unsupportedMessage . "\n";
         }
 
@@ -377,7 +377,7 @@ if (! function_exists('_media')) {
     {
         $media = '<' . $name;
 
-        if ($attributes === '') {
+        if (empty($attributes)) {
             $media .= '>';
         } else {
             $media .= ' ' . $attributes . '>';
@@ -393,7 +393,7 @@ if (! function_exists('_media')) {
             $media .= _space_indent() . $track . "\n";
         }
 
-        if ($unsupportedMessage !== '') {
+        if (! empty($unsupportedMessage)) {
             $media .= _space_indent() . $unsupportedMessage . "\n";
         }
 
@@ -421,7 +421,7 @@ if (! function_exists('source')) {
         $source = '<source src="' . $src
                 . '" type="' . $type . '"';
 
-        if ($attributes !== '') {
+        if (! empty($attributes)) {
             $source .= ' ' . $attributes;
         }
 
@@ -469,7 +469,7 @@ if (! function_exists('object')) {
         $object = '<object data="' . $data . '" '
                 . $attributes . '>';
 
-        if ($params !== []) {
+        if (! empty($params)) {
             $object .= "\n";
         }
 

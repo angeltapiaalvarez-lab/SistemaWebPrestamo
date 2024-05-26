@@ -16,8 +16,6 @@ use ReflectionMethod;
 
 /**
  * Reads a controller and returns a list of auto route listing.
- *
- * @see \CodeIgniter\Commands\Utilities\Routes\ControllerMethodReaderTest
  */
 final class ControllerMethodReader
 {
@@ -35,9 +33,10 @@ final class ControllerMethodReader
     }
 
     /**
-     * @param class-string $class
+     * @phpstan-param class-string $class
      *
-     * @return list<array{route: string, handler: string}>
+     * @return array<int, array{route: string, handler: string}>
+     * @phpstan-return list<array{route: string, handler: string}>
      */
     public function read(string $class, string $defaultController = 'Home', string $defaultMethod = 'index'): array
     {
@@ -127,7 +126,7 @@ final class ControllerMethodReader
     }
 
     /**
-     * @param class-string $classname
+     * @phpstan-param class-string $classname
      *
      * @return string URI path part from the folder(s) and controller
      */

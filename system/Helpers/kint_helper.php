@@ -16,9 +16,7 @@ if (! function_exists('dd')) {
         /**
          * Prints a Kint debug report and exits.
          *
-         * @param array $vars
-         *
-         * @return never
+         * @param array ...$vars
          *
          * @codeCoverageIgnore Can't be tested ... exits
          */
@@ -33,13 +31,6 @@ if (! function_exists('dd')) {
         }
     } else {
         // In case that Kint is not loaded.
-        /**
-         * dd function
-         *
-         * @param array $vars
-         *
-         * @return int
-         */
         function dd(...$vars)
         {
             return 0;
@@ -49,13 +40,6 @@ if (! function_exists('dd')) {
 
 if (! function_exists('d') && ! class_exists(Kint::class)) {
     // In case that Kint is not loaded.
-    /**
-     * d function
-     *
-     * @param array $vars
-     *
-     * @return int
-     */
     function d(...$vars)
     {
         return 0;
@@ -67,11 +51,6 @@ if (! function_exists('trace')) {
         /**
          * Provides a backtrace to the current execution point, from Kint.
          */
-        /**
-         * trace function
-         *
-         * @return void
-         */
         function trace()
         {
             Kint::$aliases[] = 'trace';
@@ -79,11 +58,6 @@ if (! function_exists('trace')) {
         }
     } else {
         // In case that Kint is not loaded.
-        /**
-         * trace function
-         *
-         * @return int
-         */
         function trace()
         {
             return 0;

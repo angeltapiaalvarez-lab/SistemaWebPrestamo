@@ -54,7 +54,7 @@ class Serve extends BaseCommand
     /**
      * Arguments
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $arguments = [];
 
@@ -75,7 +75,7 @@ class Serve extends BaseCommand
     /**
      * Options
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $options = [
         '--php'  => 'The PHP Binary [default: "PHP_BINARY"]',

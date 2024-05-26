@@ -13,6 +13,7 @@ namespace CodeIgniter\Validation;
 
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
+use CodeIgniter\HTTP\Request;
 use CodeIgniter\HTTP\RequestInterface;
 use Config\Mimes;
 use Config\Services;
@@ -20,8 +21,6 @@ use InvalidArgumentException;
 
 /**
  * File validation rules
- *
- * @see \CodeIgniter\Validation\FileRulesTest
  */
 class FileRules
 {

@@ -62,7 +62,7 @@ final class Environment extends BaseCommand
     /**
      * The Command's options
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $options = [];
 

@@ -18,8 +18,6 @@ use Config\Database;
 
 /**
  * Validation Rules.
- *
- * @see \CodeIgniter\Validation\StrictRules\RulesTest
  */
 class Rules
 {
@@ -36,26 +34,13 @@ class Rules
      * @param array|bool|float|int|object|string|null $str
      * @param array                                   $data Other field/value pairs
      */
-    public function differs(
-        $str,
-        string $otherField,
-        array $data,
-        ?string $error = null,
-        ?string $field = null
-    ): bool {
-        if (strpos($otherField, '.') !== false) {
-            return $str !== dot_array_search($otherField, $data);
-        }
-
-        if (! array_key_exists($field, $data)) {
+    public function differs($str, string $field, array $data): bool
+    {
+        if (! is_string($str)) {
             return false;
         }
 
-        if (! array_key_exists($otherField, $data)) {
-            return false;
-        }
-
-        return $str !== ($data[$otherField] ?? null);
+        return $this->nonStrictRules->differs($str, $field, $data);
     }
 
     /**
@@ -76,10 +61,6 @@ class Rules
      */
     public function exact_length($str, string $val): bool
     {
-        if (is_int($str) || is_float($str)) {
-            $str = (string) $str;
-        }
-
         if (! is_string($str)) {
             return false;
         }
@@ -157,8 +138,7 @@ class Rules
             ->limit(1);
 
         if (
-            $whereField !== null && $whereField !== ''
-            && $whereValue !== null && $whereValue !== ''
+            ! empty($whereField) && ! empty($whereValue)
             && ! preg_match('/^\{(\w+)\}$/', $whereValue)
         ) {
             $row = $row->where($whereField, $whereValue);
@@ -217,8 +197,7 @@ class Rules
             ->limit(1);
 
         if (
-            $ignoreField !== null && $ignoreField !== ''
-            && $ignoreValue !== null && $ignoreValue !== ''
+            ! empty($ignoreField) && ! empty($ignoreValue)
             && ! preg_match('/^\{(\w+)\}$/', $ignoreValue)
         ) {
             $row = $row->where("{$ignoreField} !=", $ignoreValue);
@@ -269,26 +248,9 @@ class Rules
      * @param array|bool|float|int|object|string|null $str
      * @param array                                   $data Other field/value pairs
      */
-    public function matches(
-        $str,
-        string $otherField,
-        array $data,
-        ?string $error = null,
-        ?string $field = null
-    ): bool {
-        if (strpos($otherField, '.') !== false) {
-            return $str === dot_array_search($otherField, $data);
-        }
-
-        if (! array_key_exists($field, $data)) {
-            return false;
-        }
-
-        if (! array_key_exists($otherField, $data)) {
-            return false;
-        }
-
-        return $str === ($data[$otherField] ?? null);
+    public function matches($str, string $field, array $data): bool
+    {
+        return $this->nonStrictRules->matches($str, $field, $data);
     }
 
     /**
@@ -385,7 +347,7 @@ class Rules
     }
 
     /**
-     * The field is required when all the other fields are present
+     * The field is required when all of the other fields are present
      * in the data but not required.
      *
      * Example (field is required when the id or email field is missing):
@@ -396,13 +358,8 @@ class Rules
      * @param string|null                             $otherFields The param fields of required_without[].
      * @param string|null                             $field       This rule param fields aren't present, this field is required.
      */
-    public function required_without(
-        $str = null,
-        ?string $otherFields = null,
-        array $data = [],
-        ?string $error = null,
-        ?string $field = null
-    ): bool {
+    public function required_without($str = null, ?string $otherFields = null, array $data = [], ?string $error = null, ?string $field = null): bool
+    {
         return $this->nonStrictRules->required_without($str, $otherFields, $data, $error, $field);
     }
 }

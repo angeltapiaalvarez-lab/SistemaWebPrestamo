@@ -12,15 +12,12 @@
 namespace CodeIgniter\Language;
 
 use Config\Services;
-use InvalidArgumentException;
 use MessageFormatter;
 
 /**
  * Handle system messages and localization.
  *
  * Locale-based, built on top of PHP internationalization.
- *
- * @see \CodeIgniter\Language\LanguageTest
  */
 class Language
 {
@@ -88,7 +85,7 @@ class Language
      * Parses the language string for a file, loads the file, if necessary,
      * getting the line.
      *
-     * @return list<string>|string
+     * @return string|string[]
      */
     public function getLine(string $line, array $args = [])
     {
@@ -192,14 +189,7 @@ class Language
             return $message;
         }
 
-        $formatted = MessageFormatter::formatMessage($this->locale, $message, $args);
-        if ($formatted === false) {
-            throw new InvalidArgumentException(
-                lang('Language.invalidMessageFormat', [$message, implode(',', $args)])
-            );
-        }
-
-        return $formatted;
+        return MessageFormatter::formatMessage($this->locale, $message, $args);
     }
 
     /**

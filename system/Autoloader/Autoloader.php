@@ -53,8 +53,6 @@ use RuntimeException;
  *      // register the autoloader
  *      $loader->register();
  * ```
- *
- * @see \CodeIgniter\Autoloader\AutoloaderTest
  */
 class Autoloader
 {
@@ -75,7 +73,8 @@ class Autoloader
     /**
      * Stores files as a list.
      *
-     * @var list<string>
+     * @var string[]
+     * @phpstan-var list<string>
      */
     protected $files = [];
 
@@ -83,7 +82,8 @@ class Autoloader
      * Stores helper list.
      * Always load the URL helper, it should be used in most apps.
      *
-     * @var list<string>
+     * @var string[]
+     * @phpstan-var list<string>
      */
     protected $helpers = ['url'];
 
@@ -117,26 +117,22 @@ class Autoloader
             $this->files = $config->files;
         }
 
-        if (isset($config->helpers)) {
+        if (isset($config->helpers)) { // @phpstan-ignore-line
             $this->helpers = [...$this->helpers, ...$config->helpers];
         }
 
         if (is_file(COMPOSER_PATH)) {
-            $this->loadComposerAutoloader($modules);
+            $this->loadComposerInfo($modules);
         }
 
         return $this;
     }
 
-    private function loadComposerAutoloader(Modules $modules): void
+    private function loadComposerInfo(Modules $modules): void
     {
-        // The path to the vendor directory.
-        // We do not want to enforce this, so set the constant if Composer was used.
-        if (! defined('VENDORPATH')) {
-            define('VENDORPATH', dirname(COMPOSER_PATH) . DIRECTORY_SEPARATOR);
-        }
-
-        /** @var ClassLoader $composer */
+        /**
+         * @var ClassLoader $composer
+         */
         $composer = include COMPOSER_PATH;
 
         $this->loadComposerClassmap($composer);
@@ -152,8 +148,6 @@ class Autoloader
 
     /**
      * Register the loader with the SPL autoloader stack.
-     *
-     * @return void
      */
     public function register()
     {
@@ -183,7 +177,8 @@ class Autoloader
     /**
      * Registers namespaces with the autoloader.
      *
-     * @param array<string, list<string>|string>|string $namespace
+     * @param array<string, array<int, string>|string>|string $namespace
+     * @phpstan-param array<string, list<string>|string>|string $namespace
      *
      * @return $this
      */
@@ -243,27 +238,33 @@ class Autoloader
     /**
      * Load a class using available class mapping.
      *
-     * @internal For `spl_autoload_register` use.
+     * @return false|string
      */
-    public function loadClassmap(string $class): void
+    public function loadClassmap(string $class)
     {
         $file = $this->classmap[$class] ?? '';
 
         if (is_string($file) && $file !== '') {
-            $this->includeFile($file);
+            return $this->includeFile($file);
         }
+
+        return false;
     }
 
     /**
      * Loads the class file for a given class name.
      *
-     * @internal For `spl_autoload_register` use.
-     *
      * @param string $class The fully qualified class name.
+     *
+     * @return false|string The mapped file on success, or boolean false
+     *                      on failure.
      */
-    public function loadClass(string $class): void
+    public function loadClass(string $class)
     {
-        $this->loadInNamespace($class);
+        $class = trim($class, '\\');
+        $class = str_ireplace('.php', '', $class);
+
+        return $this->loadInNamespace($class);
     }
 
     /**
@@ -305,6 +306,8 @@ class Autoloader
      */
     protected function includeFile(string $file)
     {
+        $file = $this->sanitizeFilename($file);
+
         if (is_file($file)) {
             include_once $file;
 
@@ -324,8 +327,6 @@ class Autoloader
      * and end of filename.
      *
      * @return string The sanitized filename
-     *
-     * @deprecated No longer used. See https://github.com/codeigniter4/CodeIgniter4/issues/7055
      */
     public function sanitizeFilename(string $filename): string
     {
@@ -444,8 +445,6 @@ class Autoloader
      * Locates autoload information from Composer, if available.
      *
      * @deprecated No longer used.
-     *
-     * @return void
      */
     protected function discoverComposerNamespaces()
     {

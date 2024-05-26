@@ -11,12 +11,8 @@
 
 namespace CodeIgniter\Typography;
 
-use Config\DocTypes;
-
 /**
  * Typography Class
- *
- * @see \CodeIgniter\Typography\TypographyTest
  */
 class Typography
 {
@@ -325,11 +321,10 @@ class Typography
      */
     public function nl2brExceptPre(string $str): string
     {
-        $newstr   = '';
-        $docTypes = new DocTypes();
+        $newstr = '';
 
         for ($ex = explode('pre>', $str), $ct = count($ex), $i = 0; $i < $ct; $i++) {
-            $xhtml = ! ($docTypes->html5 ?? false);
+            $xhtml = ! (config('DocTypes')->html5 ?? false);
             $newstr .= (($i % 2) === 0) ? nl2br($ex[$i], $xhtml) : $ex[$i];
 
             if ($ct - 1 !== $i) {

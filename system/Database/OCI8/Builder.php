@@ -166,7 +166,7 @@ class Builder extends BaseBuilder
      */
     public function delete($where = '', ?int $limit = null, bool $resetData = true)
     {
-        if ($limit !== null && $limit !== 0) {
+        if (! empty($limit)) {
             $this->QBLimit = $limit;
         }
 

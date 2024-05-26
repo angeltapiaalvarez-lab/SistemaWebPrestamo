@@ -15,7 +15,6 @@ use CodeIgniter\Cache\CacheFactory;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\I18n\Time;
-use Config\Cache;
 
 /**
  * Shows information on the cache.
@@ -55,7 +54,7 @@ class InfoCache extends BaseCommand
      */
     public function run(array $params)
     {
-        $config = config(Cache::class);
+        $config = config('Cache');
         helper('number');
 
         if ($config->handler !== 'file') {

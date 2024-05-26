@@ -21,7 +21,6 @@ use Config\Services;
  * Requires the ChromeLogger extension installed in your browser.
  *
  * @see https://craig.is/writing/chrome-logger
- * @see \CodeIgniter\Log\Handlers\ChromeLoggerHandlerTest
  */
 class ChromeLoggerHandler extends BaseHandler
 {
@@ -150,7 +149,7 @@ class ChromeLoggerHandler extends BaseHandler
     /**
      * Attaches the header and the content to the passed in request object.
      *
-     * @return void
+     * @param ResponseInterface $response
      */
     public function sendLogs(?ResponseInterface &$response = null)
     {

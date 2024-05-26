@@ -98,7 +98,7 @@ trait FilterTestTrait
         $this->response ??= clone Services::response();
 
         // Create our config and Filters instance to reuse for performance
-        $this->filtersConfig ??= config(FiltersConfig::class);
+        $this->filtersConfig ??= config('Filters');
         $this->filters ??= new Filters($this->filtersConfig, $this->request, $this->response);
 
         if ($this->collection === null) {
@@ -125,10 +125,6 @@ trait FilterTestTrait
             throw new InvalidArgumentException('Invalid filter position passed: ' . $position);
         }
 
-        if ($filter instanceof FilterInterface) {
-            $filterInstances = [$filter];
-        }
-
         if (is_string($filter)) {
             // Check for an alias (no namespace)
             if (strpos($filter, '\\') === false) {
@@ -136,69 +132,26 @@ trait FilterTestTrait
                     throw new RuntimeException("No filter found with alias '{$filter}'");
                 }
 
-                $filterClasses = (array) $this->filtersConfig->aliases[$filter];
-            } else {
-                // FQCN
-                $filterClasses = [$filter];
+                $filter = $this->filtersConfig->aliases[$filter];
             }
 
-            $filterInstances = [];
+            // Get an instance
+            $filter = new $filter();
+        }
 
-            foreach ($filterClasses as $class) {
-                // Get an instance
-                $filter = new $class();
-
-                if (! $filter instanceof FilterInterface) {
-                    throw FilterException::forIncorrectInterface(get_class($filter));
-                }
-
-                $filterInstances[] = $filter;
-            }
+        if (! $filter instanceof FilterInterface) {
+            throw FilterException::forIncorrectInterface(get_class($filter));
         }
 
         $request = clone $this->request;
 
         if ($position === 'before') {
-            return static function (?array $params = null) use ($filterInstances, $request) {
-                foreach ($filterInstances as $filter) {
-                    $result = $filter->before($request, $params);
-
-                    // @TODO The following logic is in Filters class.
-                    //       Should use Filters class.
-                    if ($result instanceof RequestInterface) {
-                        $request = $result;
-
-                        continue;
-                    }
-                    if ($result instanceof ResponseInterface) {
-                        return $result;
-                    }
-                    if (empty($result)) {
-                        continue;
-                    }
-                }
-
-                return $result;
-            };
+            return static fn (?array $params = null) => $filter->before($request, $params);
         }
 
         $response = clone $this->response;
 
-        return static function (?array $params = null) use ($filterInstances, $request, $response) {
-            foreach ($filterInstances as $filter) {
-                $result = $filter->after($request, $response, $params);
-
-                // @TODO The following logic is in Filters class.
-                //       Should use Filters class.
-                if ($result instanceof ResponseInterface) {
-                    $response = $result;
-
-                    continue;
-                }
-            }
-
-            return $result;
-        };
+        return static fn (?array $params = null) => $filter->after($request, $response, $params);
     }
 
     /**

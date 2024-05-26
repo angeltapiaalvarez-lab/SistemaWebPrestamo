@@ -53,7 +53,7 @@ class Help extends BaseCommand
     /**
      * the Command's Arguments
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $arguments = [
         'command_name' => 'The command name [default: "help"]',
@@ -62,7 +62,7 @@ class Help extends BaseCommand
     /**
      * the Command's Options
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $options = [];
 

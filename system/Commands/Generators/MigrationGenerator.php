@@ -14,8 +14,7 @@ namespace CodeIgniter\Commands\Generators;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\CLI\GeneratorTrait;
-use Config\Database;
-use Config\Migrations;
+use Config\App as AppConfig;
 use Config\Session as SessionConfig;
 
 /**
@@ -56,7 +55,7 @@ class MigrationGenerator extends BaseCommand
     /**
      * The Command's Arguments
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $arguments = [
         'name' => 'The migration class name.',
@@ -65,7 +64,7 @@ class MigrationGenerator extends BaseCommand
     /**
      * The Command's Options
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $options = [
         '--session'   => 'Generates the migration file for database sessions.',
@@ -108,12 +107,15 @@ class MigrationGenerator extends BaseCommand
             $data['session']  = true;
             $data['table']    = is_string($table) ? $table : 'ci_sessions';
             $data['DBGroup']  = is_string($DBGroup) ? $DBGroup : 'default';
-            $data['DBDriver'] = config(Database::class)->{$data['DBGroup']}['DBDriver'];
+            $data['DBDriver'] = config('Database')->{$data['DBGroup']}['DBDriver'];
 
+            /** @var AppConfig $config */
+            $config = config('App');
             /** @var SessionConfig|null $session */
-            $session = config(SessionConfig::class);
+            $session = config('Session');
 
-            $data['matchIP'] = $session->matchIP;
+            $data['matchIP'] = ($session instanceof SessionConfig)
+                ? $session->matchIP : $config->sessionMatchIP;
         }
 
         return $this->parseTemplate($class, [], [], $data);
@@ -124,6 +126,6 @@ class MigrationGenerator extends BaseCommand
      */
     protected function basename(string $filename): string
     {
-        return gmdate(config(Migrations::class)->timestampFormat) . basename($filename);
+        return gmdate(config('Migrations')->timestampFormat) . basename($filename);
     }
 }

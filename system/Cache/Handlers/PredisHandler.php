@@ -20,8 +20,6 @@ use Predis\Collection\Iterator\Keyspace;
 
 /**
  * Predis cache handler
- *
- * @see \CodeIgniter\Cache\Handlers\PredisHandlerTest
  */
 class PredisHandler extends BaseHandler
 {
@@ -45,9 +43,6 @@ class PredisHandler extends BaseHandler
      */
     protected $redis;
 
-    /**
-     * Note: Use `CacheFactory::getHandler()` to instantiate.
-     */
     public function __construct(Cache $config)
     {
         $this->prefix = $config->prefix;
@@ -133,7 +128,7 @@ class PredisHandler extends BaseHandler
             return false;
         }
 
-        if ($ttl !== 0) {
+        if ($ttl) {
             $this->redis->expireat($key, Time::now()->getTimestamp() + $ttl);
         }
 
@@ -152,8 +147,6 @@ class PredisHandler extends BaseHandler
 
     /**
      * {@inheritDoc}
-     *
-     * @return int
      */
     public function deleteMatching(string $pattern)
     {

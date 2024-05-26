@@ -13,9 +13,6 @@ namespace CodeIgniter\Test;
 
 use CodeIgniter\Log\Logger;
 
-/**
- * @see \CodeIgniter\Test\TestLoggerTest
- */
 class TestLogger extends Logger
 {
     protected static $op_logs = [];

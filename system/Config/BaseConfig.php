@@ -26,9 +26,6 @@ use RuntimeException;
  * from the environment.
  *
  * These can be set within the .env file.
- *
- * @phpstan-consistent-constructor
- * @see \CodeIgniter\Config\BaseConfigTest
  */
 class BaseConfig
 {
@@ -41,11 +38,6 @@ class BaseConfig
     public static $registrars = [];
 
     /**
-     * Whether to override properties by Env vars and Registrars.
-     */
-    public static bool $override = true;
-
-    /**
      * Has module discovery happened yet?
      *
      * @var bool
@@ -55,45 +47,9 @@ class BaseConfig
     /**
      * The modules configuration.
      *
-     * @var Modules|null
+     * @var Modules
      */
     protected static $moduleConfig;
-
-    public static function __set_state(array $array)
-    {
-        static::$override = false;
-        $obj              = new static();
-        static::$override = true;
-
-        $properties = array_keys(get_object_vars($obj));
-
-        foreach ($properties as $property) {
-            $obj->{$property} = $array[$property];
-        }
-
-        return $obj;
-    }
-
-    /**
-     * @internal For testing purposes only.
-     * @testTag
-     */
-    public static function setModules(Modules $modules): void
-    {
-        static::$moduleConfig = $modules;
-    }
-
-    /**
-     * @internal For testing purposes only.
-     * @testTag
-     */
-    public static function reset(): void
-    {
-        static::$registrars   = [];
-        static::$override     = true;
-        static::$didDiscovery = false;
-        static::$moduleConfig = null;
-    }
 
     /**
      * Will attempt to get environment variables with names
@@ -103,11 +59,7 @@ class BaseConfig
      */
     public function __construct()
     {
-        static::$moduleConfig ??= new Modules();
-
-        if (! static::$override) {
-            return;
-        }
+        static::$moduleConfig = config('Modules');
 
         $this->registerProperties();
 
@@ -134,7 +86,7 @@ class BaseConfig
     /**
      * Initialization an environment-specific configuration setting
      *
-     * @param array|bool|float|int|string|null $property
+     * @param mixed $property
      *
      * @return void
      */
@@ -216,8 +168,6 @@ class BaseConfig
     /**
      * Provides external libraries a simple way to register one or more
      * options into a config file.
-     *
-     * @return void
      *
      * @throws ReflectionException
      */

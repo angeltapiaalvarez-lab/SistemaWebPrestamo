@@ -109,56 +109,51 @@ class Forge extends BaseForge
     }
 
     /**
-     * @param array|string $processedFields Processed column definitions
-     *                                      or column names to DROP
+     * @param array|string $field
      *
      * @return array|string|null
-     * @return list<string>|string|null SQL string or null
-     * @phpstan-return ($alterType is 'DROP' ? string : list<string>|null)
      */
-    protected function _alterTable(string $alterType, string $table, $processedFields)
+    protected function _alterTable(string $alterType, string $table, $field)
     {
         switch ($alterType) {
             case 'DROP':
-                $columnNamesToDrop = $processedFields;
-
                 $sqlTable = new Table($this->db, $this);
 
                 $sqlTable->fromTable($table)
-                    ->dropColumn($columnNamesToDrop)
+                    ->dropColumn($field)
                     ->run();
 
-                return ''; // Why empty string?
+                return '';
 
             case 'CHANGE':
                 (new Table($this->db, $this))
                     ->fromTable($table)
-                    ->modifyColumn($processedFields) // @TODO Bug: should be NOT processed fields
+                    ->modifyColumn($field)
                     ->run();
 
-                return null; // Why null?
+                return null;
 
             default:
-                return parent::_alterTable($alterType, $table, $processedFields);
+                return parent::_alterTable($alterType, $table, $field);
         }
     }
 
     /**
      * Process column
      */
-    protected function _processColumn(array $processedField): string
+    protected function _processColumn(array $field): string
     {
-        if ($processedField['type'] === 'TEXT' && strpos($processedField['length'], "('") === 0) {
-            $processedField['type'] .= ' CHECK(' . $this->db->escapeIdentifiers($processedField['name'])
-                . ' IN ' . $processedField['length'] . ')';
+        if ($field['type'] === 'TEXT' && strpos($field['length'], "('") === 0) {
+            $field['type'] .= ' CHECK(' . $this->db->escapeIdentifiers($field['name'])
+                . ' IN ' . $field['length'] . ')';
         }
 
-        return $this->db->escapeIdentifiers($processedField['name'])
-            . ' ' . $processedField['type']
-            . $processedField['auto_increment']
-            . $processedField['null']
-            . $processedField['unique']
-            . $processedField['default'];
+        return $this->db->escapeIdentifiers($field['name'])
+            . ' ' . $field['type']
+            . $field['auto_increment']
+            . $field['null']
+            . $field['unique']
+            . $field['default'];
     }
 
     /**
@@ -188,11 +183,8 @@ class Forge extends BaseForge
      */
     protected function _attributeAutoIncrement(array &$attributes, array &$field)
     {
-        if (
-            ! empty($attributes['AUTO_INCREMENT'])
-            && $attributes['AUTO_INCREMENT'] === true
-            && stripos($field['type'], 'int') !== false
-        ) {
+        if (! empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === true
+            && stripos($field['type'], 'int') !== false) {
             $field['type']           = 'INTEGER PRIMARY KEY';
             $field['default']        = '';
             $field['null']           = '';

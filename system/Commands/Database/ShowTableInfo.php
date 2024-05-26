@@ -18,8 +18,6 @@ use Config\Database;
 
 /**
  * Get table data if it exists in the database.
- *
- * @see \CodeIgniter\Commands\Database\ShowTableInfoTest
  */
 class ShowTableInfo extends BaseCommand
 {
@@ -84,7 +82,7 @@ class ShowTableInfo extends BaseCommand
     ];
 
     /**
-     * @var list<list<int|string>> Table Data.
+     * @phpstan-var  list<list<string|int>> Table Data.
      */
     private array $tbody;
 
@@ -125,7 +123,7 @@ class ShowTableInfo extends BaseCommand
         $limitRows       = (int) ($params['limit-rows'] ?? 10);
         $limitFieldValue = (int) ($params['limit-field-value'] ?? 15);
 
-        while (! in_array($tableName, $tables, true)) {
+        if (! in_array($tableName, $tables, true)) {
             $tableNameNo = CLI::promptByKey(
                 ['Here is the list of your database tables:', 'Which table do you want to see?'],
                 $tables,
@@ -133,7 +131,7 @@ class ShowTableInfo extends BaseCommand
             );
             CLI::newLine();
 
-            $tableName = $tables[$tableNameNo] ?? null;
+            $tableName = $tables[$tableNameNo];
         }
 
         if (array_key_exists('metadata', $params)) {

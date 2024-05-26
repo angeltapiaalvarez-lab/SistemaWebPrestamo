@@ -17,8 +17,6 @@ use InvalidArgumentException;
 
 /**
  * Class Config
- *
- * @see \CodeIgniter\Database\ConfigTest
  */
 class Config extends BaseConfig
 {
@@ -39,11 +37,12 @@ class Config extends BaseConfig
     protected static $factory;
 
     /**
-     * Returns the database connection
+     * Creates the default
      *
-     * @param array|BaseConnection|non-empty-string|null $group     The name of the connection group to use,
-     *                                                              or an array of configuration settings.
-     * @param bool                                       $getShared Whether to return a shared instance of the connection.
+     * @param array|BaseConnection|string|null $group The name of the connection group to use,
+     *                                                or an array of configuration settings.
+     * @phpstan-param array|BaseConnection|non-empty-string|null $group
+     * @param bool $getShared Whether to return a shared instance of the connection.
      *
      * @return BaseConnection
      */
@@ -58,7 +57,8 @@ class Config extends BaseConfig
             $config = $group;
             $group  = 'custom-' . md5(json_encode($config));
         } else {
-            $dbConfig = config(DbConfig::class);
+            /** @var DbConfig $dbConfig */
+            $dbConfig = config('Database');
 
             if ($group === null) {
                 $group = (ENVIRONMENT === 'testing') ? 'tests' : $dbConfig->defaultGroup;
@@ -126,13 +126,13 @@ class Config extends BaseConfig
     /**
      * Returns a new instance of the Database Seeder.
      *
-     * @param non-empty-string|null $group
+     * @phpstan-param null|non-empty-string $group
      *
      * @return Seeder
      */
     public static function seeder(?string $group = null)
     {
-        $config = config(DbConfig::class);
+        $config = config('Database');
 
         return new Seeder($config, static::connect($group));
     }

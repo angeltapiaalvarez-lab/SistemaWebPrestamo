@@ -18,8 +18,6 @@ use RecursiveIteratorIterator;
  * Class FileCollection
  *
  * Provides easy access to uploaded files for a request.
- *
- * @see \CodeIgniter\HTTP\Files\FileCollectionTest
  */
 class FileCollection
 {
@@ -77,7 +75,7 @@ class FileCollection
     /**
      * Verify if a file exist in the collection of uploaded files and is have been uploaded with multiple option.
      *
-     * @return list<UploadedFile>|null
+     * @return array|null
      */
     public function getFileMultiple(string $name)
     {
@@ -137,8 +135,6 @@ class FileCollection
      * of UploadedFile for each one, saving the results to this->files.
      *
      * Called by files(), file(), and hasFile()
-     *
-     * @return void
      */
     protected function populateFiles()
     {
@@ -148,7 +144,7 @@ class FileCollection
 
         $this->files = [];
 
-        if ($_FILES === []) {
+        if (empty($_FILES)) {
             return;
         }
 
@@ -163,7 +159,7 @@ class FileCollection
      * Given a file array, will create UploadedFile instances. Will
      * loop over an array and create objects for each.
      *
-     * @return UploadedFile|UploadedFile[]
+     * @return array|UploadedFile
      */
     protected function createFileObject(array $array)
     {
@@ -186,8 +182,7 @@ class FileCollection
             $array['name'] ?? null,
             $array['type'] ?? null,
             $array['size'] ?? null,
-            $array['error'] ?? null,
-            $array['full_path'] ?? null
+            $array['error'] ?? null
         );
     }
 
@@ -245,7 +240,7 @@ class FileCollection
      * @param array $index The index sequence we are navigating down
      * @param array $value The portion of the array to process
      *
-     * @return list<UploadedFile>|UploadedFile|null
+     * @return mixed
      */
     protected function getValueDotNotationSyntax(array $index, array $value)
     {

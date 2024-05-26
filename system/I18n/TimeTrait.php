@@ -212,22 +212,14 @@ trait TimeTrait
      *
      * @throws Exception
      */
-    public static function create(
-        ?int $year = null,
-        ?int $month = null,
-        ?int $day = null,
-        ?int $hour = null,
-        ?int $minutes = null,
-        ?int $seconds = null,
-        $timezone = null,
-        ?string $locale = null
-    ) {
+    public static function create(?int $year = null, ?int $month = null, ?int $day = null, ?int $hour = null, ?int $minutes = null, ?int $seconds = null, $timezone = null, ?string $locale = null)
+    {
         $year ??= date('Y');
         $month ??= date('m');
         $day ??= date('d');
-        $hour ??= 0;
-        $minutes ??= 0;
-        $seconds ??= 0;
+        $hour    = empty($hour) ? 0 : $hour;
+        $minutes = empty($minutes) ? 0 : $minutes;
+        $seconds = empty($seconds) ? 0 : $seconds;
 
         return new self(date('Y-m-d H:i:s', strtotime("{$year}-{$month}-{$day} {$hour}:{$minutes}:{$seconds}")), $timezone, $locale);
     }
@@ -327,8 +319,6 @@ trait TimeTrait
      *
      * @param DateTimeInterface|self|string|null $datetime
      * @param DateTimeZone|string|null           $timezone
-     *
-     * @return void
      *
      * @throws Exception
      */
@@ -855,8 +845,6 @@ trait TimeTrait
     /**
      * Returns the localized value of the date in the format 'Y-m-d H:i:s'
      *
-     * @return false|string
-     *
      * @throws Exception
      */
     public function toDateTimeString()
@@ -1190,8 +1178,6 @@ trait TimeTrait
         $timezone = $this->timezone;
 
         $this->timezone = new DateTimeZone($timezone);
-
-        // @phpstan-ignore-next-line `$this->date` is a special property for PHP internal use.
         parent::__construct($this->date, $this->timezone);
     }
 }

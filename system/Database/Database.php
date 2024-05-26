@@ -16,7 +16,7 @@ use InvalidArgumentException;
 /**
  * Database Connection Factory
  *
- * Creates and returns an instance of the appropriate Database Connection.
+ * Creates and returns an instance of the appropriate DatabaseConnection
  */
 class Database
 {
@@ -32,7 +32,8 @@ class Database
     protected $connections = [];
 
     /**
-     * Parses the connection binds and creates a Database Connection instance.
+     * Parses the connection binds and returns an instance of the driver
+     * ready to go.
      *
      * @return BaseConnection
      *
@@ -82,7 +83,7 @@ class Database
     }
 
     /**
-     * Parses universal DSN string
+     * Parse universal DSN string
      *
      * @throws InvalidArgumentException
      */
@@ -104,7 +105,7 @@ class Database
             'database' => isset($dsn['path']) ? rawurldecode(substr($dsn['path'], 1)) : '',
         ];
 
-        if (isset($dsn['query']) && ($dsn['query'] !== '')) {
+        if (! empty($dsn['query'])) {
             parse_str($dsn['query'], $extra);
 
             foreach ($extra as $key => $val) {
@@ -120,20 +121,21 @@ class Database
     }
 
     /**
-     * Creates a database object.
+     * Initialize database driver.
      *
      * @param string       $driver   Driver name. FQCN can be used.
-     * @param string       $class    'Connection'|'Forge'|'Utils'
-     * @param array|object $argument The constructor parameter.
+     * @param array|object $argument
      *
      * @return BaseConnection|BaseUtils|Forge
      */
     protected function initDriver(string $driver, string $class, $argument): object
     {
-        $classname = (strpos($driver, '\\') === false)
-            ? "CodeIgniter\\Database\\{$driver}\\{$class}"
-            : $driver . '\\' . $class;
+        $class = $driver . '\\' . $class;
 
-        return new $classname($argument);
+        if (strpos($driver, '\\') === false) {
+            $class = "CodeIgniter\\Database\\{$class}";
+        }
+
+        return new $class($argument);
     }
 }

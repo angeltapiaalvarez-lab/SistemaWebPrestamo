@@ -13,7 +13,6 @@ namespace CodeIgniter\Config;
 
 /**
  * @deprecated Use CodeIgniter\Config\Factories::config()
- * @see \CodeIgniter\Config\ConfigTest
  */
 class Config
 {
@@ -35,8 +34,6 @@ class Config
      * Helper method for injecting mock instances while testing.
      *
      * @param object $instance
-     *
-     * @return void
      */
     public static function injectMock(string $name, $instance)
     {
@@ -45,8 +42,6 @@ class Config
 
     /**
      * Resets the static arrays
-     *
-     * @return void
      */
     public static function reset()
     {

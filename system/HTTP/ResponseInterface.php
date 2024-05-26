@@ -110,6 +110,8 @@ interface ResponseInterface extends MessageInterface
      * to understand and satisfy the request.
      *
      * @return int Status code.
+     *
+     * @deprecated To be replaced by the PSR-7 version (compatible)
      */
     public function getStatusCode(): int;
 

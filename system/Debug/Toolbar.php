@@ -83,7 +83,7 @@ class Toolbar
         $data['isAJAX']          = $request->isAJAX();
         $data['startTime']       = $startTime;
         $data['totalTime']       = $totalTime * 1000;
-        $data['totalMemory']     = number_format(memory_get_peak_usage() / 1024 / 1024, 3);
+        $data['totalMemory']     = number_format((memory_get_peak_usage()) / 1024 / 1024, 3);
         $data['segmentDuration'] = $this->roundTo($data['totalTime'] / 7);
         $data['segmentCount']    = (int) ceil($data['totalTime'] / $data['segmentDuration']);
         $data['CI_VERSION']      = CodeIgniter::CI_VERSION;
@@ -121,7 +121,7 @@ class Toolbar
             $data['vars']['varData'][esc($heading)] = $varData;
         }
 
-        if (isset($_SESSION)) {
+        if (! empty($_SESSION)) {
             foreach ($_SESSION as $key => $value) {
                 // Replace the binary data with string to avoid json_encode failure.
                 if (is_string($value) && preg_match('~[^\x20-\x7E\t\r\n]~', $value)) {
@@ -292,7 +292,7 @@ class Toolbar
         $element = array_shift($elements);
 
         // If we have children behind us, collect and attach them to us
-        while ($elements !== [] && $elements[array_key_first($elements)]['end'] <= $element['end']) {
+        while (! empty($elements) && $elements[array_key_first($elements)]['end'] <= $element['end']) {
             $element['children'][] = array_shift($elements);
         }
 
@@ -302,7 +302,7 @@ class Toolbar
         }
 
         // If we have no younger siblings, we can return
-        if ($elements === []) {
+        if (empty($elements)) {
             return [$element];
         }
 
@@ -346,7 +346,8 @@ class Toolbar
     /**
      * Prepare for debugging..
      *
-     * @return void
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
      */
     public function prepare(?RequestInterface $request = null, ?ResponseInterface $response = null)
     {
@@ -364,7 +365,7 @@ class Toolbar
                 return;
             }
 
-            $toolbar = Services::toolbar(config(ToolbarConfig::class));
+            $toolbar = Services::toolbar(config(self::class));
             $stats   = $app->getPerformanceStats();
             $data    = $toolbar->run(
                 $stats['startTime'],
@@ -433,8 +434,6 @@ class Toolbar
      * Inject debug toolbar into the response.
      *
      * @codeCoverageIgnore
-     *
-     * @return void
      */
     public function respond()
     {

@@ -15,8 +15,8 @@ if (! function_exists('number_to_size')) {
     /**
      * Formats a numbers as bytes, based on size, and adds the appropriate suffix
      *
-     * @param int|string            $num    Will be cast as int
-     * @param non-empty-string|null $locale [optional]
+     * @param mixed  $num    Will be cast as int
+     * @param string $locale
      *
      * @return bool|string
      */
@@ -24,16 +24,14 @@ if (! function_exists('number_to_size')) {
     {
         // Strip any formatting & ensure numeric input
         try {
-            // @phpstan-ignore-next-line
             $num = 0 + str_replace(',', '', $num);
         } catch (ErrorException $ee) {
-            // Catch "Warning:  A non-numeric value encountered"
             return false;
         }
 
         // ignore sub part
         $generalLocale = $locale;
-        if ($locale !== null && $locale !== '' && ($underscorePos = strpos($locale, '_'))) {
+        if (! empty($locale) && ($underscorePos = strpos($locale, '_'))) {
             $generalLocale = substr($locale, 0, $underscorePos);
         }
 
@@ -69,9 +67,7 @@ if (! function_exists('number_to_amount')) {
      *
      * @see https://simple.wikipedia.org/wiki/Names_for_large_numbers
      *
-     * @param int|string            $num       Will be cast as int
-     * @param int                   $precision [optional] The optional number of decimal digits to round to.
-     * @param non-empty-string|null $locale    [optional]
+     * @param string $num
      *
      * @return bool|string
      */
@@ -79,7 +75,6 @@ if (! function_exists('number_to_amount')) {
     {
         // Strip any formatting & ensure numeric input
         try {
-            // @phpstan-ignore-next-line
             $num = 0 + str_replace(',', '', $num);
         } catch (ErrorException $ee) {
             return false;
@@ -89,23 +84,23 @@ if (! function_exists('number_to_amount')) {
 
         // ignore sub part
         $generalLocale = $locale;
-        if ($locale !== null && $locale !== '' && ($underscorePos = strpos($locale, '_'))) {
+        if (! empty($locale) && ($underscorePos = strpos($locale, '_'))) {
             $generalLocale = substr($locale, 0, $underscorePos);
         }
 
-        if ($num >= 1_000_000_000_000_000) {
+        if ($num > 1_000_000_000_000_000) {
             $suffix = lang('Number.quadrillion', [], $generalLocale);
             $num    = round(($num / 1_000_000_000_000_000), $precision);
-        } elseif ($num >= 1_000_000_000_000) {
+        } elseif ($num > 1_000_000_000_000) {
             $suffix = lang('Number.trillion', [], $generalLocale);
             $num    = round(($num / 1_000_000_000_000), $precision);
-        } elseif ($num >= 1_000_000_000) {
+        } elseif ($num > 1_000_000_000) {
             $suffix = lang('Number.billion', [], $generalLocale);
             $num    = round(($num / 1_000_000_000), $precision);
-        } elseif ($num >= 1_000_000) {
+        } elseif ($num > 1_000_000) {
             $suffix = lang('Number.million', [], $generalLocale);
             $num    = round(($num / 1_000_000), $precision);
-        } elseif ($num >= 1000) {
+        } elseif ($num > 1000) {
             $suffix = lang('Number.thousand', [], $generalLocale);
             $num    = round(($num / 1000), $precision);
         }
@@ -178,9 +173,9 @@ if (! function_exists('number_to_roman')) {
     /**
      * Convert a number to a roman numeral.
      *
-     * @param int|string $num it will convert to int
+     * @param string $num it will convert to int
      */
-    function number_to_roman($num): ?string
+    function number_to_roman(string $num): ?string
     {
         static $map = [
             'M'  => 1000,

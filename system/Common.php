@@ -21,11 +21,12 @@ use CodeIgniter\Debug\Timer;
 use CodeIgniter\Files\Exceptions\FileNotFoundException;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\Exceptions\HTTPException;
-use CodeIgniter\HTTP\Exceptions\RedirectException;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\HTTP\URI;
 use CodeIgniter\Model;
 use CodeIgniter\Session\Session;
 use CodeIgniter\Test\TestLogger;
@@ -64,8 +65,8 @@ if (! function_exists('cache')) {
      *    cache()->save('foo', 'bar');
      *    $foo = cache('bar');
      *
-     * @return array|bool|CacheInterface|float|int|object|string|null
-     * @phpstan-return ($key is null ? CacheInterface : array|bool|float|int|object|string|null)
+     * @return CacheInterface|mixed
+     * @phpstan-return ($key is null ? CacheInterface : mixed)
      */
     function cache(?string $key = null)
     {
@@ -288,24 +289,20 @@ if (! function_exists('csrf_hash')) {
 if (! function_exists('csrf_field')) {
     /**
      * Generates a hidden input field for use within manually generated forms.
-     *
-     * @param non-empty-string|null $id
      */
     function csrf_field(?string $id = null): string
     {
-        return '<input type="hidden"' . ($id !== null ? ' id="' . esc($id, 'attr') . '"' : '') . ' name="' . csrf_token() . '" value="' . csrf_hash() . '"' . _solidus() . '>';
+        return '<input type="hidden"' . (! empty($id) ? ' id="' . esc($id, 'attr') . '"' : '') . ' name="' . csrf_token() . '" value="' . csrf_hash() . '"' . _solidus() . '>';
     }
 }
 
 if (! function_exists('csrf_meta')) {
     /**
      * Generates a meta tag for use within javascript calls.
-     *
-     * @param non-empty-string|null $id
      */
     function csrf_meta(?string $id = null): string
     {
-        return '<meta' . ($id !== null ? ' id="' . esc($id, 'attr') . '"' : '') . ' name="' . csrf_header() . '" content="' . csrf_hash() . '"' . _solidus() . '>';
+        return '<meta' . (! empty($id) ? ' id="' . esc($id, 'attr') . '"' : '') . ' name="' . csrf_header() . '" content="' . csrf_hash() . '"' . _solidus() . '>';
     }
 }
 
@@ -473,48 +470,63 @@ if (! function_exists('force_https')) {
      *
      * @see https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
      *
-     * @param int $duration How long should the SSL header be set for? (in seconds)
-     *                      Defaults to 1 year.
+     * @param int               $duration How long should the SSL header be set for? (in seconds)
+     *                                    Defaults to 1 year.
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
      *
      * @throws HTTPException
-     * @throws RedirectException
      */
-    function force_https(
-        int $duration = 31_536_000,
-        ?RequestInterface $request = null,
-        ?ResponseInterface $response = null
-    ): void {
-        $request ??= Services::request();
+    function force_https(int $duration = 31_536_000, ?RequestInterface $request = null, ?ResponseInterface $response = null)
+    {
+        if ($request === null) {
+            $request = Services::request(null, true);
+        }
 
         if (! $request instanceof IncomingRequest) {
             return;
         }
 
-        $response ??= Services::response();
+        if ($response === null) {
+            $response = Services::response(null, true);
+        }
 
-        if ((ENVIRONMENT !== 'testing' && (is_cli() || $request->isSecure()))
-            || $request->getServer('HTTPS') === 'test'
-        ) {
+        if ((ENVIRONMENT !== 'testing' && (is_cli() || $request->isSecure())) || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'test')) {
             return; // @codeCoverageIgnore
         }
 
         // If the session status is active, we should regenerate
         // the session ID for safety sake.
         if (ENVIRONMENT !== 'testing' && session_status() === PHP_SESSION_ACTIVE) {
-            Services::session()->regenerate(); // @codeCoverageIgnore
+            Services::session(null, true)->regenerate(); // @codeCoverageIgnore
         }
 
-        $uri = $request->getUri()->withScheme('https');
+        $baseURL = config(App::class)->baseURL;
+
+        if (strpos($baseURL, 'https://') === 0) {
+            $authority = substr($baseURL, strlen('https://'));
+        } elseif (strpos($baseURL, 'http://') === 0) {
+            $authority = substr($baseURL, strlen('http://'));
+        } else {
+            $authority = $baseURL;
+        }
+
+        $uri = URI::createURIString(
+            'https',
+            $authority,
+            $request->getUri()->getPath(), // Absolute URIs should use a "/" for an empty path
+            $request->getUri()->getQuery(),
+            $request->getUri()->getFragment()
+        );
 
         // Set an HSTS header
-        $response->setHeader('Strict-Transport-Security', 'max-age=' . $duration)
-            ->redirect((string) $uri)
-            ->setStatusCode(307)
-            ->setBody('')
-            ->getCookieStore()
-            ->clear();
+        $response->setHeader('Strict-Transport-Security', 'max-age=' . $duration);
+        $response->redirect($uri);
+        $response->sendHeaders();
 
-        throw new RedirectException($response);
+        if (ENVIRONMENT !== 'testing') {
+            exit(); // @codeCoverageIgnore
+        }
     }
 }
 
@@ -565,7 +577,7 @@ if (! function_exists('function_usable')) {
 if (! function_exists('helper')) {
     /**
      * Loads a helper file into memory. Supports namespaced helpers,
-     * both in and out of the 'Helpers' directory of a namespaced directory.
+     * both in and out of the 'helpers' directory of a namespaced directory.
      *
      * Will load ALL helpers of the matching name, in the following order:
      *   1. app/Helpers
@@ -576,7 +588,7 @@ if (! function_exists('helper')) {
      *
      * @throws FileNotFoundException
      */
-    function helper($filenames): void
+    function helper($filenames)
     {
         static $loaded = [];
 
@@ -732,7 +744,11 @@ if (! function_exists('is_windows')) {
             $mocked = $mock;
         }
 
-        return $mocked ?? DIRECTORY_SEPARATOR === '\\';
+        if (isset($mocked)) {
+            return $mocked;
+        }
+
+        return DIRECTORY_SEPARATOR === '\\';
     }
 }
 
@@ -741,7 +757,7 @@ if (! function_exists('lang')) {
      * A convenience method to translate a string or array of them and format
      * the result with the intl extension's MessageFormatter.
      *
-     * @return list<string>|string
+     * @return string
      */
     function lang(string $line, array $args = [], ?string $locale = null)
     {
@@ -854,13 +870,13 @@ if (! function_exists('redirect')) {
      *
      * If more control is needed, you must use $response->redirect explicitly.
      *
-     * @param non-empty-string|null $route Route name or Controller::method
+     * @param string|null $route Route name or Controller::method
      */
     function redirect(?string $route = null): RedirectResponse
     {
         $response = Services::redirectresponse(null, true);
 
-        if ($route !== null) {
+        if (! empty($route)) {
             return $response->route($route);
         }
 
@@ -872,21 +888,11 @@ if (! function_exists('_solidus')) {
     /**
      * Generates the solidus character (`/`) depending on the HTML5 compatibility flag in `Config\DocTypes`
      *
-     * @param DocTypes|null $docTypesConfig New config. For testing purpose only.
-     *
      * @internal
      */
-    function _solidus(?DocTypes $docTypesConfig = null): string
+    function _solidus(): string
     {
-        static $docTypes = null;
-
-        if ($docTypesConfig !== null) {
-            $docTypes = $docTypesConfig;
-        }
-
-        $docTypes ??= new DocTypes();
-
-        if ($docTypes->html5 ?? false) {
+        if (config(DocTypes::class)->html5 ?? false) {
             return '';
         }
 
@@ -1001,9 +1007,11 @@ if (! function_exists('service')) {
      *  - $timer = service('timer')
      *  - $timer = \CodeIgniter\Config\Services::timer();
      *
-     * @param array|bool|float|int|object|string|null ...$params
+     * @param mixed ...$params
+     *
+     * @return object
      */
-    function service(string $name, ...$params): ?object
+    function service(string $name, ...$params)
     {
         return Services::$name(...$params);
     }
@@ -1013,9 +1021,11 @@ if (! function_exists('single_service')) {
     /**
      * Always returns a new instance of the class.
      *
-     * @param array|bool|float|int|object|string|null ...$params
+     * @param mixed ...$params
+     *
+     * @return object|null
      */
-    function single_service(string $name, ...$params): ?object
+    function single_service(string $name, ...$params)
     {
         $service = Services::serviceExists($name);
 
@@ -1125,17 +1135,13 @@ if (! function_exists('timer')) {
      * returns its return value if any.
      * Otherwise will start or stop the timer intelligently.
      *
-     * @param non-empty-string|null    $name
-     * @param (callable(): mixed)|null $callable
-     *
-     * @return mixed|Timer
-     * @phpstan-return ($name is null ? Timer : ($callable is (callable(): mixed) ? mixed : Timer))
+     * @return Timer
      */
     function timer(?string $name = null, ?callable $callable = null)
     {
         $timer = Services::timer();
 
-        if ($name === null) {
+        if (empty($name)) {
             return $timer;
         }
 

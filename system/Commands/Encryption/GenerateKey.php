@@ -52,7 +52,7 @@ class GenerateKey extends BaseCommand
     /**
      * The command's options
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $options = [
         '--force'  => 'Force overwrite existing key in `.env` file.',

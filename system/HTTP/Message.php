@@ -13,8 +13,6 @@ namespace CodeIgniter\HTTP;
 
 /**
  * An HTTP message
- *
- * @see \CodeIgniter\HTTP\MessageTest
  */
 class Message implements MessageInterface
 {

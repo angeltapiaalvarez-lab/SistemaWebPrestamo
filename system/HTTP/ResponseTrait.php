@@ -156,13 +156,13 @@ trait ResponseTrait
         }
 
         // Unknown and no message?
-        if (! array_key_exists($code, static::$statusCodes) && ($reason === '')) {
+        if (! array_key_exists($code, static::$statusCodes) && empty($reason)) {
             throw HTTPException::forUnkownStatusCode($code);
         }
 
         $this->statusCode = $code;
 
-        $this->reason = ($reason !== '') ? $reason : static::$statusCodes[$code];
+        $this->reason = ! empty($reason) ? $reason : static::$statusCodes[$code];
 
         return $this;
     }
@@ -226,7 +226,7 @@ trait ResponseTrait
     public function setContentType(string $mime, string $charset = 'UTF-8')
     {
         // add charset attribute if not already there and provided as parm
-        if ((strpos($mime, 'charset=') < 1) && ($charset !== '')) {
+        if ((strpos($mime, 'charset=') < 1) && ! empty($charset)) {
             $mime .= '; charset=' . $charset;
         }
 
@@ -239,7 +239,7 @@ trait ResponseTrait
     /**
      * Converts the $body into JSON and sets the Content Type header.
      *
-     * @param array|object|string $body
+     * @param array|string $body
      *
      * @return $this
      */
@@ -304,10 +304,10 @@ trait ResponseTrait
      * Handles conversion of the data into the appropriate format,
      * and sets the correct Content-Type header for our response.
      *
-     * @param array|object|string $body
-     * @param string              $format Valid: json, xml
+     * @param array|string $body
+     * @param string       $format Valid: json, xml
      *
-     * @return false|string
+     * @return mixed
      *
      * @throws InvalidArgumentException If the body property is not string or array.
      */
@@ -377,7 +377,7 @@ trait ResponseTrait
      */
     public function setCache(array $options = [])
     {
-        if ($options === []) {
+        if (empty($options)) {
             return $this;
         }
 
@@ -582,7 +582,7 @@ trait ResponseTrait
         }
 
         /** @var CookieConfig|null $cookieConfig */
-        $cookieConfig = config(CookieConfig::class);
+        $cookieConfig = config('Cookie');
 
         if ($cookieConfig instanceof CookieConfig) {
             $secure ??= $cookieConfig->secure;
@@ -718,8 +718,6 @@ trait ResponseTrait
 
     /**
      * Actually sets the cookies.
-     *
-     * @return void
      */
     protected function sendCookies()
     {

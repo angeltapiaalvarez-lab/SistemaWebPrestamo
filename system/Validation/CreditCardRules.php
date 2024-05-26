@@ -17,7 +17,6 @@ namespace CodeIgniter\Validation;
  * Provides validation methods for common credit-card inputs.
  *
  * @see http://en.wikipedia.org/wiki/Credit_card_number
- * @see \CodeIgniter\Validation\CreditCardRulesTest
  */
 class CreditCardRules
 {
@@ -185,7 +184,7 @@ class CreditCardRules
         }
 
         // If empty, it's not a card type we recognize, or invalid type.
-        if ($info === null) {
+        if (empty($info)) {
             return false;
         }
 
@@ -237,6 +236,8 @@ class CreditCardRules
 
     /**
      * Checks the given number to see if the number passing a Luhn check.
+     *
+     * @param string $number
      */
     protected function isValidLuhn(?string $number = null): bool
     {

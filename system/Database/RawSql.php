@@ -11,9 +11,6 @@
 
 namespace CodeIgniter\Database;
 
-/**
- * @see \CodeIgniter\Database\RawSqlTest
- */
 class RawSql
 {
     /**

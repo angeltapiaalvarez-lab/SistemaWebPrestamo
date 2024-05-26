@@ -94,7 +94,7 @@ trait ResponseTrait
             $output = null;
             $this->format($data);
         } else {
-            $status ??= 200;
+            $status = empty($status) ? 200 : $status;
             $output = $this->format($data);
         }
 
@@ -318,7 +318,7 @@ trait ResponseTrait
 
         // Determine correct response type through content negotiation if not explicitly declared
         if (
-            ! in_array($this->format, ['json', 'xml'], true)
+            (empty($this->format) || ! in_array($this->format, ['json', 'xml'], true))
             && $this->request instanceof IncomingRequest
         ) {
             $mime = $this->request->negotiate(

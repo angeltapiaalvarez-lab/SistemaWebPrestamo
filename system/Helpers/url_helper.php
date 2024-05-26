@@ -10,14 +10,100 @@
  */
 
 use CodeIgniter\HTTP\CLIRequest;
+use CodeIgniter\HTTP\Exceptions\HTTPException;
 use CodeIgniter\HTTP\IncomingRequest;
-use CodeIgniter\HTTP\SiteURI;
 use CodeIgniter\HTTP\URI;
 use CodeIgniter\Router\Exceptions\RouterException;
 use Config\App;
 use Config\Services;
 
 // CodeIgniter URL Helpers
+
+if (! function_exists('_get_uri')) {
+    /**
+     * Used by the other URL functions to build a framework-specific URI
+     * based on $request->getUri()->getBaseURL() and the App config.
+     *
+     * @internal Outside the framework this should not be used directly.
+     *
+     * @param array|string $relativePath URI string or array of URI segments.
+     *                                   May include queries or fragments.
+     * @param App|null     $config       Alternative Config to use
+     *
+     * @throws HTTPException            For invalid paths.
+     * @throws InvalidArgumentException For invalid config.
+     */
+    function _get_uri($relativePath = '', ?App $config = null): URI
+    {
+        $appConfig = null;
+        if ($config === null) {
+            /** @var App $appConfig */
+            $appConfig = config('App');
+
+            if ($appConfig->baseURL === '') {
+                throw new InvalidArgumentException(
+                    '_get_uri() requires a valid baseURL.'
+                );
+            }
+        } elseif ($config->baseURL === '') {
+            throw new InvalidArgumentException(
+                '_get_uri() requires a valid baseURL.'
+            );
+        }
+
+        // Convert array of segments to a string
+        if (is_array($relativePath)) {
+            $relativePath = implode('/', $relativePath);
+        }
+
+        // If a full URI was passed then convert it
+        if (strpos($relativePath, '://') !== false) {
+            $full         = new URI($relativePath);
+            $relativePath = URI::createURIString(
+                null,
+                null,
+                $full->getPath(),
+                $full->getQuery(),
+                $full->getFragment()
+            );
+        }
+
+        $relativePath = URI::removeDotSegments($relativePath);
+
+        $request = Services::request();
+
+        if ($config === null) {
+            $baseURL = $request instanceof CLIRequest
+                ? rtrim($appConfig->baseURL, '/ ') . '/'
+                // Use the current baseURL for multiple domain support
+                : $request->getUri()->getBaseURL();
+
+            $config = $appConfig;
+        } else {
+            $baseURL = rtrim($config->baseURL, '/ ') . '/';
+        }
+
+        // Check for an index page
+        $indexPage = '';
+        if ($config->indexPage !== '') {
+            $indexPage = $config->indexPage;
+
+            // Check if we need a separator
+            if ($relativePath !== '' && $relativePath[0] !== '/' && $relativePath[0] !== '?') {
+                $indexPage .= '/';
+            }
+        }
+
+        $uri = new URI($baseURL . $indexPage . $relativePath);
+
+        // Check if the baseURL scheme needs to be coerced into its secure version
+        if ($config->forceGlobalSecureRequests && $uri->getScheme() === 'http') {
+            $uri->setScheme('https');
+        }
+
+        return $uri;
+    }
+}
 
 if (! function_exists('site_url')) {
     /**
@@ -29,11 +115,22 @@ if (! function_exists('site_url')) {
      */
     function site_url($relativePath = '', ?string $scheme = null, ?App $config = null): string
     {
-        $currentURI = Services::request()->getUri();
+        $uri = _get_uri($relativePath, $config);
 
-        assert($currentURI instanceof SiteURI);
+        $uriString = URI::createURIString(
+            $scheme ?? $uri->getScheme(),
+            $uri->getAuthority(),
+            $uri->getPath(),
+            $uri->getQuery(),
+            $uri->getFragment()
+        );
 
-        return $currentURI->siteUrl($relativePath, $scheme, $config);
+        // For protocol-relative links
+        if ($scheme === '') {
+            $uriString = '//' . $uriString;
+        }
+
+        return $uriString;
     }
 }
 
@@ -47,11 +144,18 @@ if (! function_exists('base_url')) {
      */
     function base_url($relativePath = '', ?string $scheme = null): string
     {
-        $currentURI = Services::request()->getUri();
+        /** @var App $config */
+        $config = clone config('App');
 
-        assert($currentURI instanceof SiteURI);
+        // Use the current baseURL for multiple domain support
+        $request         = Services::request();
+        $config->baseURL = $request instanceof CLIRequest
+            ? rtrim($config->baseURL, '/ ') . '/'
+            : $request->getUri()->getBaseURL();
 
-        return $currentURI->baseUrl($relativePath, $scheme);
+        $config->indexPage = '';
+
+        return site_url($relativePath, $scheme, $config);
     }
 }
 
@@ -69,7 +173,18 @@ if (! function_exists('current_url')) {
     {
         $request ??= Services::request();
         /** @var CLIRequest|IncomingRequest $request */
-        $uri = $request->getUri();
+        $routePath  = $request->getPath();
+        $currentURI = $request->getUri();
+
+        // Append queries and fragments
+        if ($query = $currentURI->getQuery()) {
+            $query = '?' . $query;
+        }
+        if ($fragment = $currentURI->getFragment()) {
+            $fragment = '#' . $fragment;
+        }
+
+        $uri = _get_uri($routePath . $query . $fragment);
 
         return $returnObject ? $uri : URI::createURIString($uri->getScheme(), $uri->getAuthority(), $uri->getPath());
     }
@@ -88,12 +203,10 @@ if (! function_exists('previous_url')) {
     {
         // Grab from the session first, if we have it,
         // since it's more reliable and safer.
-        if (isset($_SESSION)) {
-            $referer = session('_ci_previous_url');
-        }
-
         // Otherwise, grab a sanitized version from $_SERVER.
-        $referer ??= request()->getServer('HTTP_REFERER', FILTER_SANITIZE_URL) ?? site_url('/');
+        $referer = $_SESSION['_ci_previous_url'] ?? Services::request()->getServer('HTTP_REFERER', FILTER_SANITIZE_URL);
+
+        $referer ??= site_url('/');
 
         return $returnObject ? new URI($referer) : $referer;
     }
@@ -107,13 +220,10 @@ if (! function_exists('uri_string')) {
      */
     function uri_string(): string
     {
-        // The value of Services::request()->getUri()->getPath() returns
-        // full URI path.
-        $uri = Services::request()->getUri();
-
-        $path = $uri instanceof SiteURI ? $uri->getRoutePath() : $uri->getPath();
-
-        return ltrim($path, '/');
+        // The value of Services::request()->getUri()->getPath() is overridden
+        // by IncomingRequest constructor. If we use it here, the current tests
+        // in CurrentUrlTest will fail.
+        return ltrim(Services::request()->getPath(), '/');
     }
 }
 
@@ -128,7 +238,7 @@ if (! function_exists('index_page')) {
     function index_page(?App $altConfig = null): string
     {
         // use alternate config if provided, else default one
-        $config = $altConfig ?? config(App::class);
+        $config = $altConfig ?? config('App');
 
         return $config->indexPage;
     }
@@ -148,7 +258,7 @@ if (! function_exists('anchor')) {
     function anchor($uri = '', string $title = '', $attributes = '', ?App $altConfig = null): string
     {
         // use alternate config if provided, else default one
-        $config = $altConfig ?? config(App::class);
+        $config = $altConfig ?? config('App');
 
         $siteUrl = is_array($uri) ? site_url($uri, null, $config) : (preg_match('#^(\w+:)?//#i', $uri) ? $uri : site_url($uri, null, $config));
         // eliminate trailing slash
@@ -181,7 +291,7 @@ if (! function_exists('anchor_popup')) {
     function anchor_popup($uri = '', string $title = '', $attributes = false, ?App $altConfig = null): string
     {
         // use alternate config if provided, else default one
-        $config = $altConfig ?? config(App::class);
+        $config = $altConfig ?? config('App');
 
         $siteUrl = preg_match('#^(\w+:)?//#i', $uri) ? $uri : site_url($uri, null, $config);
         $siteUrl = rtrim($siteUrl, '/');
@@ -290,7 +400,7 @@ if (! function_exists('safe_mailto')) {
             if ($ordinal < 128) {
                 $x[] = '|' . $ordinal;
             } else {
-                if ($temp === []) {
+                if (empty($temp)) {
                     $count = ($ordinal < 224) ? 2 : 3;
                 }
 

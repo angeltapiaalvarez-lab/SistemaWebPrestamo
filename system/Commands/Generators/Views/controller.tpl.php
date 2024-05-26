@@ -3,7 +3,6 @@
 namespace {namespace};
 
 use {useStatement};
-use CodeIgniter\HTTP\ResponseInterface;
 
 class {class} extends {extends}
 {
@@ -11,7 +10,7 @@ class {class} extends {extends}
     /**
      * Return an array of resource objects, themselves in array format
      *
-     * @return ResponseInterface
+     * @return mixed
      */
     public function index()
     {
@@ -21,7 +20,7 @@ class {class} extends {extends}
     /**
      * Return the properties of a resource object
      *
-     * @return ResponseInterface
+     * @return mixed
      */
     public function show($id = null)
     {
@@ -31,7 +30,7 @@ class {class} extends {extends}
     /**
      * Return a new resource object, with default properties
      *
-     * @return ResponseInterface
+     * @return mixed
      */
     public function new()
     {
@@ -41,7 +40,7 @@ class {class} extends {extends}
     /**
      * Create a new resource object, from "posted" parameters
      *
-     * @return ResponseInterface
+     * @return mixed
      */
     public function create()
     {
@@ -51,7 +50,7 @@ class {class} extends {extends}
     /**
      * Return the editable properties of a resource object
      *
-     * @return ResponseInterface
+     * @return mixed
      */
     public function edit($id = null)
     {
@@ -61,7 +60,7 @@ class {class} extends {extends}
     /**
      * Add or update a model resource, from "posted" properties
      *
-     * @return ResponseInterface
+     * @return mixed
      */
     public function update($id = null)
     {
@@ -71,7 +70,7 @@ class {class} extends {extends}
     /**
      * Delete the designated resource object from the model
      *
-     * @return ResponseInterface
+     * @return mixed
      */
     public function delete($id = null)
     {
@@ -81,7 +80,7 @@ class {class} extends {extends}
     /**
      * Present a view of resource objects
      *
-     * @return ResponseInterface
+     * @return mixed
      */
     public function index()
     {
@@ -91,9 +90,9 @@ class {class} extends {extends}
     /**
      * Present a view to present a specific resource object
      *
-     * @param string $id
+     * @param mixed $id
      *
-     * @return ResponseInterface
+     * @return mixed
      */
     public function show($id = null)
     {

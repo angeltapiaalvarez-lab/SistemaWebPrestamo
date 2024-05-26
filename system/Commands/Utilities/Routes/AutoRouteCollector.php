@@ -13,8 +13,6 @@ namespace CodeIgniter\Commands\Utilities\Routes;
 
 /**
  * Collects data for auto route listing.
- *
- * @see \CodeIgniter\Commands\Utilities\Routes\AutoRouteCollectorTest
  */
 final class AutoRouteCollector
 {
@@ -37,7 +35,8 @@ final class AutoRouteCollector
     }
 
     /**
-     * @return list<list<string>>
+     * @return array<int, array<int, string>>
+     * @phpstan-return list<list<string>>
      */
     public function get(): array
     {

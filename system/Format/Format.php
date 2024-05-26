@@ -16,8 +16,6 @@ use Config\Format as FormatConfig;
 
 /**
  * The Format class is a convenient place to create Formatters.
- *
- * @see \CodeIgniter\Format\FormatTest
  */
 class Format
 {

@@ -46,7 +46,6 @@ interface RendererInterface
      *
      * @param string $context The context to escape it for: html, css, js, url
      *                        If 'raw', no escaping will happen
-     * @phpstan-param null|'html'|'js'|'css'|'url'|'attr'|'raw' $context
      *
      * @return RendererInterface
      */
@@ -58,7 +57,6 @@ interface RendererInterface
      * @param mixed  $value
      * @param string $context The context to escape it for: html, css, js, url
      *                        If 'raw' no escaping will happen
-     * @phpstan-param null|'html'|'js'|'css'|'url'|'attr'|'raw' $context
      *
      * @return RendererInterface
      */

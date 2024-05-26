@@ -15,9 +15,6 @@ use CodeIgniter\View\ViewDecoratorInterface;
 
 /**
  * View configuration
- *
- * @phpstan-type parser_callable (callable(mixed): mixed)
- * @phpstan-type parser_callable_string (callable(mixed): mixed)&string
  */
 class View extends BaseConfig
 {
@@ -36,11 +33,6 @@ class View extends BaseConfig
      *
      * To prevent potential abuse, all filters MUST be defined here
      * in order for them to be available for use within the Parser.
-     *
-     * @psalm-suppress UndefinedDocblockClass
-     *
-     * @var array<string, string>
-     * @phpstan-var array<string, parser_callable_string>
      */
     public $filters = [];
 
@@ -48,19 +40,13 @@ class View extends BaseConfig
      * Parser Plugins provide a way to extend the functionality provided
      * by the core Parser by creating aliases that will be replaced with
      * any callable. Can be single or tag pair.
-     *
-     * @psalm-suppress UndefinedDocblockClass
-     *
-     * @var array<string, array<string>|callable|string>
-     * @phpstan-var array<string, array<parser_callable_string>|parser_callable_string|parser_callable>
      */
     public $plugins = [];
 
     /**
      * Built-in View filters.
      *
-     * @var array<string, string>
-     * @phpstan-var array<string, parser_callable_string>
+     * @var array
      */
     protected $coreFilters = [
         'abs'            => '\abs',
@@ -89,8 +75,7 @@ class View extends BaseConfig
     /**
      * Built-in View plugins.
      *
-     * @var array<string, array<string>|callable|string>
-     * @phpstan-var array<string, array<parser_callable_string>|parser_callable_string|parser_callable>
+     * @var array
      */
     protected $corePlugins = [
         'csp_script_nonce'  => '\CodeIgniter\View\Plugins::cspScriptNonce',

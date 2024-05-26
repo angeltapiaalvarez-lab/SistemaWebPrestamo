@@ -13,12 +13,9 @@ namespace CodeIgniter\Commands\Utilities\Routes;
 
 use CodeIgniter\Config\Services;
 use CodeIgniter\Router\RouteCollection;
-use Config\App;
 
 /**
  * Generate a sample URI path from route key regex.
- *
- * @see \CodeIgniter\Commands\Utilities\Routes\SampleURIGeneratorTest
  */
 final class SampleURIGenerator
 {
@@ -51,14 +48,6 @@ final class SampleURIGenerator
     public function get(string $routeKey): string
     {
         $sampleUri = $routeKey;
-
-        if (strpos($routeKey, '{locale}') !== false) {
-            $sampleUri = str_replace(
-                '{locale}',
-                config(App::class)->defaultLocale,
-                $routeKey
-            );
-        }
 
         foreach ($this->routes->getPlaceholders() as $placeholder => $regex) {
             $sample = $this->samples[$placeholder] ?? '::unknown::';

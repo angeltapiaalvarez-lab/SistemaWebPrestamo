@@ -18,9 +18,6 @@ class TestException extends CriticalError
 {
     use DebugTraceableTrait;
 
-    /**
-     * @return static
-     */
     public static function forInvalidMockClass(string $name)
     {
         return new static(lang('Test.invalidMockClass', [$name]));

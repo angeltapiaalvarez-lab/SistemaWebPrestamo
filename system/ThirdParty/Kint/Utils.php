@@ -150,10 +150,6 @@ final class Utils
      */
     public static function composerSkipFlags(): void
     {
-        if (\defined('KINT_SKIP_FACADE') && \defined('KINT_SKIP_HELPERS')) {
-            return;
-        }
-
         $extras = self::composerGetExtras();
 
         if (!empty($extras['disable-facade']) && !\defined('KINT_SKIP_FACADE')) {
@@ -255,6 +251,8 @@ final class Utils
 
     /**
      * @psalm-param Encoding $encoding
+     *
+     * @param mixed $encoding
      */
     public static function truncateString(string $input, int $length = PHP_INT_MAX, string $end = '...', $encoding = false): string
     {

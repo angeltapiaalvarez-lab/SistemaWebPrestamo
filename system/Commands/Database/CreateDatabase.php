@@ -82,7 +82,10 @@ class CreateDatabase extends BaseCommand
         }
 
         try {
-            $config = config(Database::class);
+            /**
+             * @var Database $config
+             */
+            $config = config('Database');
 
             // Set to an empty database to prevent connection errors.
             $group = ENVIRONMENT === 'testing' ? 'tests' : $config->defaultGroup;

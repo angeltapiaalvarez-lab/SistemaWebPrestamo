@@ -57,13 +57,13 @@ class FilterCheck extends BaseCommand
      */
     protected $arguments = [
         'method' => 'The HTTP method. get, post, put, etc.',
-        'route'  => 'The route (URI path) to check filters.',
+        'route'  => 'The route (URI path) to check filtes.',
     ];
 
     /**
      * the Command's Options
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $options = [];
 

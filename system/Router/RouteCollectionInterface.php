@@ -28,9 +28,8 @@ interface RouteCollectionInterface
     /**
      * Adds a single route to the collection.
      *
-     * @param string               $from    The route path (with placeholders or regex)
-     * @param array|Closure|string $to      The route handler
-     * @param array|null           $options The route options
+     * @param array|Closure|string $to
+     * @param array                $options
      *
      * @return RouteCollectionInterface
      */
@@ -45,7 +44,7 @@ interface RouteCollectionInterface
      * multiple placeholders added at once.
      *
      * @param array|string $placeholder
-     * @param string|null  $pattern     The regex pattern
+     * @param string       $pattern
      *
      * @return RouteCollectionInterface
      */
@@ -180,12 +179,12 @@ interface RouteCollectionInterface
     /**
      * Determines if the route is a redirecting route.
      */
-    public function isRedirect(string $routeKey): bool;
+    public function isRedirect(string $from): bool;
 
     /**
      * Grabs the HTTP status code from a redirecting Route.
      */
-    public function getRedirectCode(string $routeKey): int;
+    public function getRedirectCode(string $from): int;
 
     /**
      * Get the flag that limit or not the routes with {locale} placeholder to App::$supportedLocales

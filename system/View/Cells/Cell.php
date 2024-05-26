@@ -51,8 +51,6 @@ class Cell
 
     /**
      * Sets the view to use when rendered.
-     *
-     * @return $this
      */
     public function setView(string $view)
     {

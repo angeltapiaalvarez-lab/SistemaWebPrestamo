@@ -54,14 +54,14 @@ class ListCommands extends BaseCommand
     /**
      * the Command's Arguments
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $arguments = [];
 
     /**
      * the Command's Options
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $options = [
         '--simple' => 'Prints a list of the commands with no other info',
