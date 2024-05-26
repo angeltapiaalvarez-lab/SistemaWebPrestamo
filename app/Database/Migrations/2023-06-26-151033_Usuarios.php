@@ -43,6 +43,7 @@ class Usuarios extends Migration
             'estado' => [
                 'type' => 'INT',
                 'constraint' => '11',
+                'default' => '1',
             ],
             'token' => [
                 'type' => 'VARCHAR',
