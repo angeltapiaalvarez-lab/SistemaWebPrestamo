@@ -1,4 +1,4 @@
-<!--head-->
+<?= $this->include('ayouts/head.php'); ?>
 
 <body>
   <div class="loader"></div>
@@ -12,10 +12,11 @@
         <section class="section">
           <!--contenido-->
         </section>
-        <!--paint-->
+        <?= $this->include('ayouts/paint.php'); ?>
       </div>
-      <!--footer-->
+      <?= $this->include('ayouts/footer.php'); ?>
     </div>
+    <?= $this->include('ayouts/scritps.php'); ?>
   </div>
 
 </body>
