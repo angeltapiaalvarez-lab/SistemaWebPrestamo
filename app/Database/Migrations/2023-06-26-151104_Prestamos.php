@@ -40,7 +40,7 @@ class Prestamos extends Migration
             'estado' => [
                 'type' => 'INT',
                 'constraint' => '11',
-                'default' => '1',
+                'default'    => '1',
             ],
             'created_at' => [
                 'type'       => 'DATETIME'

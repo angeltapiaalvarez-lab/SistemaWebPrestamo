@@ -1,24 +1,23 @@
-<?= $this->include('ayouts/head.php'); ?>
-
+<?= $this->include('layouts/head.php'); ?>
 <body>
   <div class="loader"></div>
   <div id="app">
     <div class="main-wrapper main-wrapper-1">
       <div class="navbar-bg"></div>
-      <!--menus-->
-
+      <?= $this->include('layouts/menu.php'); ?>
+      
       <!-- Main Content -->
       <div class="main-content">
         <section class="section">
-          <!--contenido-->
+            <!-- contenido -->
+            <?= $this->renderSection('content'); ?>
         </section>
-        <?= $this->include('ayouts/paint.php'); ?>
+        <?= $this->include('layouts/paint.php'); ?>
       </div>
-      <?= $this->include('ayouts/footer.php'); ?>
+      <?= $this->include('layouts/footer.php'); ?>
     </div>
-    <?= $this->include('ayouts/scritps.php'); ?>
   </div>
-
+  <?= $this->include('layouts/scripts.php'); ?>
 </body>
 
 </html>
