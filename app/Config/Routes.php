@@ -33,6 +33,9 @@ $routes->get('/', 'Home::index');
 $routes->post('/login', 'LoginController::validar');
 $routes->get('/admin', 'AdminController::index');
 
+$routes->get('/usuarios/list', 'UsuariosController::listar');
+$routes->resource('usuarios', ['controller' => 'UsuariosController']);
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

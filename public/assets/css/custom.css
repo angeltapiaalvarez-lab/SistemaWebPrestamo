@@ -1,4 +1,6 @@
-
-/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJjdXN0b20uY3NzIn0= */
-
-/*# sourceMappingURL=custom.css.map */
+.dt-buttons button{
+    background-color: white !important;
+    box-shadow: initial;
+    margin: 0;
+    padding: 0;
+}

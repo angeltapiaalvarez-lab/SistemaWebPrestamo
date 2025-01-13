@@ -10,11 +10,11 @@ class UsuariosSeeder extends Seeder
     {
         $data = [
             'nombre'    => 'ANGEL',
-            'apellido'    => 'TAPIA',
+            'apellido'    => 'Tapia',
             'telefono'    => '900897537',
             'correo'    => 'angel.tapia78910@gmail.com',
-            'direccion'    => 'Nicaragua/Masaya',
-            'clave'    => password_hash('admin1234', PASSWORD_DEFAULT),
+            'direccion'    => 'Nicaragua',
+            'clave'    => password_hash('admin123456789', PASSWORD_DEFAULT),
             'verify'    => '1',
             'created_at'    => date('Y-m-d H:i:s'),
             'updated_at'    => date('Y-m-d H:i:s'),

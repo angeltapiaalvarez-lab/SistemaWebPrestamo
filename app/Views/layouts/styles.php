@@ -3,4 +3,7 @@
 <!-- Template CSS -->
 <link rel="stylesheet" href="<?= base_url('assets/css/style.css'); ?>">
 <link rel="stylesheet" href="<?= base_url('assets/css/components.css'); ?>">
+<link rel="stylesheet" href="<?= base_url('assets/bundles/datatables/datatables.min.css'); ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/custom.css'); ?>">
+
 <?= $this->renderSection('css'); ?>

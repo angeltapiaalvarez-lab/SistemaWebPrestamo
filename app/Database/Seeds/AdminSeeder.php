@@ -9,12 +9,12 @@ class AdminSeeder extends Seeder
     public function run()
     {
         $data = [
-            'identidad' => '123456789',
-            'nombre'    => 'angeltap',
+            'identidad' => '401-091299-1011H',
+            'nombre'    => 'Angel Tapia',
             'telefono'    => '78374529',
-            'correo'    => 'angel.tapia78910gmail.com',
-            'direccion'    => 'Perú',
-            'mensaje'    => '6 MESES',
+            'correo'    => 'angel.tapia78910@gmail.com',
+            'direccion'    => 'Nicaragua',
+            'mensaje'    => 'si',
             'tasa_interes'    => '10',
             'cuotas'    => '18',
             'created_at'    => date('Y-m-d H:i:s'),
