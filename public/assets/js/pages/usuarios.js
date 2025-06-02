@@ -1,5 +1,3 @@
-const csrf_token = document.querySelector('meta[name="csrf_token"]');
-const csrf_hash = document.querySelector('meta[name="csrf_hash"]');
 let tblUsuarios;
 document.addEventListener('DOMContentLoaded', function(){
     tblUsuarios = $('#tblUsers').DataTable( {

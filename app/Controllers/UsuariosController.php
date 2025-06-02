@@ -8,12 +8,13 @@ use App\Models\UsuariosModel;
 
 class UsuariosController extends BaseController
 {
-    private $usuarios, $roles, $reglas;
+    private $usuarios, $roles, $reglas, $session;
     public function __construct()
     {
         $this->usuarios = new UsuariosModel();
         $this->roles = new RolesModel();
         helper(['form']);
+        $this->session = session();
     }
     public function index()
     {
@@ -25,7 +26,7 @@ class UsuariosController extends BaseController
     {
         $this->usuarios->select('usuarios.id, usuarios.nombre, usuarios.apellido, usuarios.telefono, usuarios.correo, usuarios.direccion, usuarios.estado, roles.nombre AS rol');
         $data = $this->usuarios->join('roles', 'usuarios.id_rol = roles.id')->where('usuarios.estado', '1')->findAll();
-        echo json_encode($data);
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
     }
 
@@ -170,5 +171,10 @@ class UsuariosController extends BaseController
             $data['usuario'] = $this->usuarios->where('id', $idUsuario)->first();
             return view('usuarios/edit', $data);
         } 
+    }
+
+    public function logout() {
+        $this->session->destroy();
+        return redirect()->to(base_url());
     }
 }

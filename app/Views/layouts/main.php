@@ -12,6 +12,9 @@
             <!-- contenido -->
             <?= $this->renderSection('content'); ?>
         </section>
+        
+        <?= $this->renderSection('modal'); ?>
+
         <?= $this->include('layouts/paint.php'); ?>
       </div>
       <?= $this->include('layouts/footer.php'); ?>

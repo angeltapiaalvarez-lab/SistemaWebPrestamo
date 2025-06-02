@@ -10,10 +10,10 @@ class UsuariosSeeder extends Seeder
     {
         $data = [
             'nombre'    => 'ANGEL',
-            'apellido'    => 'Tapia',
+            'apellido'    => 'SIFUENTES',
             'telefono'    => '900897537',
-            'correo'    => 'angel.tapia78910@gmail.com',
-            'direccion'    => 'Nicaragua',
+            'correo'    => 'info@angelsifuentes.net',
+            'direccion'    => 'Perú',
             'clave'    => password_hash('admin123456789', PASSWORD_DEFAULT),
             'verify'    => '1',
             'created_at'    => date('Y-m-d H:i:s'),

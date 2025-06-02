@@ -46,7 +46,7 @@ class LoginController extends BaseController
                         'nombre' => $result['nombre']
                     ];
                     $this->session->set($datos);
-                    return redirect()->to(base_url('admin'))->with('respuesta', [
+                    return redirect()->to(base_url('dashboard'))->with('respuesta', [
                         'type' => 'success',
                         'msg' => 'HAS INICIADO SESION CORRECTAMENTE',
                     ]);

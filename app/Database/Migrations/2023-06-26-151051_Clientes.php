@@ -37,6 +37,11 @@ class Clientes extends Migration
                 'constraint' => '20',
                 'unique'     => true
             ],
+            'whatsapp' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '20',
+                'unique'     => true
+            ],
             'correo' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '150',
