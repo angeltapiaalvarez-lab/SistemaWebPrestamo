@@ -20,7 +20,7 @@ class ClientesController extends BaseController
 
     public function listar()
     {
-        $data = $this->clientes->where('estado', '1')->findAll();
+        $data = $this->clientes->findAll();
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
     }
@@ -100,8 +100,28 @@ class ClientesController extends BaseController
                     'type' => 'danger',
                     'msg' => 'ERROR AL ELIMINAR',
                 ]);
-            } 
-            
+            }
+
+        }
+    }
+
+    public function estado($idCliente)
+    {
+        if ($this->request->is('put')) {
+            $estado = $this->request->getVar('estado') == '1' ? '1' : '0';
+            $mensaje = $estado === '1' ? 'CLIENTE ACTIVADO' : 'CLIENTE DADO DE BAJA';
+            $data = $this->clientes->update($idCliente, ['estado' => $estado]);
+            if ($data) {
+                return redirect()->to(base_url('clientes'))->with('respuesta', [
+                    'type' => 'success',
+                    'msg' => $mensaje,
+                ]);
+            } else {
+                return redirect()->to(base_url('clientes'))->with('respuesta', [
+                    'type' => 'danger',
+                    'msg' => 'ERROR AL CAMBIAR ESTADO',
+                ]);
+            }
         }
     }
 }

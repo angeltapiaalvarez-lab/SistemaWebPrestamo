@@ -40,6 +40,7 @@ $routes->get('/usuarios/logout', 'UsuariosController::logout');
 $routes->resource('usuarios', ['controller' => 'UsuariosController']);
 
 $routes->get('/clientes/list', 'ClientesController::listar');
+$routes->put('/clientes/(:num)/estado', 'ClientesController::estado/$1');
 $routes->resource('clientes', ['controller' => 'ClientesController']);
 
 $routes->get('/prestamos', 'PrestamosController::index');
