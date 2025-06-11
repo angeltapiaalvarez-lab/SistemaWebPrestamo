@@ -25,7 +25,7 @@ class Roles extends Migration
             ],
             'estado' => [
                 'type' => 'INT',
-                'default' => '1',
+                'default'    => '1',
             ],
             'created_at' => [
                 'type'       => 'DATETIME'

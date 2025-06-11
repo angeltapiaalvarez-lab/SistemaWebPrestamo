@@ -30,6 +30,28 @@ $routes->set404Override();
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
+$routes->post('/login', 'LoginController::validar');
+$routes->get('/admin', 'AdminController::index');
+$routes->get('/dashboard', 'AdminController::dashboard');
+$routes->put('/admin/(:num)', 'AdminController::update/$1');
+
+$routes->get('/usuarios/list', 'UsuariosController::listar');
+$routes->get('/usuarios/logout', 'UsuariosController::logout');
+$routes->resource('usuarios', ['controller' => 'UsuariosController']);
+
+$routes->get('/clientes/list', 'ClientesController::listar');
+$routes->resource('clientes', ['controller' => 'ClientesController']);
+
+$routes->get('/prestamos', 'PrestamosController::index');
+$routes->get('/prestamos/historial', 'PrestamosController::historial');
+$routes->get('/prestamos/listHistorial', 'PrestamosController::listHistorial');
+$routes->get('/prestamos/buscarCliente', 'PrestamosController::buscarCliente');
+$routes->get('/prestamos/(:num)/detail', 'PrestamosController::detail/$1');
+$routes->get('/prestamos/(:num)/reporte', 'PrestamosController::reporte/$1');
+$routes->post('/prestamos', 'PrestamosController::create');
+$routes->post('/prestamos/enviarCorreo', 'PrestamosController::enviarCorreo');
+$routes->put('/prestamos/(:num)', 'PrestamosController::update/$1');
+$routes->delete('/prestamos/(:num)', 'PrestamosController::delete/$1');
 
 /*
  * --------------------------------------------------------------------

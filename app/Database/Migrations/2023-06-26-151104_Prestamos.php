@@ -35,12 +35,13 @@ class Prestamos extends Migration
                 'type' => 'DATETIME'
             ],
             'fecha_venc' => [
-                'type' => 'DATE'
+                'type' => 'DATE',
+                'null' => true
             ],
             'estado' => [
                 'type' => 'INT',
                 'constraint' => '11',
-                'default' => '1',
+                'default'    => '1',
             ],
             'created_at' => [
                 'type'       => 'DATETIME'

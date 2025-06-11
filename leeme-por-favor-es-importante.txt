@@ -1,0 +1,24 @@
+TENER ACTIVADO LAS EXTENSION NECESARIAS PARA CODEIGNITER 4.
+El proceso se hace en el video de materiales necesarias.
+
+Abrir CMD o TERMINAL. con la ruta del proyecto ejemplo:
+C:\xampp\htdocs\prestamos
+	ejecutar composer install
+
+Luego crea una base de datos.
+cambia la conexion en el archivo .env
+
+En la misma ruta del proyecto ejecuta las migraciones y seeders.
+	php spark migrate
+	php spark db:seed Main
+
+Accede en el navegador a http://localhost/prestamos/public/
+
+Correo: info@angelsifuentes.net
+Clave: admin123456789
+
+IMPORTANTE:
+ Si cambias el nombre del proyecto cambia la base_url en el archivo .env
+
+
+	
