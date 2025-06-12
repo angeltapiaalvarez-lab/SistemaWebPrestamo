@@ -29,7 +29,7 @@ Gestion clientes
                         <th>Telefono</th>
                         <th>Correo</th>
                         <th>Direccion</th>
-                        <th>Estado</th>
+                        <th>Préstamo</th>
                     </tr>
                 </thead>
                 <tbody>

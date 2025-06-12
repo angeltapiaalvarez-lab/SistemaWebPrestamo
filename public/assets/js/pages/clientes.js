@@ -51,10 +51,10 @@ document.addEventListener('DOMContentLoaded', function(){
                 data: null,
                 render: function (data, type) {
                     if (type === 'display') {
-                        if (data.estado == 1) {
-                            return `<span class="badge bg-success">Activo</span>`;
+                        if (data.prestamo_activo == 1) {
+                            return `<span class="badge bg-success">Préstamo activo</span>`;
                         }
-                        return `<span class="badge bg-danger">Inactivo</span>`;
+                        return `<span class="badge bg-secondary">Sin préstamo</span>`;
                     }
                     return data;
                 },
