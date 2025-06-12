@@ -20,7 +20,10 @@ class ClientesController extends BaseController
 
     public function listar()
     {
-        $data = $this->clientes->findAll();
+        $data = $this->clientes
+            ->select('clientes.*, IF(p.id IS NULL, 0, 1) AS prestamo_activo')
+            ->join('prestamos AS p', 'p.id_cliente = clientes.id AND p.estado = 1', 'left')
+            ->findAll();
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
     }
