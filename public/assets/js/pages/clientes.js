@@ -9,24 +9,13 @@ document.addEventListener('DOMContentLoaded', function(){
             {
                 data: null,
                 render: function (data, type) {
-                    if (type === 'display') {
-                        let btnEstado = '';
-                        if (data.estado == 1) {
-                            btnEstado = `<form action="${ base_url + 'clientes/' + data.id + '/estado' }" method="post" class="d-inline cambiarEstado">
-                                <input type="hidden" name="${csrf_token.getAttribute('content')}" value="${csrf_hash.getAttribute('content')}" />
-                                <input type="hidden" name="_method" value="PUT">
-                                <input type="hidden" name="estado" value="0">
-                                <button type="submit" class="btn btn-warning"><i class="fas fa-ban"></i></button>
-                            </form>`;
-                        } else {
-                            btnEstado = `<form action="${ base_url + 'clientes/' + data.id + '/estado' }" method="post" class="d-inline cambiarEstado">
-                                <input type="hidden" name="${csrf_token.getAttribute('content')}" value="${csrf_hash.getAttribute('content')}" />
-                                <input type="hidden" name="_method" value="PUT">
-                                <input type="hidden" name="estado" value="1">
-                                <button type="submit" class="btn btn-success"><i class="fas fa-check"></i></button>
-                            </form>`;
-                        }
-                        return `<a class="btn btn-primary" href="${ base_url + 'clientes/' + data.id + '/edit' }"><i class="fas fa-edit"></i></a> ${btnEstado}`;
+                    if (type === 'display') { 
+                        return `<a class="btn btn-primary" href="${ base_url + 'clientes/' + data.id + '/edit' }"><i class="fas fa-edit"></i></a>
+                        <form action="${ base_url + 'clientes/' + data.id }" method="post" class="d-inline eliminar">
+                            <input type="hidden" name="${csrf_token.getAttribute('content')}" value="${csrf_hash.getAttribute('content')}" />    
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                        </form>`;
                     }
                     return data;
                 },
@@ -50,11 +39,8 @@ document.addEventListener('DOMContentLoaded', function(){
             {
                 data: null,
                 render: function (data, type) {
-                    if (type === 'display') {
-                        if (data.prestamo_activo == 1) {
-                            return `<span class="badge bg-success">Préstamo activo</span>`;
-                        }
-                        return `<span class="badge bg-secondary">Sin préstamo</span>`;
+                    if (type === 'display') { 
+                        return `<span class="badge bg-success">Activo</span>`;
                     }
                     return data;
                 },
@@ -70,25 +56,25 @@ document.addEventListener('DOMContentLoaded', function(){
     } );
 
     tblClientes.on('draw', function () {
-        let lista = document.querySelectorAll('.cambiarEstado');
+        let lista = document.querySelectorAll('.eliminar');
         for (let i = 0; i < lista.length; i++) {
             lista[i].addEventListener('submit', function(e){
                 e.preventDefault();
-                cambiarEstado(this);
-            });
+                eliminarRegistro(this);
+            });          
         }
     });
 })
 
-function cambiarEstado(form){
+function eliminarRegistro(form){
     Swal.fire({
         title: 'Mensaje?',
-        text: "Esta seguro de cambiar el estado!",
+        text: "Esta seguro de eliminar!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Cambiar!'
+        confirmButtonText: 'Si, Eliminar!'
       }).then((result) => {
         if (result.isConfirmed) {
           form.submit();

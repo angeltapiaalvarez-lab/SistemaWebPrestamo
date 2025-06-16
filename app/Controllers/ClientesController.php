@@ -7,35 +7,43 @@ use App\Models\ClientesModel;
 
 class ClientesController extends BaseController
 {
-    private $clientes;
+    private $clientes, $session;
     public function __construct()
     {
         $this->clientes = new ClientesModel();
         helper(['form']);
+        $this->session = session();
     }
     public function index()
     {
-        return view('clientes/index');
+        if (!verificar('listar clientes', $this->session->permisos)) {
+            return view('permisos');
+            exit;
+        }
+        $data['active'] = 'cliente';
+        return view('clientes/index', $data);
     }
 
     public function listar()
     {
-        $data = $this->clientes
-            ->select('clientes.*, IF(p.id IS NULL, 0, 1) AS prestamo_activo')
-            ->join('prestamos AS p', 'p.id_cliente = clientes.id AND p.estado = 1', 'left')
-            ->findAll();
+        $data = $this->clientes->where('estado', '1')->findAll();
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
     }
 
     public function new()
     {
-        return view('clientes/nuevo');
+        if (!verificar('nuevo cliente', $this->session->permisos)) {
+            return view('permisos');
+            exit;
+        }
+        $data['active'] = 'cliente';
+        return view('clientes/nuevo', $data);
     }
 
     public function create()
     {
-        if ($this->request->is('post')){
+        if ($this->request->is('post') && verificar('nuevo cliente', $this->session->permisos)){
             $data = [
                 'id_cliente' => $this->request->getVar('id_cliente'),
                 'identidad' => $this->request->getVar('identidad'),
@@ -49,23 +57,32 @@ class ClientesController extends BaseController
             ];
             if ($this->clientes->insert($data) === false) {
                 $data['errors'] = $this->clientes->errors();
+                $data['active'] = 'cliente';
                 return view('clientes/nuevo', $data);
             }
+            return redirect()->to(base_url('clientes'))->with('respuesta', [
+                'type' => 'success',
+                'msg' => 'CLIENTE REGISTRADO',
+            ]);
+        }else{
+            return view('permisos');
         }
-        return redirect()->to(base_url('clientes'))->with('respuesta', [
-            'type' => 'success',
-            'msg' => 'CLIENTE REGISTRADO',
-        ]);      
+              
     }
 
     public function edit($idCliente){
+        if (!verificar('editar cliente', $this->session->permisos)) {
+            return view('permisos');
+            exit;
+        }
         $data['cliente'] = $this->clientes->where('id', $idCliente)->first();
+        $data['active'] = 'cliente';
         return view('clientes/edit', $data);
     }
 
     public function update($idCliente)
     {
-        if ($this->request->is('put')){
+        if ($this->request->is('put') && verificar('editar cliente', $this->session->permisos)){
             $data = [
                 'id_cliente' => $this->request->getVar('id_cliente'),
                 'identidad' => $this->request->getVar('identidad'),
@@ -80,17 +97,21 @@ class ClientesController extends BaseController
             if ($this->clientes->update($idCliente, $data) === false) {
                 $data['errors'] = $this->clientes->errors();
                 $data['cliente'] = $this->clientes->where('id', $idCliente)->first();
+                $data['active'] = 'cliente';
                 return view('clientes/edit', $data);
             }
+            return redirect()->to(base_url('clientes'))->with('respuesta', [
+                'type' => 'success',
+                'msg' => 'CLIENTE MODIFICADO',
+            ]); 
+        }else{
+            return view('permisos');
         }
-        return redirect()->to(base_url('clientes'))->with('respuesta', [
-            'type' => 'success',
-            'msg' => 'CLIENTE MODIFICADO',
-        ]);      
+             
     }
 
     public function delete($idCliente) {
-        if ($this->request->is('delete')) {
+        if ($this->request->is('delete') && verificar('eliminar cliente', $this->session->permisos)) {
             //$data = $this->usuarios->delete($idUsuario);
             $data = $this->clientes->update($idCliente, ['estado' => '0']);
             if ($data) {
@@ -103,28 +124,10 @@ class ClientesController extends BaseController
                     'type' => 'danger',
                     'msg' => 'ERROR AL ELIMINAR',
                 ]);
-            }
-
-        }
-    }
-
-    public function estado($idCliente)
-    {
-        if ($this->request->is('put')) {
-            $estado = $this->request->getVar('estado') == '1' ? '1' : '0';
-            $mensaje = $estado === '1' ? 'CLIENTE ACTIVADO' : 'CLIENTE DADO DE BAJA';
-            $data = $this->clientes->update($idCliente, ['estado' => $estado]);
-            if ($data) {
-                return redirect()->to(base_url('clientes'))->with('respuesta', [
-                    'type' => 'success',
-                    'msg' => $mensaje,
-                ]);
-            } else {
-                return redirect()->to(base_url('clientes'))->with('respuesta', [
-                    'type' => 'danger',
-                    'msg' => 'ERROR AL CAMBIAR ESTADO',
-                ]);
-            }
+            } 
+            
+        }else{
+            return view('permisos');
         }
     }
 }

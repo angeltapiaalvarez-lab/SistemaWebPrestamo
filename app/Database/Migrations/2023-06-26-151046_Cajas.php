@@ -22,14 +22,10 @@ class Cajas extends Migration
             'fecha_apertura' => [
                 'type'       => 'DATETIME'
             ],
-            'ganancia' => [
-                'type'       => 'DECIMAL',
-                'constraint' => '10,2',
-                'default'    => '0'
-            ],
             'estado' => [
                 'type' => 'INT',
                 'constraint' => '11',
+                'default'    => '1'
             ],
             'created_at' => [
                 'type'       => 'DATETIME'

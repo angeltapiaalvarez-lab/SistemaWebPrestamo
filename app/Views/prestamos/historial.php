@@ -27,6 +27,7 @@ Historial prestamos
                         <th>Importe</th>
                         <th>Modalidad</th>
                         <th>F. venc.</th>
+                        <th>Ganancia</th>
                         <th>Usuario</th>
                         <th>Estado</th>
                     </tr>

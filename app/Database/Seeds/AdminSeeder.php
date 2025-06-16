@@ -10,11 +10,11 @@ class AdminSeeder extends Seeder
     {
         $data = [
             'identidad' => '123456789',
-            'nombre'    => 'SISPREY',
+            'nombre'    => 'VIDA INFORMÁTICO',
             'telefono'    => '900897537',
-            'correo'    => 'ange.tapia78910@gmail.com',
+            'correo'    => 'info@angelsifuentes.net',
             'direccion'    => 'Perú',
-            'mensaje'    => 'holamundo',
+            'mensaje'    => 'GRACIAS POR ADQUIRIR EL CURSO',
             'tasa_interes'    => '10',
             'cuotas'    => '18',
             'created_at'    => date('Y-m-d H:i:s'),

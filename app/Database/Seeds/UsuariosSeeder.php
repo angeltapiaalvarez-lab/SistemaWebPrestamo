@@ -9,11 +9,11 @@ class UsuariosSeeder extends Seeder
     public function run()
     {
         $data = [
-            'nombre'    => 'ANGEL',
-            'apellido'    => 'SIFUENTES',
+            'nombre'    => 'Angel',
+            'apellido'    => 'Tapia',
             'telefono'    => '900897537',
-            'correo'    => 'info@angelsifuentes.net',
-            'direccion'    => 'Perú',
+            'correo'    => 'angel.tapia78910@gmail.com',
+            'direccion'    => 'Mangua, portezuelo parque industrial',
             'clave'    => password_hash('admin123456789', PASSWORD_DEFAULT),
             'verify'    => '1',
             'created_at'    => date('Y-m-d H:i:s'),

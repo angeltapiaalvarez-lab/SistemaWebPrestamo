@@ -30,29 +30,63 @@ $routes->set404Override();
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
+$routes->get('/forgot', 'LoginController::forgot');
+$routes->get('/restablecer/(:any)', 'LoginController::restablecer/$1');
+$routes->post('/reset', 'LoginController::reset');
 $routes->post('/login', 'LoginController::validar');
-$routes->get('/admin', 'AdminController::index');
-$routes->get('/dashboard', 'AdminController::dashboard');
-$routes->put('/admin/(:num)', 'AdminController::update/$1');
+$routes->put('/restablecer', 'LoginController::restablecerPass');
 
-$routes->get('/usuarios/list', 'UsuariosController::listar');
-$routes->get('/usuarios/logout', 'UsuariosController::logout');
-$routes->resource('usuarios', ['controller' => 'UsuariosController']);
+$routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
 
-$routes->get('/clientes/list', 'ClientesController::listar');
-$routes->put('/clientes/(:num)/estado', 'ClientesController::estado/$1');
-$routes->resource('clientes', ['controller' => 'ClientesController']);
+    $routes->get('/admin', 'AdminController::index');
+    $routes->get('/dashboard', 'AdminController::dashboard');
+    $routes->get('/backup', 'AdminController::createBackup');
+    $routes->get('/prestamosMes/(:num)', 'AdminController::prestamosMes/$1');
+    $routes->put('/admin/(:num)', 'AdminController::update/$1');
 
-$routes->get('/prestamos', 'PrestamosController::index');
-$routes->get('/prestamos/historial', 'PrestamosController::historial');
-$routes->get('/prestamos/listHistorial', 'PrestamosController::listHistorial');
-$routes->get('/prestamos/buscarCliente', 'PrestamosController::buscarCliente');
-$routes->get('/prestamos/(:num)/detail', 'PrestamosController::detail/$1');
-$routes->get('/prestamos/(:num)/reporte', 'PrestamosController::reporte/$1');
-$routes->post('/prestamos', 'PrestamosController::create');
-$routes->post('/prestamos/enviarCorreo', 'PrestamosController::enviarCorreo');
-$routes->put('/prestamos/(:num)', 'PrestamosController::update/$1');
-$routes->delete('/prestamos/(:num)', 'PrestamosController::delete/$1');
+    //usuarios
+    $routes->get('/usuarios/logout', 'UsuariosController::logout');
+    $routes->get('/usuarios', 'UsuariosController::index');
+    $routes->get('/usuarios/new', 'UsuariosController::new');
+    $routes->get('/usuarios/list', 'UsuariosController::listar');
+
+    $routes->get('/usuarios/(:num)/edit', 'UsuariosController::edit/$1');
+    //profile user
+    $routes->get('/usuarios/profile', 'UsuariosController::profile');
+    $routes->post('/usuarios', 'UsuariosController::create');
+    $routes->delete('/usuarios/(:num)', 'UsuariosController::delete/$1');
+    $routes->put('/profile', 'UsuariosController::saveprofile');
+    $routes->put('/usuarios/cambiarClave', 'UsuariosController::cambiarClave');
+    $routes->put('/usuarios/(:num)', 'UsuariosController::update/$1');
+    //fin usuario
+
+    $routes->get('/clientes/list', 'ClientesController::listar');
+    $routes->resource('clientes', ['controller' => 'ClientesController']);
+
+    $routes->get('/prestamos', 'PrestamosController::index');
+    $routes->get('/prestamos/historial', 'PrestamosController::historial');
+    $routes->get('/prestamos/listHistorial', 'PrestamosController::listHistorial');
+    $routes->get('/prestamos/buscarCliente', 'PrestamosController::buscarCliente');
+    $routes->get('/prestamos/(:num)/detail', 'PrestamosController::detail/$1');
+    $routes->get('/prestamos/(:num)/reporte', 'PrestamosController::reporte/$1');
+    $routes->post('/prestamos', 'PrestamosController::create');
+    $routes->post('/prestamos/enviarCorreo', 'PrestamosController::enviarCorreo');
+    $routes->put('/prestamos/(:num)', 'PrestamosController::update/$1');
+    $routes->delete('/prestamos/(:num)', 'PrestamosController::delete/$1');
+
+    $routes->get('/cajas', 'CajasController::index');
+    $routes->get('/cajas/new', 'CajasController::new');
+    $routes->get('/cajas/movimientos', 'CajasController::movimientos');
+    $routes->get('/cajas/(:num)/edit', 'CajasController::edit/$1');
+    $routes->post('/cajas', 'CajasController::create');
+    $routes->put('/cajas/(:num)', 'CajasController::update/$1');
+
+    $routes->get('/reportesPdf/(:any)', 'ReportesController::reportesPdf/$1');
+    $routes->get('/reportesExcel/(:any)', 'ReportesController::reportesExcel/$1');
+
+    $routes->get('/roles/list', 'RolesController::listar');
+    $routes->resource('roles', ['controller' => 'RolesController']);
+});
 
 /*
  * --------------------------------------------------------------------
