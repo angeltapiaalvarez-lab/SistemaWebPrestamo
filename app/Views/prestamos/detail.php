@@ -65,7 +65,6 @@ Detalle del prestamo
                             $date = date('Y-m-d');
                             foreach ($detalles as $detalle) {
                                 $total += $detalle['importe_cuota'];
-                                $color = substr(md5($detalle['id']), 0, 6);
                                 $estado = '<span class="badge badge-danger">PENDIENTE</span>';
                                 if ($date > $detalle['fecha_venc'] && $detalle['estado'] == 1) {
                                     $class = 'bg-danger';
@@ -82,7 +81,7 @@ Detalle del prestamo
                             ?>
                                 <tr class="<?php echo $class; ?>">
                                     <td scope="row">
-                                        <button type="button" class="btn" style="background-color: #<?php echo $color; ?>">
+                                        <button type="button" class="btn btn-outline-secondary">
                                             Cuota <span class="badge badge-transparent text-dark"><?php echo $detalle['cuota']; ?></span>
                                         </button>
                                     </td>
