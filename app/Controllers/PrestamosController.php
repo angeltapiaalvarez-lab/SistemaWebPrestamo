@@ -8,6 +8,7 @@ use App\Models\CajasModel;
 use App\Models\ClientesModel;
 use App\Models\DetPrestamoModel;
 use App\Models\PrestamosModel;
+use App\Models\PagosModel;
 
 // reference the Dompdf namespace
 use Dompdf\Dompdf;
@@ -15,7 +16,7 @@ use Dompdf\Dompdf;
 class PrestamosController extends BaseController
 {
     private $empresa, $clientes, $prestamos,
-        $detalle, $session, $reglas, $cajas;
+        $detalle, $session, $reglas, $cajas, $pagos;
     public function __construct()
     {
         helper(['form', 'fecha', 'email']);
@@ -24,6 +25,7 @@ class PrestamosController extends BaseController
         $this->prestamos = new PrestamosModel();
         $this->detalle = new DetPrestamoModel();
         $this->cajas = new CajasModel();
+        $this->pagos = new PagosModel();
         $this->session = session();
     }
 
@@ -164,6 +166,12 @@ class PrestamosController extends BaseController
             ->where('prestamos.id', $id)->first();
 
         $data['detalles'] = $this->detalle->where('id_prestamo', $id)->findAll();
+        $data['pagos'] = $this->pagos
+            ->select('pagos.*, d.cuota')
+            ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
+            ->where('d.id_prestamo', $id)
+            ->orderBy('pagos.fecha_pago', 'ASC')
+            ->findAll();
         $data['active'] = 'prestamo';
         return view('prestamos/detail', $data);
     }
@@ -208,14 +216,32 @@ class PrestamosController extends BaseController
     {
         if ($this->request->is('put') && verificar('abono prestamo', $this->session->permisos)) {
             $consulta = $this->detalle
-                ->select('detalle_prestamos.id_prestamo, detalle_prestamos.fecha_venc, p.modalidad')
+                ->select('detalle_prestamos.*, p.modalidad')
                 ->join('prestamos AS p', 'detalle_prestamos.id_prestamo = p.id')
                 ->where('detalle_prestamos.id', $id)->first();
 
-            $data = $this->detalle->update($id, ['estado' => '0']);
+            if (empty($consulta)) {
+                return redirect()->back();
+            }
 
-            if ($data) {
-                //calcular vencimiento
+            $monto = $this->request->getVar('monto');
+            $metodo = $this->request->getVar('metodo');
+
+            $this->pagos->insert([
+                'id_detalle_prestamo' => $id,
+                'monto'               => $monto,
+                'fecha_pago'          => date('Y-m-d H:i:s'),
+                'metodo'              => $metodo,
+            ]);
+
+            $pagado = $this->pagos->selectSum('monto')
+                ->where('id_detalle_prestamo', $id)->first();
+
+            $msg = 'PAGO REGISTRADO';
+
+            if ($pagado['monto'] >= $consulta['importe_cuota'] && $consulta['estado'] == 1) {
+                $this->detalle->update($id, ['estado' => '0']);
+
                 if ($consulta['modalidad'] === 'DIARIO') {
                     $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+1 days'));
                 } else if ($consulta['modalidad'] === 'SEMANAL') {
@@ -225,31 +251,26 @@ class PrestamosController extends BaseController
                 } else {
                     $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+1 year'));
                 }
-                //comprobar las cuotas
+
                 $datos = $this->detalle->where([
                     'id_prestamo' => $consulta['id_prestamo'],
                     'estado' => '1'
                 ])->first();
+
                 if (!empty($datos)) {
                     $this->prestamos->update($consulta['id_prestamo'], ['fecha_venc' => $fecha_venc]);
-                    return redirect()->to(base_url('prestamos/' . $consulta['id_prestamo'] . '/detail'))->with('respuesta', [
-                        'type' => 'success',
-                        'msg' => 'ESTADO CAMBIADO',
-                    ]);
+                    $msg = 'ESTADO CAMBIADO';
                 } else {
                     $this->prestamos->update($consulta['id_prestamo'], ['estado' => '2']);
-                    return redirect()->to(base_url('prestamos/' . $consulta['id_prestamo'] . '/detail'))->with('respuesta', [
-                        'type' => 'success',
-                        'msg' => 'PRESTAMO FINALIZADO',
-                    ]);
+                    $msg = 'PRESTAMO FINALIZADO';
                 }
-            } else {
-                return redirect()->to(base_url('prestamos/' . $consulta['id_prestamo'] . '/detail'))->with('respuesta', [
-                    'type' => 'danger',
-                    'msg' => 'ERROR AL CAMBIAR EL ESTADO',
-                ]);
             }
-        }else{
+
+            return redirect()->to(base_url('prestamos/' . $consulta['id_prestamo'] . '/detail'))->with('respuesta', [
+                'type' => 'success',
+                'msg'  => $msg,
+            ]);
+        } else {
             return view('permisos');
         }
     }
