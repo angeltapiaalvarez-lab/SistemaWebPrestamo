@@ -287,7 +287,6 @@ class PrestamosController extends BaseController
                     'type' => 'danger',
                     'msg' => 'ERROR AL ENVIAR CORREO',
                 ]);
-            }
         } else {
             $data['validator'] = $this->validator;
 
