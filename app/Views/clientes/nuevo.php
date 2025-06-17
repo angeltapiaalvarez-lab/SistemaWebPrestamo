@@ -15,14 +15,17 @@ Nuevo cliente
             <div class="row">
                 <div class="form-group col-lg-4">
                     <label>Identidad</label>
-                    <input type="text" name="identidad" class="form-control identidad-format" value="<?php echo set_value('identidad'); ?>" placeholder="000-000000-0000A" maxlength="16">
+                    <select name="identidad" id="tipoIdentidad" class="form-control">
+                        <option value="Cedula" <?php echo set_select('identidad', 'Cedula'); ?>>Cedula</option>
+                        <option value="Pasaporte" <?php echo set_select('identidad', 'Pasaporte'); ?>>Pasaporte</option>
+                    </select>
                     <?php if (!empty($errors['identidad'])) { ?>
                         <span class="text-danger"><?php echo $errors['identidad']; ?></span>
                     <?php } ?>
                 </div>
                 <div class="form-group col-lg-4">
                     <label>N° identidad</label>
-                    <input type="text" name="num_identidad" class="form-control" value="<?php echo set_value('num_identidad'); ?>" placeholder="N° identidad">
+                    <input type="text" name="num_identidad" class="form-control identidad-format" value="<?php echo set_value('num_identidad'); ?>" placeholder="000-000000-0000A">
                     <?php if (!empty($errors['num_identidad'])) { ?>
                         <span class="text-danger"><?php echo $errors['num_identidad']; ?></span>
                     <?php } ?>

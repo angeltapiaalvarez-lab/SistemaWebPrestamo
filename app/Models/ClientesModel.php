@@ -23,12 +23,12 @@ class ClientesModel extends Model
     // Validation
     protected $validationRules      = [
         'id_cliente' => 'is_natural',
-        'identidad' => 'required|regex_match[/^\d{3}-\d{6}-\d{4}[A-Za-z]$/]',
+        'identidad' => 'required|in_list[Cedula,Pasaporte]',
         'num_identidad'    => [
-            'rules'  => 'required|min_length[8]|is_unique[clientes.num_identidad,id,{id_cliente}]',
+            'rules'  => 'required|regex_match[/^(\d{3}-\d{6}-\d{4}[A-Za-z])$|^[A-Za-z0-9]{9}$/]|is_unique[clientes.num_identidad,id,{id_cliente}]',
             'errors' => [
                 'required' => 'El N° de identidad es obligatorio',
-                'min_length' => 'El N° de identidad debe contener 8 caracteres',
+                'regex_match' => 'El formato de N° de identidad no es válido',
                 'is_unique' => 'El N° de identidad debe único',
             ],
         ],
