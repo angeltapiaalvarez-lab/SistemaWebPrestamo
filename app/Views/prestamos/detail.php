@@ -57,7 +57,7 @@ Detalle del prestamo
                                 <th scope="col">Vencimiento</th>
                                 <th scope="col">Importe x cuota</th>
                                 <th scope="col">Estado</th>
-                                <th scope="col"></th>
+                                <th scope="col">Abono</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -96,7 +96,11 @@ Detalle del prestamo
                                             <form action="<?php echo base_url('prestamos/' . $detalle['id']); ?>" method="post" class="formEstado">
                                                 <input type="hidden" name="_method" value="PUT">
                                                 <?php echo csrf_field(); ?>
-                                                <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i></button>
+                                                <div class="input-group">
+                                                    <input type="number" step="0.01" name="monto" value="<?php echo $detalle['importe_cuota']; ?>" class="form-control" style="max-width:100px">
+                                                    <input type="text" name="metodo" value="EFECTIVO" class="form-control" style="max-width:120px">
+                                                    <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i></button>
+                                                </div>
                                             </form>
                                         <?php } ?>
                                     </td>
@@ -108,6 +112,30 @@ Detalle del prestamo
                                 </td>
                                 <td colspan="2"></td>
                             </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4>Historial de pagos</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Cuota</th>
+                                <th>Monto</th>
+                                <th>Metodo</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($pagos as $pago) { ?>
+                                <tr>
+                                    <td><?php echo $pago['cuota']; ?></td>
+                                    <td><?php echo $pago['monto']; ?></td>
+                                    <td><?php echo $pago['metodo']; ?></td>
+                                    <td><?php echo $pago['fecha_pago']; ?></td>
+                                </tr>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>
