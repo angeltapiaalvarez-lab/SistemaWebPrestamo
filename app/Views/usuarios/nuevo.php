@@ -34,7 +34,7 @@ Nuevo usuario
                                 <i class="fas fa-phone"></i>
                             </div>
                         </div>
-                        <input type="text" name="telefono" class="form-control phone-number" value="<?php echo set_value('telefono'); ?>" placeholder="Telefono">
+                        <input type="text" name="telefono" class="form-control phone-number" value="<?php echo set_value('telefono'); ?>" placeholder="+505xxxxxxxx" maxlength="12">
 
                     </div>
                     <?php if (isset($validacion)) { ?>

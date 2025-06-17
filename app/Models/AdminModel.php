@@ -24,9 +24,9 @@ class AdminModel extends Model
     // Validation
     protected $validationRules      = [
         'id' => 'is_natural_no_zero',
-        'identidad' => 'required|min_length[8]',
+        'identidad' => 'required|regex_match[/^\d{3}-\d{6}-\d{4}[A-Za-z]$/]',
         'nombre' => 'required|min_length[3]',
-        'telefono' => 'required|min_length[9]|is_unique[configuracion.telefono,id,{id}]',
+        'telefono' => 'required|regex_match[/^\+505\d{8}$/]|is_unique[configuracion.telefono,id,{id}]',
         'correo' => 'required|valid_email|is_unique[configuracion.correo,id,{id}]',
         'cuotas' => 'required',
         'direccion' => 'required|min_length[4]',

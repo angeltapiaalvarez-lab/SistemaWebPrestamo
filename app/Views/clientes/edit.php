@@ -16,7 +16,7 @@ Editar cliente
             <div class="row">
                 <div class="form-group col-lg-4">
                     <label>Identidad</label>
-                    <input type="text" name="identidad" class="form-control" value="<?php echo set_value('identidad', $cliente['identidad']); ?>" placeholder="Identidad">
+                    <input type="text" name="identidad" class="form-control identidad-format" value="<?php echo set_value('identidad', $cliente['identidad']); ?>" placeholder="000-000000-0000A" maxlength="16">
                     <?php if (!empty($errors['identidad'])) { ?>
                         <span class="text-danger"><?php echo $errors['identidad']; ?></span>
                     <?php } ?>
@@ -50,8 +50,7 @@ Editar cliente
                                 <i class="fas fa-phone"></i>
                             </div>
                         </div>
-                        <input type="text" name="telefono" class="form-control phone-number" value="<?php echo set_value('telefono', $cliente['telefono']); ?>" placeholder="Telefono">
-
+                        <input type="text" name="telefono" class="form-control phone-number" value="<?php echo set_value('telefono', $cliente['telefono']); ?>" placeholder="+505xxxxxxxx" maxlength="12">
                     </div>
                     <?php if (!empty($errors['telefono'])) { ?>
                         <span class="text-danger"><?php echo $errors['telefono']; ?></span>
@@ -65,8 +64,7 @@ Editar cliente
                                 <i class="fab fa-whatsapp-square"></i>
                             </div>
                         </div>
-                        <input type="text" name="whatsapp" class="form-control phone-number" value="<?php echo set_value('whatsapp', $cliente['whatsapp']); ?>" placeholder="Whatsapp">
-                    </div>
+                        <input type="text" name="whatsapp" class="form-control phone-number" value="<?php echo set_value('whatsapp', $cliente['whatsapp']); ?>" placeholder="+505xxxxxxxx" maxlength="12">                    </div>
                     <?php if (!empty($errors['whatsapp'])) { ?>
                         <span class="text-danger"><?php echo $errors['whatsapp']; ?></span>
                     <?php } ?>

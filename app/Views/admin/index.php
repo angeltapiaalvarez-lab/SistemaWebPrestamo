@@ -21,7 +21,7 @@ Datos de la empresa
             <div class="row">
                 <div class="form-group col-lg-4">
                     <label>Identidad <span class="text-danger">*</span></label>
-                    <input type="number" name="identidad" class="form-control" value="<?php echo set_value('identidad', $admin['identidad']); ?>" placeholder="Identidad">
+                    <input type="text" name="identidad" class="form-control identidad-format" value="<?php echo set_value('identidad', $admin['identidad']); ?>" placeholder="000-000000-0000A" maxlength="16">
                     <?php if (!empty($errors['identidad'])) { ?>
                         <span class="text-danger"><?php echo $errors['identidad']; ?></span>
                     <?php } ?>
@@ -35,7 +35,7 @@ Datos de la empresa
                 </div>
                 <div class="form-group col-lg-4">
                     <label>Teléfono <span class="text-danger">*</span></label>
-                    <input type="number" name="telefono" class="form-control" value="<?php echo set_value('telefono', $admin['telefono']); ?>" placeholder="Teléfono">
+                    <input type="text" name="telefono" class="form-control phone-number" value="<?php echo set_value('telefono', $admin['telefono']); ?>" placeholder="+505xxxxxxxx" maxlength="12">
                     <?php if (!empty($errors['telefono'])) { ?>
                         <span class="text-danger"><?php echo $errors['telefono']; ?></span>
                     <?php } ?>

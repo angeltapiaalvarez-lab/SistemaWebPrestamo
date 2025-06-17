@@ -23,7 +23,7 @@ class ClientesModel extends Model
     // Validation
     protected $validationRules      = [
         'id_cliente' => 'is_natural',
-        'identidad' => 'required|min_length[2]',
+        'identidad' => 'required|regex_match[/^\d{3}-\d{6}-\d{4}[A-Za-z]$/]',
         'num_identidad'    => [
             'rules'  => 'required|min_length[8]|is_unique[clientes.num_identidad,id,{id_cliente}]',
             'errors' => [
@@ -34,8 +34,8 @@ class ClientesModel extends Model
         ],
         'nombre' => 'required|min_length[3]',
         'apellido' => 'required|min_length[3]',
-        'telefono' => 'required|min_length[9]|is_unique[clientes.telefono,id,{id_cliente}]',
-        'whatsapp' => 'required|min_length[9]|is_unique[clientes.whatsapp,id,{id_cliente}]',
+        'telefono' => 'required|regex_match[/^\+505\d{8}$/]|is_unique[clientes.telefono,id,{id_cliente}]',
+        'whatsapp' => 'required|regex_match[/^\+505\d{8}$/]|is_unique[clientes.whatsapp,id,{id_cliente}]',
         'correo' => 'required|valid_email|is_unique[clientes.correo,id,{id_cliente}]',
         'direccion' => 'required|min_length[4]'
     ];

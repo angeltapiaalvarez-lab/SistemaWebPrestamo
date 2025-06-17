@@ -49,3 +49,28 @@ const buttons = [
     postfixButtons: ["colvisRestore"],
   },
 ];
+// Aplicar mascaras de entrada para telefonos e identidad
+document.addEventListener('DOMContentLoaded', () => {
+  const phoneInputs = document.querySelectorAll('.phone-number');
+  phoneInputs.forEach((input) => {
+    input.setAttribute('maxlength', '12');
+    input.addEventListener('input', function () {
+      let val = this.value.replace(/[^0-9+]/g, '');
+      if (!val.startsWith('+505')) {
+        val = '+505' + val.replace(/^\+?505?/, '');
+      }
+      this.value = val.slice(0, 12);
+    });
+  });
+
+  const idInputs = document.querySelectorAll('.identidad-format');
+  idInputs.forEach((input) => {
+    input.setAttribute('maxlength', '16');
+    input.addEventListener('input', function () {
+      let val = this.value.replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+      if (val.length > 3) val = val.slice(0, 3) + '-' + val.slice(3);
+      if (val.length > 10) val = val.slice(0, 10) + '-' + val.slice(10);
+      this.value = val.slice(0, 16);
+    });
+  });
+});
