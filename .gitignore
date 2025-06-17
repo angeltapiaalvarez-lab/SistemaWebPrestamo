@@ -1,0 +1,8 @@
+/vendor/
+/writable/*
+!writable/index.html
+/public/backup.zip
+/writable/backups/
+/writable/session/
+/writable/debugbar/
+/writable/logs/

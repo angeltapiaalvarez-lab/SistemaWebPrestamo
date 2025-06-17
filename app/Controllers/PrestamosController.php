@@ -11,9 +11,6 @@ use App\Models\PrestamosModel;
 
 // reference the Dompdf namespace
 use Dompdf\Dompdf;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 
 class PrestamosController extends BaseController
 {
@@ -21,7 +18,7 @@ class PrestamosController extends BaseController
         $detalle, $session, $reglas, $cajas;
     public function __construct()
     {
-        helper(['form', 'fecha']);
+        helper(['form', 'fecha', 'email']);
         $this->empresa = new AdminModel();
         $this->clientes = new ClientesModel();
         $this->prestamos = new PrestamosModel();
@@ -34,7 +31,6 @@ class PrestamosController extends BaseController
     {
         if (!verificar('nuevo prestamo', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['empresa'] = $this->empresa->first();
         $data['active'] = 'prestamo';
@@ -160,7 +156,6 @@ class PrestamosController extends BaseController
     {
         if (!verificar('ver prestamo', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['prestamo'] = $this->prestamos
             ->select('prestamos.*, c.identidad, c.num_identidad, c.nombre AS cliente, c.apellido, c.telefono, c.whatsapp, c.correo, u.nombre AS usuario, u.apellido AS user_apellido')
@@ -177,7 +172,6 @@ class PrestamosController extends BaseController
     {
         if (!verificar('ver prestamo', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['prestamo'] = $this->prestamos
             ->select('prestamos.*, c.identidad, c.num_identidad, c.nombre AS cliente, c.apellido, c.telefono, c.whatsapp, c.correo, c.direccion, u.nombre AS usuario, u.apellido AS user_apellido')
@@ -272,41 +266,26 @@ class PrestamosController extends BaseController
         ];
         if ($this->request->is('post') && $this->validate($this->reglas)) {
             $correo = $this->request->getVar('correo');
-            $mail = new PHPMailer(true);
-            try {
                 $empresa = $this->empresa->first();
                 $cliente = $this->clientes->where('correo', $correo)->first();
-                //Server settings
-                //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                $mail->SMTPDebug = 0;                      //Enable verbose debug output
-                $mail->isSMTP();                                            //Send using SMTP
-                $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                $mail->Username   = 'lovenaju2@gmail.com';                     //SMTP username
-                $mail->Password   = 'xgrcrehtwxmrhmdf';                               //SMTP password
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-                $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-                //Recipients
-                $mail->setFrom($empresa['correo'], $empresa['nombre']);
-                $mail->addAddress($correo, $cliente['nombre']);
+                if (sendEmail(
+                    $correo,
+                    $cliente['nombre'],
+                    'Contrato de prestamo - ' . $empresa['nombre'],
+                    $this->request->getVar('mensaje'),
+                    $empresa['correo'],
+                    $empresa['nombre']
+                )) {
+                    return redirect()->to(base_url('prestamos/' . $this->request->getVar('id_prestamo') . '/detail'))->with('respuesta', [
+                        'type' => 'success',
+                        'msg' => 'CORREO ENVIADO',
+                    ]);
+                }
 
-                //Attachments
-                // $mail->addAttachment('/var/tmp/file.tar.gz');
-                //Content
-                $mail->isHTML(true);                                  //Set email format to HTML
-                $mail->CharSet = 'UTF-8';
-                $mail->Subject = 'Contrato de prestamo - ' . $empresa['nombre'];
-                $mail->Body    = $this->request->getVar('mensaje');
-                $mail->send();
                 return redirect()->to(base_url('prestamos/' . $this->request->getVar('id_prestamo') . '/detail'))->with('respuesta', [
-                    'type' => 'success',
-                    'msg' => 'CORREO ENVIADO',
-                ]);
-            } catch (Exception $e) {
-                return redirect()->to(base_url('prestamos/' . $this->request->getVar('id_prestamo') . '/detail'))->with('respuesta', [
-                    'type' => 'success',
-                    'msg' => 'ERROR AL ENVIAR CORREO: ' . $mail->ErrorInfo,
+                    'type' => 'danger',
+                    'msg' => 'ERROR AL ENVIAR CORREO',
                 ]);
             }
         } else {
@@ -328,7 +307,6 @@ class PrestamosController extends BaseController
     {
         if (!verificar('historial prestamos', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['active'] = 'prestamo';
         return view('prestamos/historial', $data);

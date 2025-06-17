@@ -26,7 +26,6 @@ class ReportesController extends BaseController
     {
         if (!verificar('pdf prestamos', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['prestamos'] = $this->filtroReportes($url);
 
@@ -62,7 +61,6 @@ class ReportesController extends BaseController
     {
         if (!verificar('excel prestamos', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         
         $results = $this->filtroReportes($url);
