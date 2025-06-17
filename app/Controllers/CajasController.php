@@ -18,7 +18,6 @@ class CajasController extends BaseController
     {
         if (!verificar('ver saldo', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['caja'] = $this->cajas->where([
             'estado' => '1',
@@ -32,7 +31,6 @@ class CajasController extends BaseController
     {
         if (!verificar('ver saldo', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['active'] = 'caja';
         return view('cajas/nuevo', $data);
@@ -76,7 +74,6 @@ class CajasController extends BaseController
     {
         if (!verificar('ver saldo', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['caja'] = $this->cajas->where('id', $id)->first();
         $data['active'] = 'caja';

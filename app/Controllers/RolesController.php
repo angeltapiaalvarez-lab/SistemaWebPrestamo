@@ -20,7 +20,6 @@ class RolesController extends BaseController
     {
         if (!verificar('listar roles', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['active'] = 'rol';
         return view('roles/index', $data);
@@ -37,7 +36,6 @@ class RolesController extends BaseController
     {
         if (!verificar('nuevo rol', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['permisos'] = $this->permisos->findAll();
         $data['active'] = 'rol';
@@ -73,7 +71,6 @@ class RolesController extends BaseController
     {
         if (!verificar('editar rol', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['permisos'] = $this->permisos->findAll();
         $data['rol'] = $this->roles->find($id);

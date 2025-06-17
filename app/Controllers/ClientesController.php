@@ -18,7 +18,6 @@ class ClientesController extends BaseController
     {
         if (!verificar('listar clientes', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['active'] = 'cliente';
         return view('clientes/index', $data);
@@ -35,7 +34,6 @@ class ClientesController extends BaseController
     {
         if (!verificar('nuevo cliente', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['active'] = 'cliente';
         return view('clientes/nuevo', $data);
@@ -73,7 +71,6 @@ class ClientesController extends BaseController
     public function edit($idCliente){
         if (!verificar('editar cliente', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['cliente'] = $this->clientes->where('id', $idCliente)->first();
         $data['active'] = 'cliente';

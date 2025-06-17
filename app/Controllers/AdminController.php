@@ -27,7 +27,6 @@ class AdminController extends BaseController
     {
         if (!verificar('actualizar empresa', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['active'] = 'config';
         $data['admin'] = $this->admin->first();
@@ -158,10 +157,11 @@ class AdminController extends BaseController
 
             if (!empty($backupData)) {
                 if (file_put_contents($backupPath, $backupData) !== false) {
-                    if ($this->crearZip($backupPath)) {
+                    $zipPath = WRITEPATH . 'backups/backup.zip';
+                    if ($this->crearZip($backupPath, $zipPath)) {
                         unlink($backupPath);
                         // Ruta y nombre del archivo a descargar
-                        $filePath = './backup.zip';
+                        $filePath = $zipPath;
                         $fileName = 'archivo.zip';
 
                         // Verifica si el archivo existe
@@ -172,6 +172,7 @@ class AdminController extends BaseController
 
                             // Lee y envía el contenido del archivo
                             readfile($filePath);
+                            unlink($filePath);
                             exit;
                         } else {
                             return redirect()->to(base_url('dashboard'))->with('respuesta', [
@@ -202,12 +203,9 @@ class AdminController extends BaseController
         }
     }
 
-    public function crearZip($ruta)
+    public function crearZip($ruta, $zipFilename)
     {
         $zip = new ZipArchive();
-
-        // Nombre y ruta del archivo ZIP que se va a crear
-        $zipFilename = 'backup.zip';
 
         // Abre el archivo ZIP en modo de creación
         if ($zip->open($zipFilename, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {

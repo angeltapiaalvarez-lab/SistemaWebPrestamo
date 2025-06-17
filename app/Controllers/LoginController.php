@@ -2,9 +2,6 @@
 
 namespace App\Controllers;
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 use App\Controllers\BaseController;
 use App\Models\AdminModel;
 use App\Models\UsuariosModel;
@@ -15,7 +12,7 @@ class LoginController extends BaseController
 
     public function __construct()
     {
-        helper(['form']);
+        helper(['form', 'email']);
         $this->usuarios = new UsuariosModel();
         $this->session = session();
     }
@@ -106,49 +103,32 @@ class LoginController extends BaseController
                     'type' => 'danger',
                     'msg' => 'EL CORREO NO EXISTE EN EL SISTEMA'
                 ]);
-                exit;
             } else {
                 $datos = new AdminModel();
                 $empresa = $datos->first();
-                $token = md5(date('YmdHis'));
-                $mail = new PHPMailer(true);
-                try {
+                $token = bin2hex(random_bytes(16));
+                $body = 'Has pedido restablecer tu contraseña, si no has sido tu omite este mensaje '
+                    . '<a href="' . base_url('restablecer/' . $token) . '">CLIC AQUI PARA CAMBIAR</a>';
 
-                    //Server settings
-                    //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                    $mail->SMTPDebug = 0;                      //Enable verbose debug output
-                    $mail->isSMTP();                                            //Send using SMTP
-                    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                    $mail->Username   = 'lovenaju2@gmail.com';                     //SMTP username
-                    $mail->Password   = 'xgrcrehtwxmrhmdf';                               //SMTP password
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-                    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-                    //Recipients
-                    $mail->setFrom($empresa['correo'], $empresa['nombre']);
-                    $mail->addAddress($correo, $user['nombre']);
-
-                    //Attachments
-                    // $mail->addAttachment('/var/tmp/file.tar.gz');
-                    //Content
-                    $mail->isHTML(true);                                  //Set email format to HTML
-                    $mail->CharSet = 'UTF-8';
-                    $mail->Subject = 'Olvidaste tu contraseña - ' . $empresa['nombre'];
-                    $mail->Body    = 'Has pedido restablecer tu contraseña, si no has sido tu omite este mensaje
-                    <a href="' . base_url('restablecer/' . $token) . '">CLIC AQUI PARA CAMBIAR</a>';
-                    $mail->send();
+                if (sendEmail(
+                    $correo,
+                    $user['nombre'],
+                    'Olvidaste tu contraseña - ' . $empresa['nombre'],
+                    $body,
+                    $empresa['correo'],
+                    $empresa['nombre']
+                )) {
                     $this->usuarios->update($user['id'], ['token' => $token]);
                     return redirect()->to(base_url('forgot'))->with('respuesta', [
                         'type' => 'success',
                         'msg' => 'CORREO ENVIADO',
                     ]);
-                } catch (Exception $e) {
-                    return redirect()->to(base_url('forgot'))->with('respuesta', [
-                        'type' => 'success',
-                        'msg' => 'ERROR AL ENVIAR CORREO: ' . $mail->ErrorInfo,
-                    ]);
                 }
+
+                return redirect()->to(base_url('forgot'))->with('respuesta', [
+                    'type' => 'danger',
+                    'msg' => 'ERROR AL ENVIAR CORREO',
+                ]);
             }
         } else {
             $data['validator'] = $this->validator;

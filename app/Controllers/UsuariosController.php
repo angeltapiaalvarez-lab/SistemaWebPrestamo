@@ -20,7 +20,6 @@ class UsuariosController extends BaseController
     {
         if (!verificar('listar usuarios', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['active'] = 'usuario';
         return view('usuarios/index', $data);
@@ -38,7 +37,6 @@ class UsuariosController extends BaseController
     {
         if (!verificar('nuevo usuario', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['roles'] = $this->roles->where('estado', '1')->findAll();
         $data['active'] = 'usuario';
@@ -133,7 +131,6 @@ class UsuariosController extends BaseController
     {
         if (!verificar('editar usuario', $this->session->permisos)) {
             return view('permisos');
-            exit;
         }
         $data['roles'] = $this->roles->where('estado', '1')->findAll();
         $data['usuario'] = $this->usuarios->where('id', $idUsuario)->first();
