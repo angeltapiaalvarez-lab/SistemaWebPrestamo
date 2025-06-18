@@ -21,7 +21,15 @@ document.addEventListener('DOMContentLoaded', function(){
                 },
             },
             { data: 'id' },
-            { data: 'nombre' },
+            {
+                data: null,
+                render: function (data, type) {
+                    if (type === 'display') { 
+                        return `${data.nombre + ' ' + data.apellido}`;
+                    }
+                    return data;
+                },
+            },
             { data: 'telefono' },
             { data: 'correo' },
             { data: 'direccion' },

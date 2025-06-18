@@ -57,7 +57,7 @@ Detalle del prestamo
                                 <th scope="col">Vencimiento</th>
                                 <th scope="col">Importe x cuota</th>
                                 <th scope="col">Estado</th>
-                                <th scope="col"></th>
+                                <th scope="col">Abono</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,7 +65,6 @@ Detalle del prestamo
                             $date = date('Y-m-d');
                             foreach ($detalles as $detalle) {
                                 $total += $detalle['importe_cuota'];
-                                $color = substr(md5($detalle['id']), 0, 6);
                                 $estado = '<span class="badge badge-danger">PENDIENTE</span>';
                                 if ($date > $detalle['fecha_venc'] && $detalle['estado'] == 1) {
                                     $class = 'bg-danger';
@@ -82,7 +81,7 @@ Detalle del prestamo
                             ?>
                                 <tr class="<?php echo $class; ?>">
                                     <td scope="row">
-                                        <button type="button" class="btn" style="background-color: #<?php echo $color; ?>">
+                                        <button type="button" class="btn btn-outline-secondary">
                                             Cuota <span class="badge badge-transparent text-dark"><?php echo $detalle['cuota']; ?></span>
                                         </button>
                                     </td>
@@ -96,7 +95,11 @@ Detalle del prestamo
                                             <form action="<?php echo base_url('prestamos/' . $detalle['id']); ?>" method="post" class="formEstado">
                                                 <input type="hidden" name="_method" value="PUT">
                                                 <?php echo csrf_field(); ?>
-                                                <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i></button>
+                                                <div class="input-group">
+                                                    <input type="number" step="0.01" name="monto" value="<?php echo $detalle['importe_cuota']; ?>" class="form-control" style="max-width:100px">
+                                                    <input type="text" name="metodo" value="EFECTIVO" class="form-control" style="max-width:120px">
+                                                    <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i></button>
+                                                </div>
                                             </form>
                                         <?php } ?>
                                     </td>
@@ -111,6 +114,8 @@ Detalle del prestamo
                         </tbody>
                     </table>
                 </div>
+
+
 
             </div>
         </div>

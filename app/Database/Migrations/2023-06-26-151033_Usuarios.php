@@ -40,6 +40,11 @@ class Usuarios extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '200',
             ],
+            'perfil' => [
+                'type' => 'VARCHAR',
+                'constraint' => '20',
+                'null' => true
+            ],
             'estado' => [
                 'type' => 'INT',
                 'constraint' => '11',

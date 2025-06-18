@@ -3,8 +3,12 @@
 Gestion clientes
 <?= $this->endSection('title'); ?>
 
-<?= $this->section('content'); ?>
-<a href="<?php echo base_url('clientes/new'); ?>" class="btn btn-primary mb-2">Nuevo</a>
+<?= $this->section('content');
+
+if (verificar('nuevo cliente', $_SESSION['permisos'])) { ?>
+    <a href="<?php echo base_url('clientes/new'); ?>" class="btn btn-primary mb-2">Nuevo</a>
+<?php } ?>
+
 <div class="card">
     <div class="card-header">
         <h4>Gestion clientes</h4>

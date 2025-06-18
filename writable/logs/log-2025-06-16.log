@@ -1,0 +1,801 @@
+INFO - 2025-06-16 13:20:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2025-06-16 13:20:05 --> Error connecting to the database: mysqli_sql_exception: Unknown database 'prestamos' in C:\xampp\htdocs\prestamos\system\Database\MySQLi\Connection.php:173
+Stack trace:
+#0 C:\xampp\htdocs\prestamos\system\Database\MySQLi\Connection.php(173): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'prestamos', 3306, '', 0)
+#1 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(574): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\prestamos\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `prestam...', Array, false)
+#4 C:\xampp\htdocs\prestamos\system\Model.php(268): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\prestamos\system\BaseModel.php(656): CodeIgniter\Model->doFirst()
+#6 C:\xampp\htdocs\prestamos\app\Controllers\PrestamosController.php(157): CodeIgniter\BaseModel->first()
+#7 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(934): App\Controllers\PrestamosController->detail('1')
+#8 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PrestamosController))
+#9 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\prestamos\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Unknown database 'prestamos' in C:\xampp\htdocs\prestamos\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(574): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\prestamos\system\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `prestam...', Array, false)
+#3 C:\xampp\htdocs\prestamos\system\Model.php(268): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\prestamos\system\BaseModel.php(656): CodeIgniter\Model->doFirst()
+#5 C:\xampp\htdocs\prestamos\app\Controllers\PrestamosController.php(157): CodeIgniter\BaseModel->first()
+#6 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(934): App\Controllers\PrestamosController->detail('1')
+#7 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PrestamosController))
+#8 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\prestamos\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+CRITICAL - 2025-06-16 13:20:05 --> Unable to connect to the database.
+Main connection [MySQLi]: Unknown database 'prestamos'
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(574): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT `prestamos`.*, `c`.`identidad`, `c`.`num_identidad`, `c`.`nombre` AS `cliente`, `c`.`apellido`, `c`.`telefono`, `c`.`whatsapp`, `c`.`correo`, `u`.`nombre` AS `usuario`, `u`.`apellido` AS `user_apellido`
+FROM `prestamos`
+JOIN `clientes` AS `c` ON `prestamos`.`id_cliente` = `c`.`id`
+JOIN `usuarios` AS `u` ON `prestamos`.`id_usuario` = `u`.`id`
+WHERE `prestamos`.`id` = :prestamos.id:
+ LIMIT 1', [...], false)
+ 3 SYSTEMPATH\Model.php(268): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(656): CodeIgniter\Model->doFirst()
+ 5 APPPATH\Controllers\PrestamosController.php(157): CodeIgniter\BaseModel->first()
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\PrestamosController->detail('1')
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PrestamosController))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:20:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:21:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:21:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 13:21:20 --> Trying to access array offset on value of type null
+in APPPATH\Models\CajasModel.php on line 63.
+ 1 APPPATH\Models\CajasModel.php(63): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\prestamos\\app\\Models\\CajasModel.php', 63)
+ 2 APPPATH\Controllers\CajasController.php(92): App\Models\CajasModel->calcularMovimientos(null)
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\CajasController->movimientos()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CajasController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:21:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:21:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:21:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:21:46 --> CSRF token verified.
+INFO - 2025-06-16 13:21:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:21:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 13:21:54 --> Trying to access array offset on value of type null
+in APPPATH\Models\CajasModel.php on line 63.
+ 1 APPPATH\Models\CajasModel.php(63): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\prestamos\\app\\Models\\CajasModel.php', 63)
+ 2 APPPATH\Controllers\AdminController.php(38): App\Models\CajasModel->calcularMovimientos(null)
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:23:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:23:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 13:23:15 --> Trying to access array offset on value of type null
+in APPPATH\Models\CajasModel.php on line 63.
+ 1 APPPATH\Models\CajasModel.php(63): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\prestamos\\app\\Models\\CajasModel.php', 63)
+ 2 APPPATH\Controllers\CajasController.php(92): App\Models\CajasModel->calcularMovimientos(null)
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\CajasController->movimientos()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CajasController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:24:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:25:02 --> CSRF token verified.
+INFO - 2025-06-16 13:25:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2025-06-16 13:25:02 --> mysqli_sql_exception: Column 'id_usuario' cannot be null in C:\xampp\htdocs\prestamos\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\prestamos\system\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `ca...', 0)
+#1 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `ca...')
+#2 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `ca...')
+#3 C:\xampp\htdocs\prestamos\system\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `ca...', Array, false)
+#4 C:\xampp\htdocs\prestamos\system\Model.php(330): CodeIgniter\Database\BaseBuilder->insert()
+#5 C:\xampp\htdocs\prestamos\system\BaseModel.php(782): CodeIgniter\Model->doInsert(Array)
+#6 C:\xampp\htdocs\prestamos\system\Model.php(730): CodeIgniter\BaseModel->insert(Array, true)
+#7 C:\xampp\htdocs\prestamos\app\Controllers\CajasController.php(47): CodeIgniter\Model->insert(Array)
+#8 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(934): App\Controllers\CajasController->create()
+#9 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CajasController))
+#10 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\prestamos\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2025-06-16 13:25:02 --> Column 'id_usuario' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 295.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `cajas` (`monto_inicial`, `fecha_apertura`, `id_usuario`, `created_at`, `updated_at`) VALUES (\'500\', \'2025-06-16 13:25:02\', NULL, \'2025-06-16 13:25:02\', \'2025-06-16 13:25:02\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `cajas` (`monto_inicial`, `fecha_apertura`, `id_usuario`, `created_at`, `updated_at`) VALUES (\'500\', \'2025-06-16 13:25:02\', NULL, \'2025-06-16 13:25:02\', \'2025-06-16 13:25:02\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `cajas` (`monto_inicial`, `fecha_apertura`, `id_usuario`, `created_at`, `updated_at`) VALUES (\'500\', \'2025-06-16 13:25:02\', NULL, \'2025-06-16 13:25:02\', \'2025-06-16 13:25:02\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `cajas` (`monto_inicial`, `fecha_apertura`, `id_usuario`, `created_at`, `updated_at`) VALUES (:monto_inicial:, :fecha_apertura:, :id_usuario:, :created_at:, :updated_at:)', [...], false)
+ 5 SYSTEMPATH\Model.php(330): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH\BaseModel.php(782): CodeIgniter\Model->doInsert([...])
+ 7 SYSTEMPATH\Model.php(730): CodeIgniter\BaseModel->insert([...], true)
+ 8 APPPATH\Controllers\CajasController.php(47): CodeIgniter\Model->insert([...])
+ 9 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\CajasController->create()
+10 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CajasController))
+11 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:26:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:26:13 --> CSRF token verified.
+INFO - 2025-06-16 13:26:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:26:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:26:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 13:26:13 --> Trying to access array offset on value of type null
+in APPPATH\Models\CajasModel.php on line 63.
+ 1 APPPATH\Models\CajasModel.php(63): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\prestamos\\app\\Models\\CajasModel.php', 63)
+ 2 APPPATH\Controllers\CajasController.php(92): App\Models\CajasModel->calcularMovimientos(null)
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\CajasController->movimientos()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CajasController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:29:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:29:25 --> CSRF token verified.
+INFO - 2025-06-16 13:29:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2025-06-16 13:29:25 --> mysqli_sql_exception: Column 'id_usuario' cannot be null in C:\xampp\htdocs\prestamos\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\prestamos\system\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `ca...', 0)
+#1 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `ca...')
+#2 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `ca...')
+#3 C:\xampp\htdocs\prestamos\system\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `ca...', Array, false)
+#4 C:\xampp\htdocs\prestamos\system\Model.php(330): CodeIgniter\Database\BaseBuilder->insert()
+#5 C:\xampp\htdocs\prestamos\system\BaseModel.php(782): CodeIgniter\Model->doInsert(Array)
+#6 C:\xampp\htdocs\prestamos\system\Model.php(730): CodeIgniter\BaseModel->insert(Array, true)
+#7 C:\xampp\htdocs\prestamos\app\Controllers\CajasController.php(47): CodeIgniter\Model->insert(Array)
+#8 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(934): App\Controllers\CajasController->create()
+#9 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CajasController))
+#10 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\prestamos\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2025-06-16 13:29:25 --> Column 'id_usuario' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 295.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `cajas` (`monto_inicial`, `fecha_apertura`, `id_usuario`, `created_at`, `updated_at`) VALUES (\'5000\', \'2025-06-16 13:29:25\', NULL, \'2025-06-16 13:29:25\', \'2025-06-16 13:29:25\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `cajas` (`monto_inicial`, `fecha_apertura`, `id_usuario`, `created_at`, `updated_at`) VALUES (\'5000\', \'2025-06-16 13:29:25\', NULL, \'2025-06-16 13:29:25\', \'2025-06-16 13:29:25\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `cajas` (`monto_inicial`, `fecha_apertura`, `id_usuario`, `created_at`, `updated_at`) VALUES (\'5000\', \'2025-06-16 13:29:25\', NULL, \'2025-06-16 13:29:25\', \'2025-06-16 13:29:25\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `cajas` (`monto_inicial`, `fecha_apertura`, `id_usuario`, `created_at`, `updated_at`) VALUES (:monto_inicial:, :fecha_apertura:, :id_usuario:, :created_at:, :updated_at:)', [...], false)
+ 5 SYSTEMPATH\Model.php(330): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH\BaseModel.php(782): CodeIgniter\Model->doInsert([...])
+ 7 SYSTEMPATH\Model.php(730): CodeIgniter\BaseModel->insert([...], true)
+ 8 APPPATH\Controllers\CajasController.php(47): CodeIgniter\Model->insert([...])
+ 9 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\CajasController->create()
+10 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CajasController))
+11 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:30:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:30:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:30:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:30:28 --> CSRF token verified.
+INFO - 2025-06-16 13:30:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:30:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 13:30:28 --> Trying to access array offset on value of type null
+in APPPATH\Models\CajasModel.php on line 63.
+ 1 APPPATH\Models\CajasModel.php(63): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\prestamos\\app\\Models\\CajasModel.php', 63)
+ 2 APPPATH\Controllers\AdminController.php(38): App\Models\CajasModel->calcularMovimientos('1')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:30:34 --> CSRF token verified.
+INFO - 2025-06-16 13:30:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:30:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 13:30:34 --> Trying to access array offset on value of type null
+in APPPATH\Models\CajasModel.php on line 63.
+ 1 APPPATH\Models\CajasModel.php(63): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\prestamos\\app\\Models\\CajasModel.php', 63)
+ 2 APPPATH\Controllers\AdminController.php(38): App\Models\CajasModel->calcularMovimientos('1')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:30:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 13:30:43 --> Trying to access array offset on value of type null
+in APPPATH\Models\CajasModel.php on line 63.
+ 1 APPPATH\Models\CajasModel.php(63): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\prestamos\\app\\Models\\CajasModel.php', 63)
+ 2 APPPATH\Controllers\AdminController.php(38): App\Models\CajasModel->calcularMovimientos('1')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:30:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 13:30:46 --> Trying to access array offset on value of type null
+in APPPATH\Models\CajasModel.php on line 63.
+ 1 APPPATH\Models\CajasModel.php(63): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\prestamos\\app\\Models\\CajasModel.php', 63)
+ 2 APPPATH\Controllers\AdminController.php(38): App\Models\CajasModel->calcularMovimientos('1')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:30:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:30:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:30:53 --> CSRF token verified.
+INFO - 2025-06-16 13:30:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:30:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 13:30:53 --> Trying to access array offset on value of type null
+in APPPATH\Models\CajasModel.php on line 63.
+ 1 APPPATH\Models\CajasModel.php(63): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\prestamos\\app\\Models\\CajasModel.php', 63)
+ 2 APPPATH\Controllers\AdminController.php(38): App\Models\CajasModel->calcularMovimientos('1')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:31:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 13:31:29 --> Trying to access array offset on value of type null
+in APPPATH\Models\CajasModel.php on line 63.
+ 1 APPPATH\Models\CajasModel.php(63): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\prestamos\\app\\Models\\CajasModel.php', 63)
+ 2 APPPATH\Controllers\AdminController.php(38): App\Models\CajasModel->calcularMovimientos('1')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:40:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:40:15 --> CSRF token verified.
+INFO - 2025-06-16 13:40:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:40:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:40:20 --> CSRF token verified.
+INFO - 2025-06-16 13:40:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:40:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 13:40:20 --> Trying to access array offset on value of type null
+in APPPATH\Models\CajasModel.php on line 63.
+ 1 APPPATH\Models\CajasModel.php(63): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\prestamos\\app\\Models\\CajasModel.php', 63)
+ 2 APPPATH\Controllers\AdminController.php(38): App\Models\CajasModel->calcularMovimientos('1')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:40:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:40:28 --> CSRF token verified.
+INFO - 2025-06-16 13:40:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:40:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 13:40:29 --> Trying to access array offset on value of type null
+in APPPATH\Models\CajasModel.php on line 63.
+ 1 APPPATH\Models\CajasModel.php(63): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\prestamos\\app\\Models\\CajasModel.php', 63)
+ 2 APPPATH\Controllers\AdminController.php(38): App\Models\CajasModel->calcularMovimientos('1')
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 13:45:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:45:05 --> CSRF token verified.
+INFO - 2025-06-16 13:45:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:45:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:45:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:45:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:45:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:45:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:45:33 --> CSRF token verified.
+INFO - 2025-06-16 13:45:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:45:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:45:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:45:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:45:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:47:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:50:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 13:50:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:10:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:10:05 --> Class "Dompdf\Dompdf" not found
+in APPPATH\Controllers\ReportesController.php on line 48.
+ 1 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\ReportesController->reportesPdf('semana')
+ 2 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ReportesController))
+ 3 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:11:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:11:00 --> Class "Dompdf\Dompdf" not found
+in APPPATH\Controllers\ReportesController.php on line 48.
+ 1 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\ReportesController->reportesPdf('dia')
+ 2 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ReportesController))
+ 3 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:19:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2025-06-16 14:19:33 --> Error connecting to the database: mysqli_sql_exception: Unknown database 'prestamos' in C:\xampp\htdocs\prestamos\system\Database\MySQLi\Connection.php:173
+Stack trace:
+#0 C:\xampp\htdocs\prestamos\system\Database\MySQLi\Connection.php(173): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'prestamos', 3306, '', 0)
+#1 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(574): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\prestamos\system\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*)...', Array, false)
+#4 C:\xampp\htdocs\prestamos\system\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+#5 C:\xampp\htdocs\prestamos\app\Controllers\AdminController.php(42): CodeIgniter\Model->countAllResults()
+#6 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+#7 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+#8 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\prestamos\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#10 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Unknown database 'prestamos' in C:\xampp\htdocs\prestamos\system\Database\MySQLi\Connection.php:218
+Stack trace:
+#0 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(391): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(574): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\prestamos\system\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*)...', Array, false)
+#3 C:\xampp\htdocs\prestamos\system\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+#4 C:\xampp\htdocs\prestamos\app\Controllers\AdminController.php(42): CodeIgniter\Model->countAllResults()
+#5 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+#6 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+#7 C:\xampp\htdocs\prestamos\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\prestamos\public\index.php(67): CodeIgniter\CodeIgniter->run()
+#9 {main}
+CRITICAL - 2025-06-16 14:19:33 --> Unable to connect to the database.
+Main connection [MySQLi]: Unknown database 'prestamos'
+in SYSTEMPATH\Database\BaseConnection.php on line 427.
+ 1 SYSTEMPATH\Database\BaseConnection.php(574): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1700): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `usuarios`
+WHERE `estado` = :estado:', [...], false)
+ 3 SYSTEMPATH\Model.php(606): CodeIgniter\Database\BaseBuilder->countAllResults(true)
+ 4 APPPATH\Controllers\AdminController.php(42): CodeIgniter\Model->countAllResults()
+ 5 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+ 6 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 7 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:19:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:19:46 --> Undefined array key "perfil"
+in APPPATH\Views\layouts\menu.php on line 13.
+ 1 APPPATH\Views\layouts\menu.php(13): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "perfil"', 'C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\menu.php', 13)
+ 2 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\menu.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\View\View.php(431): CodeIgniter\View\View->render('layouts/menu.php', null, true)
+ 5 APPPATH\Views\layouts\main.php(7): CodeIgniter\View\View->include('layouts/menu.php')
+ 6 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\main.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->render('layouts/main', [], true)
+ 9 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/home', [], true)
+10 APPPATH\Controllers\AdminController.php(47): view('admin/home', [...])
+11 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+12 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+13 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+14 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:19:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:19:54 --> Undefined array key "perfil"
+in APPPATH\Views\layouts\menu.php on line 13.
+ 1 APPPATH\Views\layouts\menu.php(13): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "perfil"', 'C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\menu.php', 13)
+ 2 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\menu.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\View\View.php(431): CodeIgniter\View\View->render('layouts/menu.php', null, true)
+ 5 APPPATH\Views\layouts\main.php(7): CodeIgniter\View\View->include('layouts/menu.php')
+ 6 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\main.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->render('layouts/main', [], true)
+ 9 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/home', [], true)
+10 APPPATH\Controllers\AdminController.php(47): view('admin/home', [...])
+11 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+12 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+13 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+14 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:20:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:20:11 --> array_search(): Argument #2 ($haystack) must be of type array, null given
+in APPPATH\Helpers\buscar_helper.php on line 3.
+ 1 APPPATH\Helpers\buscar_helper.php(3): array_search('ver saldo', null, true)
+ 2 APPPATH\Controllers\CajasController.php(19): verificar('ver saldo', null)
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\CajasController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CajasController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:20:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:20:12 --> array_search(): Argument #2 ($haystack) must be of type array, null given
+in APPPATH\Helpers\buscar_helper.php on line 3.
+ 1 APPPATH\Helpers\buscar_helper.php(3): array_search('ver saldo', null, true)
+ 2 APPPATH\Controllers\CajasController.php(33): verificar('ver saldo', null)
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\CajasController->new()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CajasController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:20:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:20:16 --> array_search(): Argument #2 ($haystack) must be of type array, null given
+in APPPATH\Helpers\buscar_helper.php on line 3.
+ 1 APPPATH\Helpers\buscar_helper.php(3): array_search('ver saldo', null, true)
+ 2 APPPATH\Controllers\CajasController.php(19): verificar('ver saldo', null)
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\CajasController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CajasController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:20:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:20:17 --> Undefined array key "perfil"
+in APPPATH\Views\layouts\menu.php on line 13.
+ 1 APPPATH\Views\layouts\menu.php(13): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "perfil"', 'C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\menu.php', 13)
+ 2 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\menu.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\View\View.php(431): CodeIgniter\View\View->render('layouts/menu.php', null, true)
+ 5 APPPATH\Views\layouts\main.php(7): CodeIgniter\View\View->include('layouts/menu.php')
+ 6 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\main.php')
+ 7 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->render('layouts/main', [], true)
+ 9 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/home', [], true)
+10 APPPATH\Controllers\AdminController.php(47): view('admin/home', [...])
+11 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+12 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+13 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+14 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:20:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:20:21 --> CSRF token verified.
+INFO - 2025-06-16 14:20:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:20:22 --> Undefined array key "perfil"
+in APPPATH\Controllers\LoginController.php on line 56.
+ 1 APPPATH\Controllers\LoginController.php(56): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "perfil"', 'C:\\xampp\\htdocs\\prestamos\\app\\Controllers\\LoginController.php', 56)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\LoginController->validar()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\LoginController))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ERROR - 2025-06-16 14:24:03 --> mysqli_sql_exception: Duplicate entry '123456789' for key 'identidad' in C:\xampp\htdocs\prestamos\system\Database\MySQLi\Connection.php:295
+Stack trace:
+#0 C:\xampp\htdocs\prestamos\system\Database\MySQLi\Connection.php(295): mysqli->query('INSERT INTO `co...', 0)
+#1 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(692): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `co...')
+#2 C:\xampp\htdocs\prestamos\system\Database\BaseConnection.php(606): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `co...')
+#3 C:\xampp\htdocs\prestamos\system\Database\BaseBuilder.php(2309): CodeIgniter\Database\BaseConnection->query('INSERT INTO `co...', Array, false)
+#4 C:\xampp\htdocs\prestamos\app\Database\Seeds\AdminSeeder.php(24): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\prestamos\system\Database\Seeder.php(146): App\Database\Seeds\AdminSeeder->run()
+#6 C:\xampp\htdocs\prestamos\app\Database\Seeds\Main.php(12): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#7 C:\xampp\htdocs\prestamos\system\Database\Seeder.php(146): App\Database\Seeds\Main->run()
+#8 C:\xampp\htdocs\prestamos\system\Commands\Database\Seed.php(77): CodeIgniter\Database\Seeder->call('App\\Database\\Se...')
+#9 C:\xampp\htdocs\prestamos\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\Seed->run(Array)
+#10 C:\xampp\htdocs\prestamos\system\CLI\Console.php(37): CodeIgniter\CLI\Commands->run('db:seed', Array)
+#11 C:\xampp\htdocs\prestamos\spark(97): CodeIgniter\CLI\Console->run()
+#12 {main}
+INFO - 2025-06-16 14:24:27 --> CSRF token verified.
+INFO - 2025-06-16 14:24:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:24:27 --> Undefined array key "perfil"
+in APPPATH\Controllers\LoginController.php on line 56.
+ 1 APPPATH\Controllers\LoginController.php(56): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "perfil"', 'C:\\xampp\\htdocs\\prestamos\\app\\Controllers\\LoginController.php', 56)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\LoginController->validar()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\LoginController))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:24:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:24:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:24:35 --> CSRF token verified.
+INFO - 2025-06-16 14:24:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:24:35 --> Undefined array key "perfil"
+in APPPATH\Controllers\LoginController.php on line 56.
+ 1 APPPATH\Controllers\LoginController.php(56): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "perfil"', 'C:\\xampp\\htdocs\\prestamos\\app\\Controllers\\LoginController.php', 56)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\LoginController->validar()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\LoginController))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:25:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:25:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:25:30 --> CSRF token verified.
+INFO - 2025-06-16 14:25:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:25:30 --> Undefined array key "perfil"
+in APPPATH\Controllers\LoginController.php on line 56.
+ 1 APPPATH\Controllers\LoginController.php(56): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "perfil"', 'C:\\xampp\\htdocs\\prestamos\\app\\Controllers\\LoginController.php', 56)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\LoginController->validar()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\LoginController))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:27:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:27:51 --> array_search(): Argument #2 ($haystack) must be of type array, null given
+in APPPATH\Helpers\buscar_helper.php on line 3.
+ 1 APPPATH\Helpers\buscar_helper.php(3): array_search('listar roles', null, true)
+ 2 APPPATH\Controllers\RolesController.php(21): verificar('listar roles', null)
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\RolesController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RolesController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:27:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:28:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:28:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:35:23 --> CSRF token verified.
+INFO - 2025-06-16 14:35:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:35:24 --> Undefined array key "perfil"
+in APPPATH\Controllers\LoginController.php on line 56.
+ 1 APPPATH\Controllers\LoginController.php(56): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "perfil"', 'C:\\xampp\\htdocs\\prestamos\\app\\Controllers\\LoginController.php', 56)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\LoginController->validar()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\LoginController))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:38:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:38:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:38:50 --> CSRF token verified.
+INFO - 2025-06-16 14:38:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:38:50 --> Undefined array key "perfil"
+in APPPATH\Controllers\LoginController.php on line 56.
+ 1 APPPATH\Controllers\LoginController.php(56): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "perfil"', 'C:\\xampp\\htdocs\\prestamos\\app\\Controllers\\LoginController.php', 56)
+ 2 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\LoginController->validar()
+ 3 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\LoginController))
+ 4 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:48:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:48:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:48:41 --> CSRF token verified.
+INFO - 2025-06-16 14:48:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:48:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:48:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:48:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:48:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:48:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:49:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:49:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:49:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:49:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:50:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:50:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:50:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:50:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:50:11 --> CSRF token verified.
+INFO - 2025-06-16 14:50:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:50:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:50:11 --> array_search(): Argument #2 ($haystack) must be of type array, null given
+in APPPATH\Helpers\buscar_helper.php on line 3.
+ 1 APPPATH\Helpers\buscar_helper.php(3): array_search('actualizar empresa', null, true)
+ 2 APPPATH\Views\layouts\menu.php(45): verificar('actualizar empresa', null)
+ 3 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\menu.php')
+ 4 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\View\View.php(431): CodeIgniter\View\View->render('layouts/menu.php', null, true)
+ 6 APPPATH\Views\layouts\main.php(7): CodeIgniter\View\View->include('layouts/menu.php')
+ 7 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\main.php')
+ 8 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 9 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->render('layouts/main', [], true)
+10 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/home', [], true)
+11 APPPATH\Controllers\AdminController.php(47): view('admin/home', [...])
+12 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+13 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+14 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:50:51 --> CSRF token verified.
+INFO - 2025-06-16 14:50:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:50:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:50:51 --> array_search(): Argument #2 ($haystack) must be of type array, int given
+in APPPATH\Helpers\buscar_helper.php on line 3.
+ 1 APPPATH\Helpers\buscar_helper.php(3): array_search('actualizar empresa', 1, true)
+ 2 APPPATH\Views\layouts\menu.php(45): verificar('actualizar empresa', 1)
+ 3 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\menu.php')
+ 4 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\View\View.php(431): CodeIgniter\View\View->render('layouts/menu.php', null, true)
+ 6 APPPATH\Views\layouts\main.php(7): CodeIgniter\View\View->include('layouts/menu.php')
+ 7 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\main.php')
+ 8 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 9 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->render('layouts/main', [], true)
+10 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/home', [], true)
+11 APPPATH\Controllers\AdminController.php(47): view('admin/home', [...])
+12 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+13 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+14 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:50:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:50:56 --> array_search(): Argument #2 ($haystack) must be of type array, int given
+in APPPATH\Helpers\buscar_helper.php on line 3.
+ 1 APPPATH\Helpers\buscar_helper.php(3): array_search('actualizar empresa', 1, true)
+ 2 APPPATH\Views\layouts\menu.php(45): verificar('actualizar empresa', 1)
+ 3 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\menu.php')
+ 4 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\View\View.php(431): CodeIgniter\View\View->render('layouts/menu.php', null, true)
+ 6 APPPATH\Views\layouts\main.php(7): CodeIgniter\View\View->include('layouts/menu.php')
+ 7 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\main.php')
+ 8 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 9 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->render('layouts/main', [], true)
+10 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/home', [], true)
+11 APPPATH\Controllers\AdminController.php(47): view('admin/home', [...])
+12 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+13 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+14 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:51:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:51:20 --> array_search(): Argument #2 ($haystack) must be of type array, int given
+in APPPATH\Helpers\buscar_helper.php on line 3.
+ 1 APPPATH\Helpers\buscar_helper.php(3): array_search('actualizar empresa', 1, true)
+ 2 APPPATH\Views\layouts\menu.php(45): verificar('actualizar empresa', 1)
+ 3 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\menu.php')
+ 4 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\View\View.php(431): CodeIgniter\View\View->render('layouts/menu.php', null, true)
+ 6 APPPATH\Views\layouts\main.php(7): CodeIgniter\View\View->include('layouts/menu.php')
+ 7 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\main.php')
+ 8 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 9 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->render('layouts/main', [], true)
+10 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/home', [], true)
+11 APPPATH\Controllers\AdminController.php(47): view('admin/home', [...])
+12 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+13 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+14 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:52:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:52:20 --> CSRF token verified.
+INFO - 2025-06-16 14:52:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:52:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:52:20 --> array_search(): Argument #2 ($haystack) must be of type array, int given
+in APPPATH\Helpers\buscar_helper.php on line 3.
+ 1 APPPATH\Helpers\buscar_helper.php(3): array_search('actualizar empresa', 0, true)
+ 2 APPPATH\Views\layouts\menu.php(45): verificar('actualizar empresa', 0)
+ 3 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\menu.php')
+ 4 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\View\View.php(431): CodeIgniter\View\View->render('layouts/menu.php', null, true)
+ 6 APPPATH\Views\layouts\main.php(7): CodeIgniter\View\View->include('layouts/menu.php')
+ 7 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\main.php')
+ 8 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 9 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->render('layouts/main', [], true)
+10 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/home', [], true)
+11 APPPATH\Controllers\AdminController.php(47): view('admin/home', [...])
+12 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+13 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+14 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:52:30 --> CSRF token verified.
+INFO - 2025-06-16 14:52:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:52:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:52:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:52:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:52:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:52:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:52:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:53:01 --> CSRF token verified.
+INFO - 2025-06-16 14:53:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:53:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:53:01 --> array_search(): Argument #2 ($haystack) must be of type array, null given
+in APPPATH\Helpers\buscar_helper.php on line 3.
+ 1 APPPATH\Helpers\buscar_helper.php(3): array_search('actualizar empresa', null, true)
+ 2 APPPATH\Views\layouts\menu.php(45): verificar('actualizar empresa', null)
+ 3 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\menu.php')
+ 4 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\View\View.php(431): CodeIgniter\View\View->render('layouts/menu.php', null, true)
+ 6 APPPATH\Views\layouts\main.php(7): CodeIgniter\View\View->include('layouts/menu.php')
+ 7 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\prestamos\\app\\Views\\layouts\\main.php')
+ 8 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 9 SYSTEMPATH\View\View.php(229): CodeIgniter\View\View->render('layouts/main', [], true)
+10 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('admin/home', [], true)
+11 APPPATH\Controllers\AdminController.php(47): view('admin/home', [...])
+12 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\AdminController->dashboard()
+13 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+14 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+15 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:53:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:53:41 --> array_search(): Argument #2 ($haystack) must be of type array, null given
+in APPPATH\Helpers\buscar_helper.php on line 3.
+ 1 APPPATH\Helpers\buscar_helper.php(3): array_search('nuevo rol', null, true)
+ 2 APPPATH\Controllers\RolesController.php(38): verificar('nuevo rol', null)
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\RolesController->new()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RolesController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:53:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:53:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-16 14:53:56 --> array_search(): Argument #2 ($haystack) must be of type array, null given
+in APPPATH\Helpers\buscar_helper.php on line 3.
+ 1 APPPATH\Helpers\buscar_helper.php(3): array_search('listar roles', null, true)
+ 2 APPPATH\Controllers\RolesController.php(21): verificar('listar roles', null)
+ 3 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\RolesController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RolesController))
+ 5 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+INFO - 2025-06-16 14:56:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:56:22 --> CSRF token verified.
+INFO - 2025-06-16 14:56:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:56:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:56:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:56:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:56:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:56:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:56:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:56:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 14:56:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:04:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:04:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:04:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:04:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:04:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:04:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:04:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:04:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:04:24 --> CSRF token verified.
+INFO - 2025-06-16 15:04:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:04:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:04:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:20 --> CSRF token verified.
+INFO - 2025-06-16 15:05:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:27 --> CSRF token verified.
+INFO - 2025-06-16 15:05:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:05:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:06 --> CSRF token verified.
+INFO - 2025-06-16 15:06:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:35 --> CSRF token verified.
+INFO - 2025-06-16 15:06:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:48 --> CSRF token verified.
+INFO - 2025-06-16 15:06:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:06:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:07:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:00 --> CSRF token verified.
+INFO - 2025-06-16 15:08:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:21 --> CSRF token verified.
+INFO - 2025-06-16 15:08:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:08:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:27 --> CSRF token verified.
+INFO - 2025-06-16 15:09:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:09:54 --> CSRF token verified.
+INFO - 2025-06-16 15:09:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:10:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:10:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:10:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:10:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:10:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:10:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:10:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:10:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:10:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:10:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:10:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-16 15:10:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

@@ -16,14 +16,17 @@ Editar cliente
             <div class="row">
                 <div class="form-group col-lg-4">
                     <label>Identidad</label>
-                    <input type="text" name="identidad" class="form-control" value="<?php echo set_value('identidad', $cliente['identidad']); ?>" placeholder="Identidad">
+                    <select name="identidad" id="tipoIdentidad" class="form-control">
+                        <option value="Cedula" <?php echo set_select('identidad', 'Cedula', $cliente['identidad'] === 'Cedula'); ?>>Cedula</option>
+                        <option value="Pasaporte" <?php echo set_select('identidad', 'Pasaporte', $cliente['identidad'] === 'Pasaporte'); ?>>Pasaporte</option>
+                    </select>
                     <?php if (!empty($errors['identidad'])) { ?>
                         <span class="text-danger"><?php echo $errors['identidad']; ?></span>
                     <?php } ?>
                 </div>
                 <div class="form-group col-lg-4">
                     <label>N° identidad</label>
-                    <input type="text" name="num_identidad" class="form-control" value="<?php echo set_value('num_identidad', $cliente['num_identidad']); ?>" placeholder="N° identidad">
+                    <input type="text" name="num_identidad" class="form-control identidad-format" value="<?php echo set_value('num_identidad', $cliente['num_identidad']); ?>" placeholder="000-000000-0000A">
                     <?php if (!empty($errors['num_identidad'])) { ?>
                         <span class="text-danger"><?php echo $errors['num_identidad']; ?></span>
                     <?php } ?>
@@ -50,8 +53,7 @@ Editar cliente
                                 <i class="fas fa-phone"></i>
                             </div>
                         </div>
-                        <input type="text" name="telefono" class="form-control phone-number" value="<?php echo set_value('telefono', $cliente['telefono']); ?>" placeholder="Telefono">
-
+                        <input type="text" name="telefono" class="form-control phone-number" value="<?php echo set_value('telefono', $cliente['telefono']); ?>" placeholder="+505xxxxxxxx" maxlength="12">
                     </div>
                     <?php if (!empty($errors['telefono'])) { ?>
                         <span class="text-danger"><?php echo $errors['telefono']; ?></span>
@@ -65,8 +67,7 @@ Editar cliente
                                 <i class="fab fa-whatsapp-square"></i>
                             </div>
                         </div>
-                        <input type="text" name="whatsapp" class="form-control phone-number" value="<?php echo set_value('whatsapp', $cliente['whatsapp']); ?>" placeholder="Whatsapp">
-                    </div>
+                        <input type="text" name="whatsapp" class="form-control phone-number" value="<?php echo set_value('whatsapp', $cliente['whatsapp']); ?>" placeholder="+505xxxxxxxx" maxlength="12">                    </div>
                     <?php if (!empty($errors['whatsapp'])) { ?>
                         <span class="text-danger"><?php echo $errors['whatsapp']; ?></span>
                     <?php } ?>
