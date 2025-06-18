@@ -35,7 +35,6 @@
             </a>
         </div>
         <ul class="sidebar-menu">
-            <li class="menu-header">Main</li>
             <li class="dropdown <?php echo ($active == 'dashboard') ? 'active' : ''; ?>">
                 <a href="<?php echo base_url('dashboard'); ?>" class="nav-link">
                     <i class="fa-solid fa-chart-pie mx-1"></i>
