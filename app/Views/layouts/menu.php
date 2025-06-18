@@ -95,6 +95,13 @@
                     </ul>
                 </li>
             <?php }
+            if (verificar('abono prestamo', $_SESSION['permisos'])) { ?>
+                <li class="<?php echo ($active == 'pago') ? 'active' : ''; ?>">
+                    <a href="<?php echo base_url('pagos'); ?>" class="nav-link">
+                        <i class="fa-solid fa-money-bill-wave mx-1"></i>
+                        <span>Pagos</span></a>
+                </li>
+            <?php }
             if (verificar('ver saldo', $_SESSION['permisos'])) { ?>
                 <li class="<?php echo ($active == 'caja') ? 'active' : ''; ?>">
                     <a href="<?php echo base_url('cajas'); ?>" class="nav-link">
