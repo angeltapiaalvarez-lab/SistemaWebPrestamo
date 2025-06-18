@@ -10,7 +10,11 @@ function movimientoGrafico() {
   http.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       const res = JSON.parse(this.responseText);
-      var ctx = document.getElementById("movimiento").getContext("2d");
+      var canvas = document.getElementById("movimiento");
+      canvas.height = 400;
+      var ctx = canvas.getContext("2d");
+      const darkMode = document.body.classList.contains('dark');
+      const legendFontColor = darkMode ? "#ffffff" : "#343a40";
       var myChart = new Chart(ctx, {
         type: "pie",
         data: {
@@ -46,7 +50,7 @@ function movimientoGrafico() {
           legend: {
             position: "bottom",
             labels: {
-              fontColor: "#343a40",
+              fontColor: legendFontColor,
               boxWidth: 20,
               fontSize: 14,
             }
