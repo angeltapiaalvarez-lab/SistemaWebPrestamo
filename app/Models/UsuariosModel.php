@@ -14,7 +14,7 @@ class UsuariosModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = [
         'nombre', 'apellido', 'telefono',
-        'correo', 'direccion', 'clave', 'estado', 'token', 'id_rol'
+        'correo', 'direccion', 'clave', 'perfil', 'estado', 'token', 'id_rol'
     ];
 
     // Dates
