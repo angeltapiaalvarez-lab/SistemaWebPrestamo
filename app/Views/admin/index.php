@@ -20,8 +20,8 @@ Datos de la empresa
             <input type="hidden" name="id" value="<?php echo $admin['id']; ?>">
             <div class="row">
                 <div class="form-group col-lg-4">
-                    <label>Identidad <span class="text-danger">*</span></label>
-                    <input type="text" name="identidad" class="form-control identidad-format" value="<?php echo set_value('identidad', $admin['identidad']); ?>" placeholder="000-000000-0000A" maxlength="16">
+                    <label>Código RUC <span class="text-danger">*</span></label>
+                    <input type="text" name="identidad" class="form-control ruc-format" value="<?php echo set_value('identidad', $admin['identidad']); ?>" placeholder="3620411740001A-3" maxlength="16">
                     <?php if (!empty($errors['identidad'])) { ?>
                         <span class="text-danger"><?php echo $errors['identidad']; ?></span>
                     <?php } ?>

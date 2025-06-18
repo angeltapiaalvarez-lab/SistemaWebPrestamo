@@ -63,6 +63,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  const rucInputs = document.querySelectorAll('.ruc-format');
+  rucInputs.forEach((input) => {
+    input.setAttribute('maxlength', '16');
+    input.setAttribute('placeholder', '3620411740001A-3');
+    input.addEventListener('input', function () {
+      let val = this.value.replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+      if (val.length > 14) {
+        val = val.slice(0, 14) + '-' + val.slice(14, 15);
+      }
+      this.value = val.slice(0, 16);
+    });
+  });
+
   const idInputs = document.querySelectorAll('.identidad-format');
   const tipoSelect = document.getElementById('tipoIdentidad');
 

@@ -11,7 +11,8 @@ function sendEmail(string $to, string $toName, string $subject, string $body, ?s
         $mail->SMTPAuth   = true;
         $mail->Username   = getenv('SMTP_USER');
         $mail->Password   = getenv('SMTP_PASS');
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $secure = getenv('SMTP_SECURE') ?: 'ssl';
+        $mail->SMTPSecure = ($secure === 'tls') ? PHPMailer::ENCRYPTION_STARTTLS : PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = getenv('SMTP_PORT') ?: 465;
 
         $mail->setFrom($fromEmail ?? getenv('SMTP_FROM'), $fromName ?? getenv('SMTP_FROM_NAME') ?: 'Sistema');
