@@ -23,11 +23,13 @@ function movimientoGrafico() {
                 res.saldo,
               ],
               backgroundColor: [
-                "#191d21",
-                "#63ed7a",
-                "#ffa426",
-                "#fc544b"
+                "#6c757d",
+                "#5da5da",
+                "#faa43a",
+                "#60bd68"
               ],
+              borderColor: "#ffffff",
+              borderWidth: 2,
               label: "Movimientos",
             },
           ],
@@ -40,8 +42,14 @@ function movimientoGrafico() {
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           legend: {
             position: "bottom",
+            labels: {
+              fontColor: "#343a40",
+              boxWidth: 20,
+              fontSize: 14,
+            }
           },
         },
       });
