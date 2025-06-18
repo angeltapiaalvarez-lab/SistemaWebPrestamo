@@ -102,4 +102,26 @@ document.addEventListener('DOMContentLoaded', () => {
       ajustarMaxLength();
     });
   }
+
+  const rucInputs = document.querySelectorAll('.ruc-format');
+
+  function aplicarMascaraRuc(e) {
+    let val = e.target.value.replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+    let digits = val.slice(0, 13);
+    let letter = val.slice(13, 14);
+    let check = val.slice(14, 15);
+    let formatted = digits;
+    if (letter) {
+      formatted += letter + '-';
+    }
+    if (check) {
+      formatted += check;
+    }
+    e.target.value = formatted.slice(0, 16);
+  }
+
+  rucInputs.forEach((input) => {
+    input.setAttribute('maxlength', '16');
+    input.addEventListener('input', aplicarMascaraRuc);
+  });
 });
