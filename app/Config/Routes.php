@@ -74,6 +74,9 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->put('/prestamos/(:num)', 'PrestamosController::update/$1');
     $routes->delete('/prestamos/(:num)', 'PrestamosController::delete/$1');
 
+    $routes->get('/pagos', 'PagosController::index');
+    $routes->get('/pagos/list', 'PagosController::listar');
+
     $routes->get('/cajas', 'CajasController::index');
     $routes->get('/cajas/new', 'CajasController::new');
     $routes->get('/cajas/movimientos', 'CajasController::movimientos');
