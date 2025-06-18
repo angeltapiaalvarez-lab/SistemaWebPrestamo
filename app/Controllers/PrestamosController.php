@@ -77,6 +77,7 @@ class PrestamosController extends BaseController
                 'cuotas' => $this->request->getVar('cuotas'),
                 'fecha' => date('Y-m-d H:i:s'),
                 'fecha_venc' => $fecha_venc,
+                'estado' => '1',
                 'id_cliente' => $this->request->getVar('id_cliente'),
                 'id_usuario' => $this->session->id_usuario
             ];
@@ -113,6 +114,7 @@ class PrestamosController extends BaseController
                                 'fecha_venc' => $fecha_venc,
                                 'importe_cuota' => $importe_cuota,
                                 'id_prestamo' => $prestamo,
+                                'estado' => '1',
                             ]);
                             //consulta de vencimiento
                             $consulta = $this->detalle->where('id', $presDetalle)->first();

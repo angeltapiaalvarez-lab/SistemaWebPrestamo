@@ -115,29 +115,7 @@ Detalle del prestamo
                     </table>
                 </div>
 
-                <h4>Historial de pagos</h4>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Cuota</th>
-                                <th>Monto</th>
-                                <th>Metodo</th>
-                                <th>Fecha</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($pagos as $pago) { ?>
-                                <tr>
-                                    <td><?php echo $pago['cuota']; ?></td>
-                                    <td><?php echo $pago['monto']; ?></td>
-                                    <td><?php echo $pago['metodo']; ?></td>
-                                    <td><?php echo $pago['fecha_pago']; ?></td>
-                                </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
+
 
             </div>
         </div>
