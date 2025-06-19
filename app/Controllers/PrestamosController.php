@@ -261,7 +261,7 @@ class PrestamosController extends BaseController
 
                 if (!empty($datos)) {
                     $this->prestamos->update($consulta['id_prestamo'], ['fecha_venc' => $fecha_venc]);
-                    $msg = 'ESTADO CAMBIADO';
+                    $msg = 'Ha realizado el pago';
                 } else {
                     $this->prestamos->update($consulta['id_prestamo'], ['estado' => '2']);
                     $msg = 'PRESTAMO FINALIZADO';

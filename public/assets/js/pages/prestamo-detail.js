@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function cambiarEstado(form) {
   Swal.fire({
     title: "Mensaje?",
-    text: "Esta seguro cambiar el estado!",
+    text: "Esta seguro de que desea realizar el pago!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
