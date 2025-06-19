@@ -34,6 +34,7 @@ if (verificar('nuevo cliente', $_SESSION['permisos'])) { ?>
                         <th>Correo</th>
                         <th>Direccion</th>
                         <th>Prestamo</th>
+                        <th>Prestamo activo</th>
                         <th>Estado</th>
                     </tr>
                 </thead>

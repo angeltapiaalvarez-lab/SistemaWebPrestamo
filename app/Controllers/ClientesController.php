@@ -36,6 +36,11 @@ class ClientesController extends BaseController
                 ->where('estado !=', '0')
                 ->countAllResults();
             $data[$key]['prestamo'] = $tiene > 0 ? 'SI' : 'NO';
+            $tieneActivo = $this->prestamos
+                ->where('id_cliente', $cliente['id'])
+                ->where('estado', '1')
+                ->countAllResults();
+            $data[$key]['prestamo_activo'] = $tieneActivo > 0 ? 'SI' : 'NO';
         }
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
