@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function(){
             { data: 'correo' },
             { data: 'direccion' },
             { data: 'prestamo' },
+            { data: 'prestamo_activo' },
             {
                 data: null,
                 render: function (data, type) {
