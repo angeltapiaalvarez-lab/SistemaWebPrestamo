@@ -247,9 +247,10 @@ class PrestamosController extends BaseController
             ]);
 
             if ($idPago) {
+                $descripcion = 'Prestamo ID ' . $consulta['id_prestamo'] . ', Cuota ' . $consulta['cuota'] . ', Pago ID ' . $idPago;
                 $this->transacciones->insert([
                     'accion'      => 'PAGO',
-                    'descripcion' => 'Pago ID ' . $idPago,
+                    'descripcion' => $descripcion,
                     'id_usuario'  => $this->session->id_usuario,
                 ]);
             }
