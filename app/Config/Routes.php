@@ -76,6 +76,7 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
 
     $routes->get('/pagos', 'PagosController::index');
     $routes->get('/pagos/list', 'PagosController::listar');
+    $routes->get('/pagos/(:num)/recibo', 'PagosController::recibo/$1');
 
     $routes->get('/cajas', 'CajasController::index');
     $routes->get('/cajas/new', 'CajasController::new');
