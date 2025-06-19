@@ -270,7 +270,7 @@ class PrestamosController extends BaseController
 
             return redirect()->to(base_url('prestamos/' . $consulta['id_prestamo'] . '/detail'))
                 ->with('respuesta', [
-                    'type' => 'success',
+                    'type' => 'light',
                     'msg'  => $msg,
                 ])
                 ->with('id_pago', $idPago);
