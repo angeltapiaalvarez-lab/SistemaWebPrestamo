@@ -229,7 +229,7 @@ class PrestamosController extends BaseController
             $monto = $this->request->getVar('monto');
             $metodo = $this->request->getVar('metodo');
 
-            $this->pagos->insert([
+            $idPago = $this->pagos->insert([
                 'id_detalle_prestamo' => $id,
                 'monto'               => $monto,
                 'fecha_pago'          => date('Y-m-d H:i:s'),
@@ -268,10 +268,12 @@ class PrestamosController extends BaseController
                 }
             }
 
-            return redirect()->to(base_url('prestamos/' . $consulta['id_prestamo'] . '/detail'))->with('respuesta', [
-                'type' => 'success',
-                'msg'  => $msg,
-            ]);
+            return redirect()->to(base_url('prestamos/' . $consulta['id_prestamo'] . '/detail'))
+                ->with('respuesta', [
+                    'type' => 'success',
+                    'msg'  => $msg,
+                ])
+                ->with('id_pago', $idPago);
         } else {
             return view('permisos');
         }

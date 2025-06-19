@@ -12,6 +12,9 @@ Detalle del prestamo
         <?php if (!empty(session()->getFlashdata('respuesta'))) { ?>
             <div class="alert alert-<?php echo session()->getFlashdata('respuesta')['type']; ?>">
                 <?php echo session()->getFlashdata('respuesta')['msg']; ?>
+                <?php if (session()->getFlashdata('id_pago')) { ?>
+                    <a href="<?php echo base_url('pagos/' . session()->getFlashdata('id_pago') . '/recibo'); ?>" target="_blank" class="btn btn-sm btn-success ml-3">Imprimir Recibo</a>
+                <?php } ?>
             </div>
         <?php } ?>
         <div class="row">
