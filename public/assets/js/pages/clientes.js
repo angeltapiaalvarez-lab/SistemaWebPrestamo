@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function(){
             { data: 'telefono' },
             { data: 'correo' },
             { data: 'direccion' },
-            { data: 'prestamo' },
             { data: 'prestamo_activo' },
             {
                 data: null,

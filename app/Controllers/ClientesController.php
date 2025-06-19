@@ -31,11 +31,6 @@ class ClientesController extends BaseController
     {
         $data = $this->clientes->findAll();
         foreach ($data as $key => $cliente) {
-            $tiene = $this->prestamos
-                ->where('id_cliente', $cliente['id'])
-                ->where('estado !=', '0')
-                ->countAllResults();
-            $data[$key]['prestamo'] = $tiene > 0 ? 'SI' : 'NO';
             $tieneActivo = $this->prestamos
                 ->where('id_cliente', $cliente['id'])
                 ->where('estado', '1')
