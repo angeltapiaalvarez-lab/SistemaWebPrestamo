@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function(){
             { data: 'cuota' },
             { data: 'monto' },
             { data: 'metodo' },
+            { data: 'usuario' },
             { data: 'fecha_pago' }
         ],
         responsive: true,

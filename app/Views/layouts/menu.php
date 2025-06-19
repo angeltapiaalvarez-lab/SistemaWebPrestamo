@@ -98,6 +98,11 @@
                 <li class="<?php echo ($active == 'pago') ? 'active' : ''; ?>">
                     <a href="<?php echo base_url('pagos'); ?>" class="nav-link">
                         <i class="fa-solid fa-money-bill-wave mx-1"></i>
+                        <span>Historial Pagos</span></a>
+                </li>
+                <li class="<?php echo ($active == 'transaccion') ? 'active' : ''; ?>">
+                    <a href="<?php echo base_url('transacciones'); ?>" class="nav-link">
+                        <i class="fa-solid fa-list mx-1"></i>
                         <span>Historial Transacciones</span></a>
                 </li>
             <?php }

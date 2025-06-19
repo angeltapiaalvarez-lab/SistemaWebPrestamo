@@ -9,6 +9,7 @@ use App\Models\ClientesModel;
 use App\Models\DetPrestamoModel;
 use App\Models\PrestamosModel;
 use App\Models\PagosModel;
+use App\Models\TransaccionesModel;
 
 // reference the Dompdf namespace
 use Dompdf\Dompdf;
@@ -16,7 +17,7 @@ use Dompdf\Dompdf;
 class PrestamosController extends BaseController
 {
     private $empresa, $clientes, $prestamos,
-        $detalle, $session, $reglas, $cajas, $pagos;
+        $detalle, $session, $reglas, $cajas, $pagos, $transacciones;
     public function __construct()
     {
         helper(['form', 'fecha', 'email']);
@@ -26,6 +27,7 @@ class PrestamosController extends BaseController
         $this->detalle = new DetPrestamoModel();
         $this->cajas = new CajasModel();
         $this->pagos = new PagosModel();
+        $this->transacciones = new \App\Models\TransaccionesModel();
         $this->session = session();
     }
 
@@ -129,6 +131,13 @@ class PrestamosController extends BaseController
                                 $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+1 year'));
                             }
                         }
+
+                        $this->transacciones->insert([
+                            'accion'      => 'CREAR',
+                            'descripcion' => 'Prestamo ID ' . $prestamo,
+                            'id_usuario'  => $this->session->id_usuario,
+                        ]);
+
                         return redirect()->to(base_url('prestamos/' . $prestamo . '/detail'))->with('respuesta', [
                             'type' => 'success',
                             'msg' => 'PRESTAMO REGISTRADO',
@@ -234,7 +243,16 @@ class PrestamosController extends BaseController
                 'monto'               => $monto,
                 'fecha_pago'          => date('Y-m-d H:i:s'),
                 'metodo'              => $metodo,
+                'id_usuario'          => $this->session->id_usuario,
             ]);
+
+            if ($idPago) {
+                $this->transacciones->insert([
+                    'accion'      => 'PAGO',
+                    'descripcion' => 'Pago ID ' . $idPago,
+                    'id_usuario'  => $this->session->id_usuario,
+                ]);
+            }
 
             $pagado = $this->pagos->selectSum('monto')
                 ->where('id_detalle_prestamo', $id)->first();
@@ -364,6 +382,11 @@ class PrestamosController extends BaseController
             //$data = $this->prestamos->delete($id);
             $data = $this->prestamos->update($id, ['estado' => '0']);
             if ($data) {
+                $this->transacciones->insert([
+                    'accion'      => 'ELIMINAR',
+                    'descripcion' => 'Prestamo ID ' . $id,
+                    'id_usuario'  => $this->session->id_usuario,
+                ]);
                 return redirect()->to(base_url('prestamos/historial'))->with('respuesta', [
                     'type' => 'success',
                     'msg' => 'PRESTAMO ELIMINADO',

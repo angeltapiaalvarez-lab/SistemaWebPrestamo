@@ -37,9 +37,10 @@ class PagosController extends BaseController
     {
         if ($this->request->is('get')) {
             $data = $this->pagos
-                ->select('pagos.*, p.id AS prestamo, d.cuota')
+                ->select('pagos.*, p.id AS prestamo, d.cuota, CONCAT(u.nombre, " ", u.apellido) AS usuario')
                 ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
                 ->join('prestamos AS p', 'd.id_prestamo = p.id')
+                ->join('usuarios AS u', 'pagos.id_usuario = u.id')
                 ->orderBy('pagos.fecha_pago', 'DESC')
                 ->findAll();
             echo json_encode($data, JSON_UNESCAPED_UNICODE);
