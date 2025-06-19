@@ -5,14 +5,16 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\ClientesModel;
 use App\Models\TransaccionesModel;
+use App\Models\PrestamosModel;
 
 class ClientesController extends BaseController
 {
-    private $clientes, $transacciones, $session;
+    private $clientes, $transacciones, $prestamos, $session;
     public function __construct()
     {
         $this->clientes       = new ClientesModel();
         $this->transacciones  = new TransaccionesModel();
+        $this->prestamos      = new PrestamosModel();
         helper(['form']);
         $this->session = session();
     }
@@ -28,6 +30,13 @@ class ClientesController extends BaseController
     public function listar()
     {
         $data = $this->clientes->findAll();
+        foreach ($data as $key => $cliente) {
+            $tiene = $this->prestamos
+                ->where('id_cliente', $cliente['id'])
+                ->where('estado !=', '0')
+                ->countAllResults();
+            $data[$key]['prestamo'] = $tiene > 0 ? 'SI' : 'NO';
+        }
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
     }
@@ -116,24 +125,33 @@ class ClientesController extends BaseController
 
     public function delete($idCliente) {
         if ($this->request->is('delete') && verificar('eliminar cliente', $this->session->permisos)) {
-            //$data = $this->usuarios->delete($idUsuario);
-            $data = $this->clientes->update($idCliente, ['estado' => '0']);
+            $cliente = $this->clientes->where('id', $idCliente)->first();
+            if (!$cliente) {
+                return redirect()->to(base_url('clientes'))->with('respuesta', [
+                    'type' => 'danger',
+                    'msg' => 'CLIENTE NO ENCONTRADO',
+                ]);
+            }
+            $nuevoEstado = ($cliente['estado'] == 1) ? 0 : 1;
+            $data = $this->clientes->update($idCliente, ['estado' => $nuevoEstado]);
             if ($data) {
+                $accion = ($nuevoEstado == 1) ? 'ACTIVAR' : 'ELIMINAR';
+                $mensaje = ($nuevoEstado == 1) ? 'CLIENTE ACTIVADO' : 'CLIENTE DADO DE BAJA';
                 $this->transacciones->insert([
-                    'accion'      => 'ELIMINAR',
+                    'accion'      => $accion,
                     'descripcion' => 'Cliente ID ' . $idCliente,
                     'id_usuario'  => $this->session->id_usuario,
                 ]);
                 return redirect()->to(base_url('clientes'))->with('respuesta', [
                     'type' => 'success',
-                    'msg' => 'CLIENTE DADO DE BAJA',
+                    'msg' => $mensaje,
                 ]);
             } else {
                 return redirect()->to(base_url('clientes'))->with('respuesta', [
                     'type' => 'danger',
-                    'msg' => 'ERROR AL ELIMINAR',
+                    'msg' => 'ERROR AL ACTUALIZAR',
                 ]);
-            } 
+            }
             
         }else{
             return view('permisos');

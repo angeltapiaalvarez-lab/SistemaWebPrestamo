@@ -9,12 +9,15 @@ document.addEventListener('DOMContentLoaded', function(){
             {
                 data: null,
                 render: function (data, type) {
-                    if (type === 'display') { 
+                    if (type === 'display') {
+                        const accion = data.estado == 1 ? 'desactivar' : 'activar';
+                        const icon = data.estado == 1 ? 'fa-user-times' : 'fa-check';
+                        const btnClass = data.estado == 1 ? 'btn-danger' : 'btn-success';
                         return `<a class="btn btn-primary" href="${ base_url + 'clientes/' + data.id + '/edit' }"><i class="fas fa-edit"></i></a>
-                        <form action="${ base_url + 'clientes/' + data.id }" method="post" class="d-inline eliminar">
-                            <input type="hidden" name="${csrf_token.getAttribute('content')}" value="${csrf_hash.getAttribute('content')}" />    
+                        <form action="${ base_url + 'clientes/' + data.id }" method="post" class="d-inline eliminar" data-accion="${accion}">
+                            <input type="hidden" name="${csrf_token.getAttribute('content')}" value="${csrf_hash.getAttribute('content')}" />
                             <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            <button type="submit" class="btn ${btnClass}"><i class="fas ${icon}"></i></button>
                         </form>`;
                     }
                     return data;
@@ -36,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function(){
             { data: 'telefono' },
             { data: 'correo' },
             { data: 'direccion' },
+            { data: 'prestamo' },
             {
                 data: null,
                 render: function (data, type) {
@@ -70,14 +74,16 @@ document.addEventListener('DOMContentLoaded', function(){
 })
 
 function eliminarRegistro(form){
+    const accion = form.getAttribute('data-accion');
+    const mensaje = accion === 'activar' ? 'Esta seguro de activar?' : 'Esta seguro de desactivar?';
     Swal.fire({
         title: 'Mensaje?',
-        text: "Esta seguro de eliminar!",
+        text: mensaje,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Eliminar!'
+        confirmButtonText: 'Si, Continuar!'
       }).then((result) => {
         if (result.isConfirmed) {
           form.submit();
