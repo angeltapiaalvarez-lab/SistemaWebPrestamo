@@ -13,6 +13,7 @@ Historial de pagos
             <table class="table table-striped nowrap" id="tblPagos" style="width:100%">
                 <thead>
                     <tr>
+                        <th>Recibo</th>
                         <th>#</th>
                         <th>Prestamo</th>
                         <th>Cuota</th>

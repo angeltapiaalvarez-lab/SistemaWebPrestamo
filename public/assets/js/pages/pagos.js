@@ -6,6 +6,15 @@ document.addEventListener('DOMContentLoaded', function(){
             dataSrc: ''
         },
         columns: [
+            {
+                data: null,
+                render: function(data, type){
+                    if(type === 'display'){
+                        return `<a class="btn btn-primary" href="${base_url + 'pagos/' + data.id + '/recibo'}" target="_blank"><i class="fas fa-print"></i></a>`;
+                    }
+                    return data;
+                }
+            },
             { data: 'id' },
             { data: 'prestamo' },
             { data: 'cuota' },
