@@ -39,8 +39,11 @@ document.addEventListener('DOMContentLoaded', function(){
             {
                 data: null,
                 render: function (data, type) {
-                    if (type === 'display') { 
-                        return `<span class="badge bg-success">Activo</span>`;
+                    if (type === 'display') {
+                        if (data.estado == 1) {
+                            return `<span class="badge bg-success">Activo</span>`;
+                        }
+                        return `<span class="badge bg-danger">Inactivo</span>`;
                     }
                     return data;
                 },
