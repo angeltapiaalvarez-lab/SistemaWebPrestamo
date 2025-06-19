@@ -4,13 +4,15 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\ClientesModel;
+use App\Models\TransaccionesModel;
 
 class ClientesController extends BaseController
 {
-    private $clientes, $session;
+    private $clientes, $transacciones, $session;
     public function __construct()
     {
-        $this->clientes = new ClientesModel();
+        $this->clientes       = new ClientesModel();
+        $this->transacciones  = new TransaccionesModel();
         helper(['form']);
         $this->session = session();
     }
@@ -25,7 +27,7 @@ class ClientesController extends BaseController
 
     public function listar()
     {
-        $data = $this->clientes->where('estado', '1')->findAll();
+        $data = $this->clientes->findAll();
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
     }
@@ -97,10 +99,15 @@ class ClientesController extends BaseController
                 $data['active'] = 'cliente';
                 return view('clientes/edit', $data);
             }
+            $this->transacciones->insert([
+                'accion'      => 'EDITAR',
+                'descripcion' => 'Cliente ID ' . $idCliente,
+                'id_usuario'  => $this->session->id_usuario,
+            ]);
             return redirect()->to(base_url('clientes'))->with('respuesta', [
                 'type' => 'success',
                 'msg' => 'CLIENTE MODIFICADO',
-            ]); 
+            ]);
         }else{
             return view('permisos');
         }
@@ -112,6 +119,11 @@ class ClientesController extends BaseController
             //$data = $this->usuarios->delete($idUsuario);
             $data = $this->clientes->update($idCliente, ['estado' => '0']);
             if ($data) {
+                $this->transacciones->insert([
+                    'accion'      => 'ELIMINAR',
+                    'descripcion' => 'Cliente ID ' . $idCliente,
+                    'id_usuario'  => $this->session->id_usuario,
+                ]);
                 return redirect()->to(base_url('clientes'))->with('respuesta', [
                     'type' => 'success',
                     'msg' => 'CLIENTE DADO DE BAJA',
