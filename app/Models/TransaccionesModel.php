@@ -4,17 +4,16 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PagosModel extends Model
+class TransaccionesModel extends Model
 {
-    protected $table            = 'pagos';
+    protected $table            = 'transacciones';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_detalle_prestamo', 'monto', 'fecha_pago', 'metodo', 'id_usuario'];
+    protected $allowedFields    = ['accion', 'descripcion', 'id_usuario'];
 
-    // Dates
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';

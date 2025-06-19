@@ -1,24 +1,21 @@
 <?= $this->extend('layouts/main'); ?>
 <?= $this->section('title'); ?>
-Historial de pagos
+Historial de transacciones
 <?= $this->endSection('title'); ?>
 
 <?= $this->section('content'); ?>
 <div class="card">
     <div class="card-header">
-        <h4>Historial de pagos</h4>
+        <h4>Historial de transacciones</h4>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-striped nowrap" id="tblPagos" style="width:100%">
+            <table class="table table-striped nowrap" id="tblTransacciones" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Recibo</th>
                         <th>#</th>
-                        <th>Prestamo</th>
-                        <th>Cuota</th>
-                        <th>Monto</th>
-                        <th>Metodo</th>
+                        <th>Accion</th>
+                        <th>Descripcion</th>
                         <th>Usuario</th>
                         <th>Fecha</th>
                     </tr>
@@ -32,5 +29,6 @@ Historial de pagos
 <?= $this->endSection('content'); ?>
 
 <?= $this->section('js'); ?>
-<script src="<?= base_url('assets/js/pages/pagos.js'); ?>"></script>
+<script src="<?= base_url('assets/js/pages/transacciones.js'); ?>"></script>
 <?= $this->endSection('js'); ?>
+
