@@ -16,6 +16,13 @@ const buttons = [
   {
     extend: "pdfHtml5",
     download: "open",
+    orientation: "landscape",
+    title: function () {
+      return document.title;
+    },
+    filename: function () {
+      return document.title.replace(/\s+/g, "_").toLowerCase();
+    },
     footer: true,
     text: '<span class="badge bg-danger"><i class="fas fa-file-pdf"></i></span>',
     exportOptions: {
