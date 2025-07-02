@@ -220,7 +220,8 @@ class PrestamosController extends BaseController
         $dompdf->render();
 
         // Output the generated PDF to Browser
-        $dompdf->stream('reporte.pdf', ['Attachment' => false]);
+        $nombre = 'contrato_prestamo_' . $id . '_' . date('Ymd') . '.pdf';
+        $dompdf->stream($nombre, ['Attachment' => false]);
     }
 
     public function update($id)
