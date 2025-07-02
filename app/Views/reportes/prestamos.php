@@ -22,7 +22,7 @@
             </td>
             <td class="info-fecha">
                 <div class="container-fecha">
-                    <span class="contrato">Información</span>
+                    <span class="contrato"><?php echo $titulo; ?></span>
                     <p>Fecha: <?php
                                 $dato = date('Y-m-d');
                                 echo fechaPerzo(date('Y-m-d', strtotime($dato)));

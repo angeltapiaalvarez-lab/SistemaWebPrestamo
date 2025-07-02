@@ -77,6 +77,7 @@ class PagosController extends BaseController
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'vertical');
         $dompdf->render();
-        $dompdf->stream('recibo.pdf', ['Attachment' => false]);
+        $nombre = 'recibo_pago_' . $id . '_' . date('Ymd') . '.pdf';
+        $dompdf->stream($nombre, ['Attachment' => false]);
     }
 }

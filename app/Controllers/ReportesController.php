@@ -28,6 +28,7 @@ class ReportesController extends BaseController
             return view('permisos');
         }
         $data['prestamos'] = $this->filtroReportes($url);
+        $data['titulo'] = 'Historial de préstamos';
 
         for ($i = 0; $i < count($data['prestamos']); $i++) {
             $result = $this->clientes->select('nombre, apellido')->where('id', $data['prestamos'][$i]['id_cliente'])->first();
@@ -54,7 +55,8 @@ class ReportesController extends BaseController
         $dompdf->render();
 
         // Output the generated PDF to Browser
-        $dompdf->stream('reporte.pdf', ['Attachment' => false]);
+        $nombre = 'historial_prestamos_' . date('Ymd') . '.pdf';
+        $dompdf->stream($nombre, ['Attachment' => false]);
     }
 
     public function reportesExcel($url)
@@ -101,7 +103,8 @@ class ReportesController extends BaseController
         }
 
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="prestamos.xls"');
+        $nombre = 'historial_prestamos_' . date('Ymd') . '.xls';
+        header('Content-Disposition: attachment;filename="' . $nombre . '"');
         header('Cache-Control: max-age=0');
 
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xls');
