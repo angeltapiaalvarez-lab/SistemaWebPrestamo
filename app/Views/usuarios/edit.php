@@ -77,6 +77,16 @@ Editar usuario
                         <span class="text-danger"><?php echo $validacion->getError('rol'); ?></span>
                     <?php } ?>
                 </div>
+                <div class="form-group col-lg-4">
+                    <label>Estado</label>
+                    <select name="estado" class="form-control">
+                        <option value="1" <?php echo set_select('estado', '1', $usuario['estado'] == 1); ?>>Activo</option>
+                        <option value="0" <?php echo set_select('estado', '0', $usuario['estado'] == 0); ?>>Inactivo</option>
+                    </select>
+                    <?php if (isset($validacion)) { ?>
+                        <span class="text-danger"><?php echo $validacion->getError('estado'); ?></span>
+                    <?php } ?>
+                </div>
             </div>
             <div class="text-end">
                 <a href="<?php echo base_url('usuarios'); ?>" class="btn btn-danger">Cancelar</a>
