@@ -12,32 +12,6 @@ const buttons = [
     //Aquí es donde generas el botón personalizado
     text: '<span class="badge bg-success"><i class="fas fa-file-excel"></i></span>',
   },
-  //Botón para PDF
-  {
-    extend: "pdfHtml5",
-    download: "open",
-    orientation: "landscape",
-    title: function () {
-      return document.title;
-    },
-    filename: function () {
-      return document.title.replace(/\s+/g, "_").toLowerCase();
-    },
-    footer: true,
-    text: '<span class="badge bg-danger"><i class="fas fa-file-pdf"></i></span>',
-    exportOptions: {
-      columns: [0, ":visible"],
-    },
-  },
-  //Botón para copiar
-  {
-    extend: "copyHtml5",
-    footer: true,
-    text: '<span class="badge bg-primary"><i class="fas fa-copy"></i></span>',
-    exportOptions: {
-      columns: [0, ":visible"],
-    },
-  },
   //Botón para print
   {
     extend: "print",

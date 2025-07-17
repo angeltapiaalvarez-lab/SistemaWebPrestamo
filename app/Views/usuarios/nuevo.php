@@ -13,14 +13,14 @@ Nuevo usuario
             <?php echo csrf_field(); ?>
             <div class="row">
                 <div class="form-group col-lg-4">
-                    <label>Nombre</label>
+                    <label>Nombre <span class="text-danger">*</span></label>
                     <input type="text" name="nombre" class="form-control" value="<?php echo set_value('nombre'); ?>" placeholder="Nombre">
                     <?php if (isset($validacion)) { ?>
                         <span class="text-danger"><?php echo $validacion->getError('nombre'); ?></span>
                     <?php } ?>
                 </div>
                 <div class="form-group col-lg-4">
-                    <label>Apellidos</label>
+                    <label>Apellidos <span class="text-danger">*</span></label>
                     <input type="text" name="apellido" class="form-control" value="<?php echo set_value('apellido'); ?>" placeholder="Apellido">
                     <?php if (isset($validacion)) { ?>
                         <span class="text-danger"><?php echo $validacion->getError('apellido'); ?></span>
@@ -42,7 +42,7 @@ Nuevo usuario
                     <?php } ?>
                 </div>
                 <div class="form-group col-lg-4">
-                    <label>Correo</label>
+                    <label>Correo <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
@@ -64,7 +64,7 @@ Nuevo usuario
                     <?php } ?>
                 </div>
                 <div class="form-group col-lg-4">
-                    <label>Rol</label>
+                    <label>Rol <span class="text-danger">*</span></label>
                     <select name="rol" class="form-control">
                         <option value="">Seleccionar</option>
                         <?php foreach ($roles as $rol) { ?>
@@ -78,7 +78,7 @@ Nuevo usuario
                     <?php } ?>
                 </div>
                 <div class="form-group col-lg-4">
-                    <label>Contraseña</label>
+                    <label>Contraseña <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
@@ -93,7 +93,7 @@ Nuevo usuario
                     <?php } ?>
                 </div>
                 <div class="form-group col-lg-4">
-                    <label>Confirmar Contraseña</label>
+                    <label>Confirmar Contraseña <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">

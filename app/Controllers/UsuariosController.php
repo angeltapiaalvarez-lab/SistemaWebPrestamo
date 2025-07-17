@@ -54,13 +54,13 @@ class UsuariosController extends BaseController
                     'rules' => 'required'
                 ],
                 'telefono' => [
-                    'rules' => 'required|regex_match[/^\+505\d{8}$/]|is_unique[usuarios.telefono]'
+                    'rules' => 'permit_empty|regex_match[/^\+505\d{8}$/]|is_unique[usuarios.telefono]'
                 ],
                 'correo' => [
                     'rules' => 'required|valid_email|is_unique[usuarios.correo]'
                 ],
                 'direccion' => [
-                    'rules' => 'required'
+                    'rules' => 'permit_empty'
                 ],
                 'rol' => [
                     'rules' => 'required'
@@ -150,13 +150,16 @@ class UsuariosController extends BaseController
                     'rules' => 'required'
                 ],
                 'telefono' => [
-                    'rules' => 'required|regex_match[/^\+505\d{8}$/]|is_unique[usuarios.telefono,id,{id_usuario}]'
+                    'rules' => 'permit_empty|regex_match[/^\+505\d{8}$/]|is_unique[usuarios.telefono,id,{id_usuario}]'
                 ],
                 'correo' => [
                     'rules' => 'required|valid_email|is_unique[usuarios.correo,id,{id_usuario}]'
                 ],
                 'direccion' => [
-                    'rules' => 'required'
+                    'rules' => 'permit_empty'
+                ],
+                'estado' => [
+                    'rules' => 'required|in_list[1,0]'
                 ],
                 'rol' => [
                     'rules' => 'required'
@@ -170,7 +173,8 @@ class UsuariosController extends BaseController
                     'telefono' => $this->request->getVar('telefono'),
                     'correo' => $this->request->getVar('correo'),
                     'direccion' => $this->request->getVar('direccion'),
-                    'id_rol' => $this->request->getVar('rol')
+                    'estado' => $this->request->getVar('estado'),
+                    'id_rol' => $this->request->getVar('rol'),
                 ]);
                 if ($data > 0) {
                     return redirect()->to(base_url('usuarios'))->with('respuesta', [
