@@ -100,8 +100,11 @@ Detalle del prestamo
                                                 <?php echo csrf_field(); ?>
                                                 <div class="input-group">
                                                     <input type="number" step="0.01" name="monto" value="<?php echo $detalle['importe_cuota']; ?>" class="form-control" style="max-width:100px">
-                                                    <input type="text" name="metodo" value="EFECTIVO" class="form-control" style="max-width:120px">
-                                                    <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i></button>
+                                                    <select name="metodo" class="form-select" style="max-width:150px">
+                                                        <option value="EFECTIVO">EFECTIVO</option>
+                                                        <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                                                    </select>
+                                                    <button type="submit" class="btn btn-primary">Pagar</button>
                                                 </div>
                                             </form>
                                         <?php } ?>
