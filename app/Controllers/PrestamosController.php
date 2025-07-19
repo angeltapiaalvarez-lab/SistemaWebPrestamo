@@ -62,14 +62,12 @@ class PrestamosController extends BaseController
         if ($this->request->is('post') && verificar('nuevo prestamo', $this->session->permisos)) {
             $fecha = date('Y-m-d');
             //calcular vencimiento
-            if ($this->request->getVar('modalidad') === 'DIARIO') {
-                $fecha_venc = date('Y-m-d', strtotime($fecha . '+1 days'));
-            } else if ($this->request->getVar('modalidad') === 'SEMANAL') {
-                $fecha_venc = date('Y-m-d', strtotime($fecha . '+7 days'));
+            if ($this->request->getVar('modalidad') === 'QUINCENAL') {
+                $fecha_venc = date('Y-m-d', strtotime($fecha . '+15 days'));
             } else if ($this->request->getVar('modalidad') === 'MENSUAL') {
-                $fecha_venc = date('Y-m-d', strtotime($fecha . '+1 month'));
+                $fecha_venc = date('Y-m-d', strtotime($fecha . '+30 days'));
             } else {
-                $fecha_venc = date('Y-m-d', strtotime($fecha . '+1 year'));
+                $fecha_venc = date('Y-m-d', strtotime($fecha . '+15 days'));
             }
             $data = [
                 'cliente' => $this->request->getVar('cliente'),
@@ -121,14 +119,12 @@ class PrestamosController extends BaseController
                             //consulta de vencimiento
                             $consulta = $this->detalle->where('id', $presDetalle)->first();
                             //calcular vencimiento
-                            if ($this->request->getVar('modalidad') === 'DIARIO') {
-                                $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+1 days'));
-                            } else if ($this->request->getVar('modalidad') === 'SEMANAL') {
-                                $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+7 days'));
+                            if ($this->request->getVar('modalidad') === 'QUINCENAL') {
+                                $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+15 days'));
                             } else if ($this->request->getVar('modalidad') === 'MENSUAL') {
-                                $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+1 month'));
+                                $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+30 days'));
                             } else {
-                                $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+1 year'));
+                                $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+15 days'));
                             }
                         }
 
@@ -317,14 +313,12 @@ class PrestamosController extends BaseController
             if ($pagado['monto'] >= $consulta['importe_cuota'] && $consulta['estado'] == 1) {
                 $this->detalle->update($id, ['estado' => '0']);
 
-                if ($consulta['modalidad'] === 'DIARIO') {
-                    $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+1 days'));
-                } else if ($consulta['modalidad'] === 'SEMANAL') {
-                    $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+7 days'));
+                if ($consulta['modalidad'] === 'QUINCENAL') {
+                    $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+15 days'));
                 } else if ($consulta['modalidad'] === 'MENSUAL') {
-                    $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+1 month'));
+                    $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+30 days'));
                 } else {
-                    $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+1 year'));
+                    $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+15 days'));
                 }
 
                 $datos = $this->detalle->where([

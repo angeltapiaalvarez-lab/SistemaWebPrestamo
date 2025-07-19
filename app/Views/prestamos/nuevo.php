@@ -30,7 +30,7 @@ Nuevo prestamo
                     <div class="row">
                         <div class="col-lg-6 form-group">
                             <label>Importe</label>
-                            <input type="text" id="importe_credito" name="importe_credito" class="form-control" value="<?php echo set_value('importe_credito'); ?>" placeholder="Importe">
+                        <input type="number" step="0.01" min="0" id="importe_credito" name="importe_credito" class="form-control" value="<?php echo set_value('importe_credito'); ?>" placeholder="Importe">
                             <?php if (!empty($errors['importe_credito'])) { ?>
                                 <span class="text-danger"><?php echo $errors['importe_credito']; ?></span>
                             <?php } ?>
@@ -39,10 +39,8 @@ Nuevo prestamo
                             <label>Modalidad</label>
                             <select class="form-select" name="modalidad">
                                 <option value="">Seleccionar</option>
-                                <option value="DIARIO" <?= set_select('modalidad', 'DIARIO', (!empty($modalidad) && $modalidad == 'DIARIO' ? true : false)) ?>>DIARIO</option>
-                                <option value="SEMANAL" <?= set_select('modalidad', 'SEMANAL', (!empty($modalidad) && $modalidad == 'SEMANAL' ? true : false)) ?>>SEMANAL</option>
-                                <option value="MENSUAL" <?= set_select('modalidad', 'MENSUAL', (!empty($modalidad) && $modalidad == 'MENSUAL' ? true : false)) ?>>MENSUAL</option>
-                                <option value="ANUAL" <?= set_select('modalidad', 'ANUAL', (!empty($modalidad) && $modalidad == 'ANUAL' ? true : false)) ?>>ANUAL</option>
+                                <option value="QUINCENAL" <?= set_select('modalidad', 'QUINCENAL', (!empty($modalidad) && $modalidad == 'QUINCENAL' ? true : false)) ?>>QUINCENAL (15 días)</option>
+                                <option value="MENSUAL" <?= set_select('modalidad', 'MENSUAL', (!empty($modalidad) && $modalidad == 'MENSUAL' ? true : false)) ?>>MENSUAL (30 días)</option>
                             </select>
                             <?php if (!empty($errors['modalidad'])) { ?>
                                 <span class="text-danger"><?php echo $errors['modalidad']; ?></span>
@@ -50,7 +48,7 @@ Nuevo prestamo
                         </div>
                         <div class="col-lg-6 form-group">
                             <label>Tasa Interes</label>
-                            <input type="number" min="1" id="tasa_interes" name="tasa_interes" class="form-control" value="<?php echo set_value('tasa_interes', $empresa['tasa_interes']); ?>" placeholder="10">
+                            <input type="number" min="1" max="99" id="tasa_interes" name="tasa_interes" class="form-control" value="<?php echo set_value('tasa_interes', $empresa['tasa_interes']); ?>" placeholder="10">
                             <?php if (!empty($errors['tasa_interes'])) { ?>
                                 <span class="text-danger"><?php echo $errors['tasa_interes']; ?></span>
                             <?php } ?>

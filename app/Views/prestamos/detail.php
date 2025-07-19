@@ -49,7 +49,6 @@ Detalle del prestamo
             <div class="col-lg-12">
                 <div class="mb-3">
                     <a href="<?php echo base_url('prestamos/' . $prestamo['id'] . '/reporte'); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Estado de Cuenta</a>
-                    <button type="button" id="btnCorreo" class="btn btn-warning"><i class="fas fa-envelope"></i> Enviar correo</button>
                     <button type="button" id="btnWhatsApp" class="btn btn-success"><i class="fab fa-whatsapp-square"></i> WhatsApp</button>
                 </div>
                 <div class="table-responsive">
