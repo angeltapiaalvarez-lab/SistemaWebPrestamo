@@ -247,6 +247,59 @@ class PrestamosController extends BaseController
                 'id_usuario'          => $this->session->id_usuario,
             ]);
 
+            // Enviar recibo por correo si el pago se registró correctamente
+            if ($idPago) {
+                // Datos del pago para generar el recibo
+                $pagoData = $this->pagos
+                    ->select(
+                        'pagos.*, d.cuota, d.id_prestamo, p.id AS prestamo, c.identidad, c.num_identidad, c.nombre AS cliente, c.apellido, c.telefono, c.direccion, c.correo'
+                    )
+                    ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
+                    ->join('prestamos AS p', 'd.id_prestamo = p.id')
+                    ->join('clientes AS c', 'p.id_cliente = c.id')
+                    ->where('pagos.id', $idPago)
+                    ->first();
+
+                $empresa = $this->empresa->first();
+
+                if (!empty($pagoData) && !empty($pagoData['correo'])) {
+                    $dompdf = new \Dompdf\Dompdf();
+                    ob_start();
+                    echo view('pagos/recibo', ['pago' => $pagoData, 'empresa' => $empresa]);
+                    $html = ob_get_clean();
+
+                    $options = $dompdf->getOptions();
+                    $options->set('isJavascriptEnabled', true);
+                    $options->set('isRemoteEnabled', true);
+                    $dompdf->setOptions($options);
+
+                    $dompdf->loadHtml($html);
+                    $dompdf->setPaper('A4', 'vertical');
+                    $dompdf->render();
+
+                    // Guardar archivo temporalmente
+                    $dirRecibos = WRITEPATH . 'recibos';
+                    if (!is_dir($dirRecibos)) {
+                        mkdir($dirRecibos, 0777, true);
+                    }
+                    $nombreArchivo = $dirRecibos . DIRECTORY_SEPARATOR . 'recibo_pago_' . $idPago . '.pdf';
+                    file_put_contents($nombreArchivo, $dompdf->output());
+
+                    $body = '<p>Adjunto encontrá el recibo de su pago.</p>';
+                    sendEmail(
+                        $pagoData['correo'],
+                        $pagoData['cliente'],
+                        'Recibo de pago',
+                        $body,
+                        $empresa['correo'],
+                        $empresa['nombre'],
+                        [['path' => $nombreArchivo, 'name' => 'recibo_pago_' . $idPago . '.pdf']]
+                    );
+
+                    @unlink($nombreArchivo);
+                }
+            }
+
             if ($idPago) {
                 $descripcion = 'Prestamo ID ' . $consulta['id_prestamo'] . ', Cuota ' . $consulta['cuota'] . ', Pago ID ' . $idPago;
                 $this->transacciones->insert([

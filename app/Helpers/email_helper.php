@@ -2,7 +2,15 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-function sendEmail(string $to, string $toName, string $subject, string $body, ?string $fromEmail = null, ?string $fromName = null): bool
+function sendEmail(
+    string $to,
+    string $toName,
+    string $subject,
+    string $body,
+    ?string $fromEmail = null,
+    ?string $fromName = null,
+    array $attachments = []
+): bool
 {
     $mail = new PHPMailer(true);
     try {
@@ -24,8 +32,17 @@ function sendEmail(string $to, string $toName, string $subject, string $body, ?s
         }
 
 
-        $mail->setFrom($fromEmail ?? getenv('SMTP_FROM'), $fromName ?? getenv('SMTP_FROM_NAME') ?: 'Sistema');
+        $mail->setFrom(
+            $fromEmail ?? getenv('SMTP_FROM'),
+            $fromName ?? getenv('SMTP_FROM_NAME') ?: 'Sistema'
+        );
         $mail->addAddress($to, $toName);
+        // Adjuntar archivos si existen
+        foreach ($attachments as $attach) {
+            if (is_array($attach) && isset($attach['path'])) {
+                $mail->addAttachment($attach['path'], $attach['name'] ?? '');
+            }
+        }
         $mail->isHTML(true);
         $mail->CharSet = 'UTF-8';
         $mail->Subject = $subject;
