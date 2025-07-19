@@ -14,10 +14,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  //modal correo
-  btnCorreo.addEventListener('click', function(){
-    myModal.show();
-  })
+  // modal correo (may not exist)
+  if (btnCorreo) {
+    btnCorreo.addEventListener('click', function(){
+      myModal.show();
+    });
+  }
 
   //modal WhatsApp
   btnWhatsApp.addEventListener('click', function(){
