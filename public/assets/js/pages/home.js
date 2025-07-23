@@ -35,7 +35,7 @@ function movimientoGrafico(anio) {
             show: false,
           },
         },
-        colors: ["#77B6EA", "#545454"],
+        colors: ["#77B6EA", "#28a745"],
         dataLabels: {
           enabled: true,
         },
@@ -45,8 +45,13 @@ function movimientoGrafico(anio) {
         series: [
           {
             name: "Total",
-            data: [res.total.ene, res.total.feb, res.total.mar, res.total.abr, res.total.may, 
+            data: [res.total.ene, res.total.feb, res.total.mar, res.total.abr, res.total.may,
               res.total.jun, res.total.jul, res.total.ago, res.total.sep, res.total.oct, res.total.nov, res.total.dic],
+          },
+          {
+            name: "Ganancia",
+            data: [res.ganancia.ene, res.ganancia.feb, res.ganancia.mar, res.ganancia.abr, res.ganancia.may,
+              res.ganancia.jun, res.ganancia.jul, res.ganancia.ago, res.ganancia.sep, res.ganancia.oct, res.ganancia.nov, res.ganancia.dic],
           }
         ],
         title: {
@@ -96,7 +101,7 @@ function movimientoGrafico(anio) {
               color: "#9aa0ac",
             },
           },
-          min: 5,
+          min: 0,
           max: parseFloat(res.max.importe),
         },
         legend: {
