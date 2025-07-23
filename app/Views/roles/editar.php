@@ -49,6 +49,11 @@ Editar rol
                         </div>
                     </div>
                 <?php } ?>
+                <?php if (!empty($errors['permisos'])) { ?>
+                    <div class="col-12">
+                        <span class="text-danger"><?php echo $errors['permisos']; ?></span>
+                    </div>
+                <?php } ?>
             </div>
             <div class="text-end">
                 <a href="<?php echo base_url('roles'); ?>" class="btn btn-danger">Cancelar</a>

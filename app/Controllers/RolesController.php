@@ -46,7 +46,13 @@ class RolesController extends BaseController
     {
         if ($this->request->is('post') && verificar('nuevo rol', $this->session->permisos)) {
             $permisosSel = $this->request->getVar('permisos');
-            $json = (empty($permisosSel)) ? null : json_encode($permisosSel);
+            if (empty($permisosSel)) {
+                $data['errors']['permisos'] = 'Debe seleccionar al menos un permiso';
+                $data['permisos'] = $this->permisos->findAll();
+                $data['active'] = 'rol';
+                return view('roles/nuevo', $data);
+            }
+            $json = json_encode($permisosSel);
             $data = [
                 'id_rol' => $this->request->getVar('id_rol'),
                 'nombre' => $this->request->getVar('nombre'),
@@ -87,7 +93,19 @@ class RolesController extends BaseController
     {
         if ($this->request->is('put') && verificar('editar rol', $this->session->permisos)) {
             $permisosSel = $this->request->getVar('permisos');
-            $json = (empty($permisosSel)) ? null : json_encode($permisosSel);
+            if (empty($permisosSel)) {
+                $data['errors']['permisos'] = 'Debe seleccionar al menos un permiso';
+                $data['permisos'] = $this->permisos->findAll();
+                $data['rol'] = $this->roles->find($id);
+                $permisos = [];
+                if ($data['rol']['permisos'] != null) {
+                    $permisos = json_decode($data['rol']['permisos'], true);
+                }
+                $data['activos'] = $permisos;
+                $data['active'] = 'rol';
+                return view('roles/editar', $data);
+            }
+            $json = json_encode($permisosSel);
             $data = [
                 'id_rol' => $this->request->getVar('id_rol'),
                 'nombre' => $this->request->getVar('nombre'),

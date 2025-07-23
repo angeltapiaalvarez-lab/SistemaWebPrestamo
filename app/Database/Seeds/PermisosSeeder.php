@@ -50,6 +50,18 @@ class PermisosSeeder extends Seeder
             'created_at'    => date('Y-m-d H:i:s'),
             'updated_at'    => date('Y-m-d H:i:s'),
         ];
+        $data[7] = [
+            'modulo'    => 'pagos',
+            'campos'    => json_encode(['historial pagos']),
+            'created_at'    => date('Y-m-d H:i:s'),
+            'updated_at'    => date('Y-m-d H:i:s'),
+        ];
+        $data[8] = [
+            'modulo'    => 'transacciones',
+            'campos'    => json_encode(['historial transacciones']),
+            'created_at'    => date('Y-m-d H:i:s'),
+            'updated_at'    => date('Y-m-d H:i:s'),
+        ];
         for ($i=0; $i < count($data); $i++) { 
             $this->db->table('permisos')->insert($data[$i]);
         }
