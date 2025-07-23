@@ -104,8 +104,40 @@ class AdminController extends BaseController
         SUM(IF(MONTH(fecha) = 11, importe, 0)) AS nov,
         SUM(IF(MONTH(fecha) = 12, importe, 0)) AS dic")
             ->where($where)->first();
+
+        $data['ganancia'] = $this->prestamos->select("
+        SUM(IF(MONTH(fecha) = 1, importe * (tasa_interes / 100), 0)) AS ene,
+        SUM(IF(MONTH(fecha) = 2, importe * (tasa_interes / 100), 0)) AS feb,
+        SUM(IF(MONTH(fecha) = 3, importe * (tasa_interes / 100), 0)) AS mar,
+        SUM(IF(MONTH(fecha) = 4, importe * (tasa_interes / 100), 0)) AS abr,
+        SUM(IF(MONTH(fecha) = 5, importe * (tasa_interes / 100), 0)) AS may,
+        SUM(IF(MONTH(fecha) = 6, importe * (tasa_interes / 100), 0)) AS jun,
+        SUM(IF(MONTH(fecha) = 7, importe * (tasa_interes / 100), 0)) AS jul,
+        SUM(IF(MONTH(fecha) = 8, importe * (tasa_interes / 100), 0)) AS ago,
+        SUM(IF(MONTH(fecha) = 9, importe * (tasa_interes / 100), 0)) AS sep,
+        SUM(IF(MONTH(fecha) = 10, importe * (tasa_interes / 100), 0)) AS oct,
+        SUM(IF(MONTH(fecha) = 11, importe * (tasa_interes / 100), 0)) AS nov,
+        SUM(IF(MONTH(fecha) = 12, importe * (tasa_interes / 100), 0)) AS dic")
+            ->where($where)->first();
         //calcular maximo
-        $data['max'] = $this->prestamos->selectMax('importe')->where($where)->first();
+        $totales = [
+            $data['total']['ene'], $data['total']['feb'],
+            $data['total']['mar'], $data['total']['abr'],
+            $data['total']['may'], $data['total']['jun'],
+            $data['total']['jul'], $data['total']['ago'],
+            $data['total']['sep'], $data['total']['oct'],
+            $data['total']['nov'], $data['total']['dic'],
+        ];
+        $ganancias = [
+            $data['ganancia']['ene'], $data['ganancia']['feb'],
+            $data['ganancia']['mar'], $data['ganancia']['abr'],
+            $data['ganancia']['may'], $data['ganancia']['jun'],
+            $data['ganancia']['jul'], $data['ganancia']['ago'],
+            $data['ganancia']['sep'], $data['ganancia']['oct'],
+            $data['ganancia']['nov'], $data['ganancia']['dic'],
+        ];
+        $maxImporte = max(max($totales), max($ganancias));
+        $data['max'] = ['importe' => $maxImporte];
         echo json_encode($data);
         die();
     }
