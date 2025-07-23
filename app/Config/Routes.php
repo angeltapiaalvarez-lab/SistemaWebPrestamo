@@ -61,6 +61,7 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     //fin usuario
 
     $routes->get('/clientes/list', 'ClientesController::listar');
+    $routes->get('/clientes/buscar', 'ClientesController::buscar');
     $routes->resource('clientes', ['controller' => 'ClientesController']);
 
     $routes->get('/prestamos', 'PrestamosController::index');

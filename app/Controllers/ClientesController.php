@@ -41,6 +41,28 @@ class ClientesController extends BaseController
         die();
     }
 
+    public function buscar()
+    {
+        if ($this->request->is('get') && !empty($this->request->getVar('term'))) {
+            $term = $this->request->getVar('term');
+            $data = $this->clientes
+                ->groupStart()
+                    ->like('num_identidad', $term)
+                    ->orLike('id', $term)
+                ->groupEnd()
+                ->where('estado', '1')
+                ->findAll(10);
+            $result = [];
+            foreach ($data as $cliente) {
+                $result[] = [
+                    'id' => $cliente['id'],
+                    'value' => $cliente['num_identidad'] . ' - ' . $cliente['nombre'] . ' ' . $cliente['apellido'],
+                ];
+            }
+            return $this->response->setJSON($result);
+        }
+    }
+
     public function new()
     {
         if (!verificar('nuevo cliente', $this->session->permisos)) {
