@@ -62,6 +62,29 @@ document.addEventListener('DOMContentLoaded', function(){
         order: [[1, 'desc']]
     } );
 
+    $("#buscarCliente").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: base_url + 'clientes/buscar',
+                dataType: 'json',
+                data: { term: request.term },
+                success: function(data) {
+                    response(data);
+                }
+            });
+        },
+        minLength: 1,
+        select: function(event, ui) {
+            tblClientes.search(ui.item.id).draw();
+        }
+    });
+
+    document.querySelector('#buscarCliente').addEventListener('input', function(e){
+        if (this.value === '') {
+            tblClientes.search('').draw();
+        }
+    });
+
     tblClientes.on('draw', function () {
         let lista = document.querySelectorAll('.eliminar');
         for (let i = 0; i < lista.length; i++) {
