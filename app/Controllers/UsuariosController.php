@@ -54,13 +54,13 @@ class UsuariosController extends BaseController
                     'rules' => 'required'
                 ],
                 'telefono' => [
-                    'rules' => 'required|regex_match[/^\+505\d{8}$/]|is_unique[usuarios.telefono]'
+                    'rules' => 'permit_empty|regex_match[/^\+505\d{8}$/]|is_unique[usuarios.telefono]'
                 ],
                 'correo' => [
                     'rules' => 'required|valid_email|is_unique[usuarios.correo]'
                 ],
                 'direccion' => [
-                    'rules' => 'required'
+                    'rules' => 'permit_empty'
                 ],
                 'rol' => [
                     'rules' => 'required'
