@@ -48,31 +48,43 @@ class CajasModel extends Model
             'id_usuario' => $id_usuario
         ])->first();
 
-        $ingresos = $prestamos
-            ->select('d.importe_cuota, d.estado')
-            ->join('detalle_prestamos AS d', 'prestamos.id = d.id_prestamo')
+        $detPrestamo = new DetPrestamoModel();
+        $detalles = $detPrestamo
+            ->select('detalle_prestamos.importe_cuota, detalle_prestamos.estado, p.importe, p.cuotas')
+            ->join('prestamos AS p', 'detalle_prestamos.id_prestamo = p.id')
             ->where([
-                'prestamos.id_usuario' => $id_usuario,
-                'prestamos.estado' => '1'
+                'p.id_usuario' => $id_usuario,
+                'p.estado'     => '1'
             ])->findAll();
-        $totalIngreso = 0;
-        foreach ($ingresos as $ingreso) {
-            if ($ingreso['estado'] == 0) {
-                $totalIngreso += $ingreso['importe_cuota'];
+
+        $capital = 0;
+        $interes = 0;
+        foreach ($detalles as $detalle) {
+            if ($detalle['estado'] == 0) {
+                $capitalCuota  = $detalle['importe'] / $detalle['cuotas'];
+                $interesCuota  = $detalle['importe_cuota'] - $capitalCuota;
+                $capital      += $capitalCuota;
+                $interes      += $interesCuota;
             }
         }
 
+        $totalIngreso = $capital + $interes;
+
         $data['inicial'] = $incialSaldo;
-        $data['egreso'] = ($egreso['importe'] != null) ? $egreso['importe'] : '0';
-        $data['ingreso'] = $totalIngreso;
+        $data['egreso']  = ($egreso['importe'] != null) ? $egreso['importe'] : 0;
+        $data['capital'] = $capital;
+        $data['interes'] = $interes;
+        $data['ingreso'] = $totalIngreso; // capital + interes
         //CALCULAR SALDO
         $data['saldo'] = ($data['inicial'] - $data['egreso']) + $data['ingreso'];
         
         $data['decimales'] = [
             'inicial' => number_format($data['inicial'], 2),
-            'egreso' => number_format($data['egreso'], 2),
+            'egreso'  => number_format($data['egreso'], 2),
+            'capital' => number_format($data['capital'], 2),
+            'interes' => number_format($data['interes'], 2),
             'ingreso' => number_format($data['ingreso'], 2),
-            'saldo' => number_format($data['saldo'], 2)
+            'saldo'   => number_format($data['saldo'], 2)
         ];
         return $data;
     }
