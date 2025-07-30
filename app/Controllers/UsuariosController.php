@@ -213,7 +213,7 @@ class UsuariosController extends BaseController
                 'rules' => 'required'
             ],
             'telefono' => [
-                'rules' => 'required|min_length[9]|is_unique[usuarios.telefono,id,{id_usuario}]'
+                'rules' => 'required|regex_match[/^\+505\d{8}$/]|is_unique[usuarios.telefono,id,{id_usuario}]'
             ],
             'correo' => [
                 'rules' => 'required|valid_email|is_unique[usuarios.correo,id,{id_usuario}]'

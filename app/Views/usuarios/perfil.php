@@ -112,7 +112,7 @@ Perfil de usuario
                                             </div>
                                             <div class="form-group col-md-5 col-12">
                                                 <label>Teléfono</label>
-                                                <input type="tel" name="telefono" class="form-control" value="<?php echo set_value('telefono', $usuario['telefono']); ?>">
+                                                <input type="tel" name="telefono" class="form-control phone-number" value="<?php echo set_value('telefono', $usuario['telefono']); ?>" placeholder="+505xxxxxxxx" maxlength="12">
                                                 <?php if (isset($validacion)) { ?>
                                                     <span class="text-danger"><?php echo $validacion->getError('telefono'); ?></span>
                                                 <?php } ?>
