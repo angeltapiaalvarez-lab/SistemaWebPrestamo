@@ -18,6 +18,9 @@ define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
 // Ensure the current directory is pointing to the front controller's directory
 chdir(FCPATH);
 
+// Set default timezone for the application
+date_default_timezone_set('America/Managua');
+
 /*
  *---------------------------------------------------------------
  * BOOTSTRAP THE APPLICATION
