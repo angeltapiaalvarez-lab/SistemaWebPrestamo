@@ -94,18 +94,6 @@
                     </ul>
                 </li>
             <?php }
-            if (verificar('abono prestamo', $_SESSION['permisos'])) { ?>
-                <li class="<?php echo ($active == 'pago') ? 'active' : ''; ?>">
-                    <a href="<?php echo base_url('pagos'); ?>" class="nav-link">
-                        <i class="fa-solid fa-money-bill-wave mx-1"></i>
-                        <span>Historial Pagos</span></a>
-                </li>
-                <li class="<?php echo ($active == 'transaccion') ? 'active' : ''; ?>">
-                    <a href="<?php echo base_url('transacciones'); ?>" class="nav-link">
-                        <i class="fa-solid fa-list mx-1"></i>
-                        <span>Historial Transacciones</span></a>
-                </li>
-            <?php }
             if (verificar('ver saldo', $_SESSION['permisos'])) { ?>
                 <li class="<?php echo ($active == 'caja') ? 'active' : ''; ?>">
                     <a href="<?php echo base_url('cajas'); ?>" class="nav-link">
@@ -113,36 +101,55 @@
                         <span>Cajas</span></a>
                 </li>
             <?php }
-            if (verificar('pdf prestamos', $_SESSION['permisos'])) { ?>
-                <li class="dropdown">
+            if (
+                verificar('abono prestamo', $_SESSION['permisos']) ||
+                verificar('pdf prestamos', $_SESSION['permisos']) ||
+                verificar('excel prestamos', $_SESSION['permisos'])
+            ) { ?>
+                <li class="dropdown <?php echo (
+                                            $active == 'pago' ||
+                                            $active == 'transaccion' ||
+                                            $active == 'reportesPdf' ||
+                                            $active == 'reportesExcel'
+                                        ) ? 'active' : ''; ?>">
                     <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i class="fa-regular fa-file-pdf mx-1"></i>
-                        <span>Reportes PDF</span></a>
+                        <i class="fa-solid fa-chart-line mx-1"></i>
+                        <span>Reportes</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="<?php echo base_url('reportesPdf/dia'); ?>" target="_blank">Actual</a></li>
-                        <li><a class="nav-link" href="<?php echo base_url('reportesPdf/semana'); ?>" target="_blank">Ultimos 7 diás</a></li>
-                        <li><a class="nav-link" href="<?php echo base_url('reportesPdf/ultimos'); ?>" target="_blank">Ultimos 30 diás</a></li>
-                        <li><a class="nav-link" href="<?php echo base_url('reportesPdf/anterior'); ?>" target="_blank">Mes anterior</a></li>
-                        <li><a class="nav-link" href="<?php echo base_url('reportesPdf/actual'); ?>" target="_blank">Mes actual</a></li>
+                        <?php if (verificar('abono prestamo', $_SESSION['permisos'])) { ?>
+                            <li><a class="nav-link <?php echo ($active == 'pago') ? 'text-success' : ''; ?>" href="<?php echo base_url('pagos'); ?>">Historial Pagos</a></li>
+                            <li><a class="nav-link <?php echo ($active == 'transaccion') ? 'text-success' : ''; ?>" href="<?php echo base_url('transacciones'); ?>">Historial Transacciones</a></li>
+                        <?php }
+                        if (verificar('pdf prestamos', $_SESSION['permisos'])) { ?>
+                            <li class="dropdown">
+                                <a href="#" class="menu-toggle nav-link has-dropdown">
+                                    <i class="fa-regular fa-file-pdf mx-1"></i>
+                                    <span>Reporte Préstamo PDF</span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="nav-link" href="<?php echo base_url('reportesPdf/dia'); ?>" target="_blank">Actual</a></li>
+                                    <li><a class="nav-link" href="<?php echo base_url('reportesPdf/semana'); ?>" target="_blank">Ultimos 7 diás</a></li>
+                                    <li><a class="nav-link" href="<?php echo base_url('reportesPdf/ultimos'); ?>" target="_blank">Ultimos 30 diás</a></li>
+                                    <li><a class="nav-link" href="<?php echo base_url('reportesPdf/anterior'); ?>" target="_blank">Mes anterior</a></li>
+                                    <li><a class="nav-link" href="<?php echo base_url('reportesPdf/actual'); ?>" target="_blank">Mes actual</a></li>
+                                </ul>
+                            </li>
+                        <?php }
+                        if (verificar('excel prestamos', $_SESSION['permisos'])) { ?>
+                            <li class="dropdown">
+                                <a href="#" class="menu-toggle nav-link has-dropdown">
+                                    <i class="fa-regular fa-file-excel mx-1"></i>
+                                    <span>Reporte Préstamo Excel</span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="nav-link" href="<?php echo base_url('reportesExcel/dia'); ?>">Actual</a></li>
+                                    <li><a class="nav-link" href="<?php echo base_url('reportesExcel/semana'); ?>">Ultimos 7 diás</a></li>
+                                    <li><a class="nav-link" href="<?php echo base_url('reportesExcel/ultimos'); ?>">Ultimos 30 diás</a></li>
+                                    <li><a class="nav-link" href="<?php echo base_url('reportesExcel/anterior'); ?>">Mes anterior</a></li>
+                                    <li><a class="nav-link" href="<?php echo base_url('reportesExcel/actual'); ?>">Mes actual</a></li>
+                                </ul>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </li>
-
-            <?php }
-            if (verificar('excel prestamos', $_SESSION['permisos'])) { ?>
-
-                <li class="dropdown">
-                    <a href="#" class="menu-toggle nav-link has-dropdown">
-                        <i class="fa-regular fa-file-excel mx-1"></i>
-                        <span>Reportes excel</span></a>
-                    <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="<?php echo base_url('reportesExcel/dia'); ?>">Actual</a></li>
-                        <li><a class="nav-link" href="<?php echo base_url('reportesExcel/semana'); ?>">Ultimos 7 diás</a></li>
-                        <li><a class="nav-link" href="<?php echo base_url('reportesExcel/ultimos'); ?>">Ultimos 30 diás</a></li>
-                        <li><a class="nav-link" href="<?php echo base_url('reportesExcel/anterior'); ?>">Mes anterior</a></li>
-                        <li><a class="nav-link" href="<?php echo base_url('reportesExcel/actual'); ?>">Mes actual</a></li>
-                    </ul>
-                </li>
-
             <?php } ?>
 
         </ul>
