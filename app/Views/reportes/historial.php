@@ -1,0 +1,72 @@
+<?= $this->extend('layouts/main'); ?>
+<?= $this->section('title'); ?>
+Historial de préstamos
+<?= $this->endSection('title'); ?>
+
+<?= $this->section('content'); ?>
+<div class="card">
+    <div class="card-header">
+        <h4>Historial de préstamos</h4>
+    </div>
+    <div class="card-body">
+        <?php if (!empty(session()->getFlashdata('respuesta'))) { ?>
+            <div class="alert alert-<?php echo session()->getFlashdata('respuesta')['type']; ?>">
+                <?php echo session()->getFlashdata('respuesta')['msg']; ?>
+            </div>
+        <?php } ?>
+        <form class="row g-3" method="get" action="<?= base_url('reportes/historial'); ?>">
+            <div class="col-md-4">
+                <label class="form-label">Fecha inicio</label>
+                <input type="date" name="fecha_inicio" class="form-control" value="<?= $fecha_inicio; ?>" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Fecha fin</label>
+                <input type="date" name="fecha_fin" class="form-control" value="<?= $fecha_fin; ?>" required>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary me-2">Generar</button>
+                <a href="<?= base_url('reportesPdf?fecha_inicio=' . $fecha_inicio . '&fecha_fin=' . $fecha_fin); ?>" target="_blank" class="btn btn-danger me-2">Exportar PDF</a>
+                <a href="<?= base_url('reportesExcel?fecha_inicio=' . $fecha_inicio . '&fecha_fin=' . $fecha_fin); ?>" class="btn btn-success">Exportar Excel</a>
+            </div>
+        </form>
+        <?php if ($mensaje != '') { ?>
+            <div class="alert alert-warning mt-3"><?= $mensaje; ?></div>
+        <?php } ?>
+        <?php if (!empty($prestamos)) { ?>
+            <div class="table-responsive mt-3">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Cliente</th>
+                            <th>Importe</th>
+                            <th>Modalidad</th>
+                            <th>Tasa interes</th>
+                            <th>F. vencimiento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $i = 1; $total = 0; foreach ($prestamos as $p) { $total += $p['importe']; ?>
+                            <tr>
+                                <td><?= $i++; ?></td>
+                                <td><?= $p['cliente']; ?></td>
+                                <td><?= $p['importe']; ?></td>
+                                <td><?= $p['modalidad']; ?></td>
+                                <td><?= $p['tasa_interes']; ?></td>
+                                <td><?= fechaPerzo($p['fecha_venc']); ?></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2" class="text-end">Total</th>
+                            <th><?= number_format($total, 2); ?></th>
+                            <th colspan="3"></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        <?php } ?>
+    </div>
+</div>
+<?= $this->endSection('content'); ?>
