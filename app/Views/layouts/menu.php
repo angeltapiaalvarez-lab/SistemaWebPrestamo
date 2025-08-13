@@ -109,8 +109,7 @@
                 <li class="dropdown <?php echo (
                                             $active == 'pago' ||
                                             $active == 'transaccion' ||
-                                            $active == 'reportesPdf' ||
-                                            $active == 'reportesExcel'
+                                            $active == 'reportesHistorial'
                                         ) ? 'active' : ''; ?>">
                     <a href="#" class="menu-toggle nav-link has-dropdown">
                         <i class="fa-solid fa-chart-line mx-1"></i>
@@ -120,11 +119,8 @@
                             <li><a class="nav-link <?php echo ($active == 'pago') ? 'text-success' : ''; ?>" href="<?php echo base_url('pagos'); ?>">Historial Pagos</a></li>
                             <li><a class="nav-link <?php echo ($active == 'transaccion') ? 'text-success' : ''; ?>" href="<?php echo base_url('transacciones'); ?>">Historial Transacciones</a></li>
                         <?php }
-                        if (verificar('pdf prestamos', $_SESSION['permisos'])) { ?>
-                            <li><a class="nav-link" href="<?php echo base_url('reportesPdf'); ?>" target="_blank"><i class="fa-regular fa-file-pdf mx-1"></i> Historial Préstamo PDF</a></li>
-                        <?php }
-                        if (verificar('excel prestamos', $_SESSION['permisos'])) { ?>
-                            <li><a class="nav-link" href="<?php echo base_url('reportesExcel'); ?>"><i class="fa-regular fa-file-excel mx-1"></i> Historial Préstamo Excel</a></li>
+                        if (verificar('pdf prestamos', $_SESSION['permisos']) || verificar('excel prestamos', $_SESSION['permisos'])) { ?>
+                            <li><a class="nav-link <?php echo ($active == 'reportesHistorial') ? 'text-success' : ''; ?>" href="<?php echo base_url('reportes/historial'); ?>">Historial Préstamos</a></li>
                         <?php } ?>
                     </ul>
                 </li>

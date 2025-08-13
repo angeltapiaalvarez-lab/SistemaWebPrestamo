@@ -79,6 +79,9 @@
     <div class="mensaje">
         <?php echo $empresa['mensaje']; ?>
     </div>
+    <div class="mensaje">
+        Generado por: <?php echo $usuario; ?> el <?php echo $generado; ?>
+    </div>
 </body>
 
 </html>

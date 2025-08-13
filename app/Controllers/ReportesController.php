@@ -22,6 +22,37 @@ class ReportesController extends BaseController
         $this->session = session();
         helper(['fecha']);
     }
+    public function historial()
+    {
+        if (!verificar('pdf prestamos', $this->session->permisos) && !verificar('excel prestamos', $this->session->permisos)) {
+            return view('permisos');
+        }
+        $fechaFin = $this->request->getGet('fecha_fin');
+        $fechaInicio = $this->request->getGet('fecha_inicio');
+        if (empty($fechaInicio) || empty($fechaFin)) {
+            $fechaFin = date('Y-m-d');
+            $fechaInicio = date('Y-m-d', strtotime('-30 days'));
+        }
+        $data['fecha_inicio'] = $fechaInicio;
+        $data['fecha_fin'] = $fechaFin;
+        $data['active'] = 'reportesHistorial';
+        $data['prestamos'] = [];
+        $data['mensaje'] = '';
+        if ($fechaInicio > $fechaFin) {
+            $data['mensaje'] = 'Rango de fechas inválido.';
+        } else {
+            $data['prestamos'] = $this->filtroReportes($fechaInicio, $fechaFin);
+            if (empty($data['prestamos'])) {
+                $data['mensaje'] = 'No hay datos para el rango seleccionado.';
+            } else {
+                for ($i = 0; $i < count($data['prestamos']); $i++) {
+                    $result = $this->clientes->select('nombre, apellido')->where('id', $data['prestamos'][$i]['id_cliente'])->first();
+                    $data['prestamos'][$i]['cliente'] = $result['nombre'] . ' ' . $result['apellido'];
+                }
+            }
+        }
+        return view('reportes/historial', $data);
+    }
     public function reportesPdf()
     {
         if (!verificar('pdf prestamos', $this->session->permisos)) {
@@ -29,7 +60,19 @@ class ReportesController extends BaseController
         }
         $fechaInicio = $this->request->getGet('fecha_inicio');
         $fechaFin = $this->request->getGet('fecha_fin');
+        if ($fechaInicio > $fechaFin) {
+            return redirect()->to(base_url('reportes/historial'))->with('respuesta', [
+                'type' => 'warning',
+                'msg' => 'Rango de fechas inválido'
+            ]);
+        }
         $data['prestamos'] = $this->filtroReportes($fechaInicio, $fechaFin);
+        if (empty($data['prestamos'])) {
+            return redirect()->to(base_url('reportes/historial'))->with('respuesta', [
+                'type' => 'warning',
+                'msg' => 'No hay datos para el rango seleccionado'
+            ]);
+        }
         $data['titulo'] = 'Historial de préstamos';
 
         for ($i = 0; $i < count($data['prestamos']); $i++) {
@@ -37,6 +80,8 @@ class ReportesController extends BaseController
             $data['prestamos'][$i]['cliente'] = $result['nombre'] . ' ' . $result['apellido'];
         }
         $data['empresa'] = $this->empresa->first();
+        $data['usuario'] = $this->session->nombre;
+        $data['generado'] = date('Y-m-d H:i:s');
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
         ob_start();
@@ -69,7 +114,19 @@ class ReportesController extends BaseController
 
         $fechaInicio = $this->request->getGet('fecha_inicio');
         $fechaFin = $this->request->getGet('fecha_fin');
+        if ($fechaInicio > $fechaFin) {
+            return redirect()->to(base_url('reportes/historial'))->with('respuesta', [
+                'type' => 'warning',
+                'msg' => 'Rango de fechas inválido'
+            ]);
+        }
         $results = $this->filtroReportes($fechaInicio, $fechaFin);
+        if (empty($results)) {
+            return redirect()->to(base_url('reportes/historial'))->with('respuesta', [
+                'type' => 'warning',
+                'msg' => 'No hay datos para el rango seleccionado'
+            ]);
+        }
 
         $spreadsheet = new Spreadsheet();
 
@@ -96,6 +153,7 @@ class ReportesController extends BaseController
         $hojaActiva->setCellValue('E1', 'F. VENCIMIENTO');
 
         $fila = 2;
+        $total = 0;
         foreach ($results as $prestamo) {
             $result = $this->clientes->select('nombre, apellido')->where('id', $prestamo['id_cliente'])->first();
             $hojaActiva->setCellValue('A' . $fila, $result['nombre'] . ' ' . $result['apellido']);
@@ -103,8 +161,14 @@ class ReportesController extends BaseController
             $hojaActiva->setCellValue('C' . $fila, $prestamo['modalidad']);
             $hojaActiva->setCellValue('D' . $fila, $prestamo['tasa_interes']);
             $hojaActiva->setCellValue('E' . $fila, fechaPerzo($prestamo['fecha_venc']));
+            $total += $prestamo['importe'];
             $fila++;
         }
+        $hojaActiva->setCellValue('A' . $fila, 'Total');
+        $hojaActiva->setCellValue('B' . $fila, $total);
+        $fila += 2;
+        $hojaActiva->setCellValue('A' . $fila, 'Generado por: ' . $this->session->nombre);
+        $hojaActiva->setCellValue('B' . $fila, 'Fecha: ' . date('Y-m-d H:i:s'));
 
         header('Content-Type: application/vnd.ms-excel');
         $nombre = 'historial_prestamos_' . date('Ymd') . '.xls';
