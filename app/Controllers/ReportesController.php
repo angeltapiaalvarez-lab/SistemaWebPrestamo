@@ -22,12 +22,14 @@ class ReportesController extends BaseController
         $this->session = session();
         helper(['fecha']);
     }
-    public function reportesPdf($url)
+    public function reportesPdf()
     {
         if (!verificar('pdf prestamos', $this->session->permisos)) {
             return view('permisos');
         }
-        $data['prestamos'] = $this->filtroReportes($url);
+        $fechaInicio = $this->request->getGet('fecha_inicio');
+        $fechaFin = $this->request->getGet('fecha_fin');
+        $data['prestamos'] = $this->filtroReportes($fechaInicio, $fechaFin);
         $data['titulo'] = 'Historial de préstamos';
 
         for ($i = 0; $i < count($data['prestamos']); $i++) {
@@ -59,13 +61,15 @@ class ReportesController extends BaseController
         $dompdf->stream($nombre, ['Attachment' => false]);
     }
 
-    public function reportesExcel($url)
+    public function reportesExcel()
     {
         if (!verificar('excel prestamos', $this->session->permisos)) {
             return view('permisos');
         }
-        
-        $results = $this->filtroReportes($url);
+
+        $fechaInicio = $this->request->getGet('fecha_inicio');
+        $fechaFin = $this->request->getGet('fecha_fin');
+        $results = $this->filtroReportes($fechaInicio, $fechaFin);
 
         $spreadsheet = new Spreadsheet();
 
@@ -111,22 +115,12 @@ class ReportesController extends BaseController
         $writer->save('php://output');
     }
 
-    public function filtroReportes($url) {
+    public function filtroReportes($fechaInicio = null, $fechaFin = null) {
         $id_usuario = $this->session->id_usuario;
-        if ($url === 'dia') {
-            $where = "TO_DAYS(fecha) = TO_DAYS(NOW()) AND id_usuario = $id_usuario AND estado = 1";
-        } else if ($url === 'semana') {
-            $where = "DATE_SUB(CURDATE(), INTERVAL 7 DAY) < date(fecha) AND id_usuario = $id_usuario AND estado = 1";
-        } else if ($url === 'ultimos') {
-            $where = "DATE_SUB(CURDATE(), INTERVAL 30 DAY) < date(fecha) AND id_usuario = $id_usuario AND estado = 1";
-        } else if ($url === 'anterior') {
-            $inicioMes = date('Y-m-01', strtotime('last month'));
-            $finMes = date('Y-m-t', strtotime('last month'));
-            $where = "fecha >= '$inicioMes' AND fecha <= '$finMes' AND id_usuario = $id_usuario AND estado = 1";
-        } else {
-            $where = "DATE_FORMAT(fecha, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m') AND id_usuario = $id_usuario AND estado = 1";
+        $builder = $this->prestamos->where('id_usuario', $id_usuario)->where('estado', 1);
+        if ($fechaInicio && $fechaFin) {
+            $builder->where('fecha >=', $fechaInicio)->where('fecha <=', $fechaFin);
         }
-        $results = $this->prestamos->where($where)->findAll();
-        return $results;
+        return $builder->findAll();
     }
 }
