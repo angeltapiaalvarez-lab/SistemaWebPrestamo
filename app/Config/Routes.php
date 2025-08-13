@@ -89,8 +89,8 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->post('/cajas', 'CajasController::create');
     $routes->put('/cajas/(:num)', 'CajasController::update/$1');
 
-    $routes->get('/reportesPdf/(:any)', 'ReportesController::reportesPdf/$1');
-    $routes->get('/reportesExcel/(:any)', 'ReportesController::reportesExcel/$1');
+    $routes->get('/reportesPdf', 'ReportesController::reportesPdf');
+    $routes->get('/reportesExcel', 'ReportesController::reportesExcel');
 
     $routes->get('/roles/list', 'RolesController::listar');
     $routes->resource('roles', ['controller' => 'RolesController']);

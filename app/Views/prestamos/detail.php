@@ -49,7 +49,6 @@ Detalle del prestamo
             <div class="col-lg-12">
                 <div class="mb-3">
                     <a href="<?php echo base_url('prestamos/' . $prestamo['id'] . '/reporte'); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Estado de Cuenta</a>
-                    <button type="button" id="btnWhatsApp" class="btn btn-success"><i class="fab fa-whatsapp-square"></i> WhatsApp</button>
                 </div>
                 <div class="table-responsive">
                     <table class="table">
@@ -158,30 +157,8 @@ Detalle del prestamo
                     <button type="submit" class="btn btn-primary m-t-15 waves-effect">Enviar</button>
                 </div>
             </form>
-        </div>
-    </div>
 </div>
-<div class="modal fade" id="modalWhatsApp" tabindex="-1" role="dialog" aria-labelledby="formModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Mensaje</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="num-whatsapp" value="<?php echo $prestamo['whatsapp']; ?>">
-                <div class="mb-3">
-                    <label for="" class="form-label">Mensaje</label>
-                    <textarea class="form-control" id="mensaje-whatsapp" rows="3"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btnWhatsappWeb" class="btn btn-primary m-t-15 waves-effect">Enviar</button>
-            </div>
-        </div>
-    </div>
+</div>
 </div>
 <?= $this->endSection('modal'); ?>
 
