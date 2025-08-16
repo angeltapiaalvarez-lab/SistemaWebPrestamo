@@ -18,14 +18,20 @@ Detalle del prestamo
                 document.addEventListener('DOMContentLoaded', function () {
                     Swal.fire({
                         icon: '<?= $respuesta['type']; ?>',
+                        title: <?= $respuesta['type'] === 'success' ? json_encode('¡Pago realizado!') : json_encode('Aviso'); ?>,
                         text: '<?= esc($respuesta['msg'], 'js'); ?>',
                         <?php if (!empty($id_pago)) : ?>
                         showCancelButton: true,
                         confirmButtonText: 'Imprimir Recibo',
-                        cancelButtonText: 'Cerrar'
+                        cancelButtonText: 'Cerrar',
                         <?php else : ?>
-                        confirmButtonText: 'Aceptar'
+                        confirmButtonText: 'Aceptar',
                         <?php endif; ?>
+                        buttonsStyling: false,
+                        customClass: {
+                            confirmButton: 'btn btn-primary',
+                            cancelButton: 'btn btn-secondary'
+                        }
                     }).then((result) => {
                         <?php if (!empty($id_pago)) : ?>
                         if (result.isConfirmed) {
