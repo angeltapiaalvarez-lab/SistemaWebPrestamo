@@ -232,6 +232,21 @@ class PrestamosController extends BaseController
                 return redirect()->back();
             }
 
+            // Validar que no existan cuotas anteriores pendientes de pago
+            $anterior = $this->detalle
+                ->where('id_prestamo', $consulta['id_prestamo'])
+                ->where('cuota <', $consulta['cuota'])
+                ->where('estado', '1')
+                ->first();
+
+            if (!empty($anterior)) {
+                return redirect()->to(base_url('prestamos/' . $consulta['id_prestamo'] . '/detail'))
+                    ->with('respuesta', [
+                        'type' => 'warning',
+                        'msg'  => 'Tiene una cuota anterior por pagar',
+                    ]);
+            }
+
             $monto = $this->request->getVar('monto');
             $metodo = $this->request->getVar('metodo');
 
