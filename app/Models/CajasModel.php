@@ -52,10 +52,9 @@ class CajasModel extends Model
         $detalles = $detPrestamo
             ->select('detalle_prestamos.importe_cuota, detalle_prestamos.estado, p.importe, p.cuotas')
             ->join('prestamos AS p', 'detalle_prestamos.id_prestamo = p.id')
-            ->where([
-                'p.id_usuario' => $id_usuario,
-                'p.estado'     => '1'
-            ])->findAll();
+            ->where('p.id_usuario', $id_usuario)
+            ->where('p.estado !=', '0')
+            ->findAll();
 
         $capital = 0;
         $interes = 0;
