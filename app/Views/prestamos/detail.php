@@ -13,35 +13,35 @@ Detalle del prestamo
         $respuesta = session()->getFlashdata('respuesta');
         $id_pago   = session()->getFlashdata('id_pago');
         ?>
-        <?php if (!empty($respuesta)) : ?>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    Swal.fire({
-                        icon: '<?= $respuesta['type']; ?>',
-                        title: <?= $respuesta['type'] === 'success' ? json_encode('¡Pago realizado!') : json_encode('Aviso'); ?>,
-                        text: '<?= esc($respuesta['msg'], 'js'); ?>',
-                        <?php if (!empty($id_pago)) : ?>
-                        showCancelButton: true,
-                        confirmButtonText: 'Imprimir Recibo',
-                        cancelButtonText: 'Cerrar',
-                        <?php else : ?>
-                        confirmButtonText: 'Aceptar',
-                        <?php endif; ?>
-                        buttonsStyling: false,
-                        customClass: {
-                            confirmButton: 'btn btn-primary',
-                            cancelButton: 'btn btn-secondary'
-                        }
-                    }).then((result) => {
-                        <?php if (!empty($id_pago)) : ?>
-                        if (result.isConfirmed) {
-                            window.open('<?= base_url('pagos/' . $id_pago . '/recibo'); ?>', '_blank');
-                        }
-                        <?php endif; ?>
-                    });
-                });
-            </script>
-        <?php endif; ?>
+    <?php if (!empty($respuesta)) : ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: '<?= $respuesta['type']; ?>',
+                title: <?= $respuesta['type'] === 'success' ? json_encode('¡Pago realizado!') : json_encode('Aviso'); ?>,
+                text: '<?= esc($respuesta['msg'], 'js'); ?>',
+                <?php if (!empty($id_pago)) : ?>
+                showCancelButton: true,
+                confirmButtonText: 'Imprimir Recibo',
+                cancelButtonText: 'Cerrar',
+                <?php else : ?>
+                confirmButtonText: 'Aceptar',
+                <?php endif; ?>
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-secondary'
+                }
+            }).then((result) => {
+                <?php if (!empty($id_pago)) : ?>
+                if (result.isConfirmed) {
+                    window.open('<?= base_url('pagos/' . $id_pago . '/recibo'); ?>', '_blank');
+                }
+                <?php endif; ?>
+            });
+        });
+    </script>
+    <?php endif; ?>
         <div class="row">
             <div class="col-lg-6">
                 <div class="card">
