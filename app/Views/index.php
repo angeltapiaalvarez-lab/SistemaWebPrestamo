@@ -36,7 +36,7 @@ login
         <div class="input-group">
           <input id="password" type="password" class="form-control" name="password" placeholder="Contraseña" tabindex="2">
           <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
-            <i class="fa-solid fa-eye-slash"></i>
+            Mostrar contraseña
           </span>
         </div>
         <?php if (isset($validator)) { ?>
@@ -59,10 +59,9 @@ login
   const togglePassword = document.querySelector('#togglePassword');
   const password = document.querySelector('#password');
   togglePassword.addEventListener('click', function () {
-    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-    password.setAttribute('type', type);
-    this.querySelector('i').classList.toggle('fa-eye');
-    this.querySelector('i').classList.toggle('fa-eye-slash');
+    const isPassword = password.getAttribute('type') === 'password';
+    password.setAttribute('type', isPassword ? 'text' : 'password');
+    this.textContent = isPassword ? 'Ocultar contraseña' : 'Mostrar contraseña';
   });
 </script>
 <?= $this->endSection('js'); ?>
