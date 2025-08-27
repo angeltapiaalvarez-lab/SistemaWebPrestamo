@@ -137,6 +137,7 @@ class PrestamosController extends BaseController
                         return redirect()->to(base_url('prestamos/' . $prestamo . '/detail'))->with('respuesta', [
                             'type' => 'success',
                             'msg' => 'PRESTAMO REGISTRADO',
+                            'title' => '¡Préstamo registrado!',
                         ]);
                     } else {
                         return redirect()->to(base_url('prestamos'))->with('respuesta', [
@@ -244,6 +245,7 @@ class PrestamosController extends BaseController
                     ->with('respuesta', [
                         'type' => 'warning',
                         'msg'  => 'Tiene una cuota anterior por pagar',
+                        'title' => 'Aviso',
                     ]);
             }
 
@@ -354,6 +356,7 @@ class PrestamosController extends BaseController
                 ->with('respuesta', [
                     'type' => 'success',
                     'msg'  => $msg,
+                    'title' => '¡Pago realizado!',
                 ])
                 ->with('id_pago', $idPago);
         } else {
@@ -387,12 +390,14 @@ class PrestamosController extends BaseController
                     return redirect()->to(base_url('prestamos/' . $this->request->getVar('id_prestamo') . '/detail'))->with('respuesta', [
                         'type' => 'success',
                         'msg' => 'CORREO ENVIADO',
+                        'title' => '¡Correo enviado!',
                     ]);
                 }
 
                 return redirect()->to(base_url('prestamos/' . $this->request->getVar('id_prestamo') . '/detail'))->with('respuesta', [
                     'type' => 'danger',
                     'msg' => 'ERROR AL ENVIAR CORREO',
+                    'title' => 'Error',
                 ]);
         } else {
             $data['validator'] = $this->validator;
