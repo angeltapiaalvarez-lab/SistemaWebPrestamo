@@ -226,7 +226,9 @@ class PrestamosController extends BaseController
                 return redirect()->back();
             }
 
-            $monto = $this->request->getVar('monto');
+            // El monto del abono debe ser el mismo que el importe de la cuota,
+            // por lo que se ignora cualquier valor enviado desde el cliente.
+            $monto  = $consulta['importe_cuota'];
             $metodo = $this->request->getVar('metodo');
 
             $this->pagos->insert([
