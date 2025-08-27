@@ -136,7 +136,7 @@ class PrestamosController extends BaseController
 
                         return redirect()->to(base_url('prestamos/' . $prestamo . '/detail'))->with('respuesta', [
                             'type' => 'success',
-                            'msg' => 'PRESTAMO REGISTRADO',
+                            'msg' => '',
                             'title' => '¡Préstamo registrado!',
                         ]);
                     } else {
