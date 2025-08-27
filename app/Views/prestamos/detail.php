@@ -18,7 +18,7 @@ Detalle del prestamo
         document.addEventListener('DOMContentLoaded', function () {
             Swal.fire({
                 icon: '<?= $respuesta['type']; ?>',
-                title: <?= $respuesta['type'] === 'success' ? json_encode('¡Pago realizado!') : json_encode('Aviso'); ?>,
+                title: <?= json_encode($respuesta['title'] ?? ($respuesta['type'] === 'success' ? '¡Pago realizado!' : 'Aviso')); ?>,
                 text: '<?= esc($respuesta['msg'], 'js'); ?>',
                 <?php if (!empty($id_pago)) : ?>
                 showCancelButton: true,
