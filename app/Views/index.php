@@ -33,7 +33,12 @@ login
             </a>
           </div>
         </div>
-        <input id="password" type="password" class="form-control" name="password" placeholder="Contraseña" tabindex="2">
+        <div class="input-group">
+          <input id="password" type="password" class="form-control" name="password" placeholder="Contraseña" tabindex="2">
+          <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+            <i class="fa-solid fa-eye-slash"></i>
+          </span>
+        </div>
         <?php if (isset($validator)) { ?>
           <span class="text-danger"><?php echo $validator->getError('password'); ?></span>
         <?php } ?>
@@ -47,4 +52,17 @@ login
     </form>
   </div>
 </div>
-<?= $this->endSection('content'); ?>
+  <?= $this->endSection('content'); ?>
+
+<?= $this->section('js'); ?>
+<script>
+  const togglePassword = document.querySelector('#togglePassword');
+  const password = document.querySelector('#password');
+  togglePassword.addEventListener('click', function () {
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    this.querySelector('i').classList.toggle('fa-eye');
+    this.querySelector('i').classList.toggle('fa-eye-slash');
+  });
+</script>
+<?= $this->endSection('js'); ?>
