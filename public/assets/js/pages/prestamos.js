@@ -6,6 +6,7 @@ const importe_cuota = document.querySelector('#importe_cuota');
 const total_pagar = document.querySelector('#total_pagar');
 const interes_generado = document.querySelector('#interes_generado');
 const errorCliente = document.querySelector('#errorCliente');
+const cliente = document.querySelector('#cliente');
 document.addEventListener('DOMContentLoaded', function(){
     $("#cliente").autocomplete({
         source: function( request, response ) {
@@ -31,6 +32,18 @@ document.addEventListener('DOMContentLoaded', function(){
             console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );
         }
       } );
+
+      cliente.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' && id_cliente.value === '') {
+            e.preventDefault();
+        }
+      });
+
+      cliente.addEventListener('keyup', function(e){
+        if (e.key !== 'Enter') {
+            id_cliente.value = '';
+        }
+      });
 
       //calcular importe
       importe_credito.addEventListener('keyup', function(e){
