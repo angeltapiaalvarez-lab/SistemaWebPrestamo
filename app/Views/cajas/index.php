@@ -21,7 +21,7 @@ if (empty($caja)) { ?>
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h4>Monto inicial y egresos</h4>
+                <h4>Monto inicial y Egresos</h4>
             </div>
             <div class="card-body">
                 <canvas id="inicialEgreso"></canvas>
@@ -31,7 +31,7 @@ if (empty($caja)) { ?>
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h4>Ingresos y saldo</h4>
+                <h4>Ingresos y Saldo</h4>
             </div>
             <div class="card-body">
                 <canvas id="ingresoSaldo"></canvas>

@@ -31,7 +31,7 @@
         <div class="sidebar-brand">
             <a href="<?php echo base_url('dashboard'); ?>">
                 <img alt="image" src="<?= base_url('assets/img/logo.png'); ?>" class="header-logo" />
-                <span class="logo-name">SP</span>
+                <span class="logo-name">SisPrey</span>
             </a>
         </div>
         <ul class="sidebar-menu">
