@@ -21,7 +21,7 @@ Nuevo prestamo
                     <div class="form-group">
                         <label>Buscar cliente</label>
                         <input type="hidden" id="id_cliente" name="id_cliente" value="<?php echo set_value('id_cliente'); ?>">
-                        <input type="text" id="cliente" name="cliente" class="form-control" value="<?php echo set_value('cliente'); ?>" placeholder="Nombre">
+                        <input type="text" id="cliente" name="cliente" class="form-control" value="<?php echo set_value('cliente'); ?>" placeholder="Nombre/Cédula">
                         <span class="text-danger" id="errorCliente"></span>
                         <?php if (!empty($errors['id_cliente']) || !empty($errors['cliente'])) { ?>
                             <span class="text-danger"><?php echo $errors['cliente']; ?></span>
