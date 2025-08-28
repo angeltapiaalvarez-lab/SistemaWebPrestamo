@@ -212,7 +212,7 @@ class PrestamosController extends BaseController
 
         // (Optional) Setup the paper size and orientation
         $dompdf->setPaper('A4', 'vertical');
-
+        $this->response->setHeader('Content-Type', 'application/pdf');
         // Render the HTML as PDF
         $dompdf->render();
 
