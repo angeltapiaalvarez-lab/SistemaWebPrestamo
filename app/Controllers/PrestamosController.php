@@ -44,7 +44,12 @@ class PrestamosController extends BaseController
     public function buscarCliente()
     {
         if ($this->request->is('get') && !empty($this->request->getVar('term'))) {
-            $data = $this->clientes->like('num_identidad', $this->request->getVar('term'))
+            $data = $this->clientes
+                ->groupStart()
+                ->like('num_identidad', $this->request->getVar('term'))
+                ->orLike('nombre', $this->request->getVar('term'))
+                ->orLike('apellido', $this->request->getVar('term'))
+                ->groupEnd()
                 ->where('estado', '1')->findAll(10);
             $result = array();
             foreach ($data as $cliente) {
