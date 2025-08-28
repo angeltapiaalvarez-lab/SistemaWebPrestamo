@@ -11,17 +11,32 @@ if (empty($caja)) { ?>
     <a href="<?php echo base_url('cajas/' . $caja['id'] . '/edit'); ?>" class="btn btn-primary mb-2">Editar monto</a>
 <?php } ?>
 
-<div class="card">
-    <div class="card-header">
-        <h4>Gestion cajas</h4>
+<?php if (!empty(session()->getFlashdata('respuesta'))) { ?>
+    <div class="alert alert-<?php echo session()->getFlashdata('respuesta')['type']; ?>">
+        <?php echo session()->getFlashdata('respuesta')['msg']; ?>
     </div>
-    <div class="card-body">
-        <?php if (!empty(session()->getFlashdata('respuesta'))) { ?>
-            <div class="alert alert-<?php echo session()->getFlashdata('respuesta')['type']; ?>">
-                <?php echo session()->getFlashdata('respuesta')['msg']; ?>
+<?php } ?>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Monto inicial y egresos</h4>
             </div>
-        <?php } ?>
-        <canvas id="movimiento"></canvas>
+            <div class="card-body">
+                <canvas id="inicialEgreso"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Ingresos y saldo</h4>
+            </div>
+            <div class="card-body">
+                <canvas id="ingresoSaldo"></canvas>
+            </div>
+        </div>
     </div>
 </div>
 <?= $this->endSection('content'); ?>
