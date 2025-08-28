@@ -1,98 +1,109 @@
 document.addEventListener('DOMContentLoaded', function () {
   movimientoGrafico();
-})
+});
+
+function getChartOptions(legendFontColor) {
+  const baseOptions = {
+    responsive: true,
+    maintainAspectRatio: false
+  };
+
+  // Chart.js v3+ uses the `plugins` key, while v2 uses `legend` directly
+  const major = parseInt((Chart.version || '2').split('.')[0]);
+  if (major >= 3) {
+    baseOptions.plugins = {
+      legend: {
+        position: 'bottom',
+        labels: {
+          color: legendFontColor,
+          boxWidth: 20,
+          font: { size: 14 }
+        }
+      }
+    };
+  } else {
+    baseOptions.legend = {
+      position: 'bottom',
+      labels: {
+        fontColor: legendFontColor,
+        boxWidth: 20,
+        fontSize: 14
+      }
+    };
+  }
+
+  return baseOptions;
+}
 
 function movimientoGrafico() {
-  const url = base_url + "cajas/movimientos";
+  const url = base_url + 'cajas/movimientos';
   const http = new XMLHttpRequest();
-  http.open("GET", url, true);
+  http.open('GET', url, true);
   http.send();
   http.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       const res = JSON.parse(this.responseText);
       const darkMode = document.body.classList.contains('dark');
-      const legendFontColor = darkMode ? "#ffffff" : "#343a40";
+      const legendFontColor = darkMode ? '#ffffff' : '#343a40';
 
       // Monto inicial vs Egresos
-      var canvasInicial = document.getElementById("inicialEgreso");
+      const canvasInicial = document.getElementById('inicialEgreso');
       canvasInicial.height = 400;
-      var ctxInicial = canvasInicial.getContext("2d");
+      const ctxInicial = canvasInicial.getContext('2d');
       new Chart(ctxInicial, {
-        type: "pie",
+        type: 'pie',
         data: {
           datasets: [
             {
               data: [
                 res.inicial,
-                res.egreso,
+                res.egreso
               ],
               backgroundColor: [
-                "#6c757d",
-                "#faa43a"
+                '#6c757d',
+                '#faa43a'
               ],
-              borderColor: "#ffffff",
+              borderColor: '#ffffff',
               borderWidth: 2,
-              label: "Inicial vs Egresos",
-            },
+              label: 'Inicial vs Egresos'
+            }
           ],
           labels: [
-            "Monto inicial: " + res.decimales.inicial,
-            "Egresos: " + res.decimales.egreso,
-          ],
+            'Monto inicial: ' + res.decimales.inicial,
+            'Egresos: ' + res.decimales.egreso
+          ]
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          legend: {
-            position: "bottom",
-            labels: {
-              fontColor: legendFontColor,
-              boxWidth: 20,
-              fontSize: 14,
-            }
-          },
-        },
+        options: getChartOptions(legendFontColor)
       });
 
       // Ingresos vs Saldo
-      var canvasIngreso = document.getElementById("ingresoSaldo");
+      const canvasIngreso = document.getElementById('ingresoSaldo');
       canvasIngreso.height = 400;
-      var ctxIngreso = canvasIngreso.getContext("2d");
+      const ctxIngreso = canvasIngreso.getContext('2d');
       new Chart(ctxIngreso, {
-        type: "pie",
+        type: 'pie',
         data: {
           datasets: [
             {
               data: [
                 res.ingreso,
-                res.saldo,
+                res.saldo
               ],
               backgroundColor: [
-                "#5da5da",
-                "#60bd68"
+                '#5da5da',
+                '#60bd68'
               ],
-              borderColor: "#ffffff",
+              borderColor: '#ffffff',
               borderWidth: 2,
-              label: "Ingresos vs Saldo",
-            },
+              label: 'Ingresos vs Saldo'
+            }
           ],
           labels: [
-            "Ingresos: " + res.decimales.ingreso,
-            "Saldo: " + res.decimales.saldo,
-          ],
+            'Ingresos: ' + res.decimales.ingreso,
+            'Saldo: ' + res.decimales.saldo
+          ]
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          legend: {
-            position: "bottom",
-            labels: {
-              fontColor: legendFontColor,
-              boxWidth: 20,
-              fontSize: 14,
-            }
-          },
-        },
+        options: getChartOptions(legendFontColor)
       });
     }
   };
