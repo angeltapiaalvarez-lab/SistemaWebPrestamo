@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function () {
   movimientoGrafico();
 })
 
@@ -10,37 +10,74 @@ function movimientoGrafico() {
   http.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       const res = JSON.parse(this.responseText);
-      var canvas = document.getElementById("movimiento");
-      canvas.height = 400;
-      var ctx = canvas.getContext("2d");
       const darkMode = document.body.classList.contains('dark');
       const legendFontColor = darkMode ? "#ffffff" : "#343a40";
-      var myChart = new Chart(ctx, {
+
+      // Monto inicial vs Egresos
+      var canvasInicial = document.getElementById("inicialEgreso");
+      canvasInicial.height = 400;
+      var ctxInicial = canvasInicial.getContext("2d");
+      new Chart(ctxInicial, {
         type: "pie",
         data: {
           datasets: [
             {
               data: [
                 res.inicial,
-                res.ingreso,
                 res.egreso,
-                res.saldo,
               ],
               backgroundColor: [
                 "#6c757d",
-                "#5da5da",
-                "#faa43a",
-                "#60bd68"
+                "#faa43a"
               ],
               borderColor: "#ffffff",
               borderWidth: 2,
-              label: "Movimientos",
+              label: "Inicial vs Egresos",
             },
           ],
           labels: [
             "Monto inicial: " + res.decimales.inicial,
-            "Ingresos: " + res.decimales.ingreso,
             "Egresos: " + res.decimales.egreso,
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            position: "bottom",
+            labels: {
+              fontColor: legendFontColor,
+              boxWidth: 20,
+              fontSize: 14,
+            }
+          },
+        },
+      });
+
+      // Ingresos vs Saldo
+      var canvasIngreso = document.getElementById("ingresoSaldo");
+      canvasIngreso.height = 400;
+      var ctxIngreso = canvasIngreso.getContext("2d");
+      new Chart(ctxIngreso, {
+        type: "pie",
+        data: {
+          datasets: [
+            {
+              data: [
+                res.ingreso,
+                res.saldo,
+              ],
+              backgroundColor: [
+                "#5da5da",
+                "#60bd68"
+              ],
+              borderColor: "#ffffff",
+              borderWidth: 2,
+              label: "Ingresos vs Saldo",
+            },
+          ],
+          labels: [
+            "Ingresos: " + res.decimales.ingreso,
             "Saldo: " + res.decimales.saldo,
           ],
         },
