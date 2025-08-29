@@ -67,13 +67,11 @@ class CajasModel extends Model
             }
         }
 
-        $totalIngreso = $capital + $interes;
-
         $data['inicial'] = $incialSaldo;
         $data['egreso']  = ($egreso['importe'] != null) ? $egreso['importe'] : 0;
         $data['capital'] = $capital;
         $data['interes'] = $interes;
-        $data['ingreso'] = $totalIngreso; // capital + interes
+        $data['ingreso'] = $interes; // solo interes
         //CALCULAR SALDO
         $data['saldo'] = ($data['inicial'] - $data['egreso']) + $data['ingreso'];
         
