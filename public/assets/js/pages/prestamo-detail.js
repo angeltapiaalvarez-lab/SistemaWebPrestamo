@@ -3,22 +3,48 @@ const myModal = new bootstrap.Modal(document.getElementById('modalMensaje'));
 const modalPago = new bootstrap.Modal(document.getElementById('modalPago'));
 const formPago = document.getElementById('formPago');
 const montoPago = document.getElementById('monto');
-const btnPago = document.querySelectorAll('.btnPago');
+const metodoPago = document.getElementById('metodo');
+const btnPagoParcial = document.querySelectorAll('.btnPagoParcial');
+const btnPagoCompleto = document.querySelectorAll('.btnPagoCompleto');
 
 document.addEventListener("DOMContentLoaded", function () {
-  btnPago.forEach(btn => {
+  btnPagoParcial.forEach(btn => {
+    btn.addEventListener('click', function () {
+      const id = this.getAttribute('data-id');
+      const pendiente = this.getAttribute('data-pendiente');
+      formPago.setAttribute('action', base_url + 'prestamos/' + id);
+      formPago.setAttribute('data-pendiente', pendiente);
+      montoPago.value = '';
+      montoPago.setAttribute('max', pendiente);
+      metodoPago.value = 'EFECTIVO';
+      modalPago.show();
+    });
+  });
+
+  btnPagoCompleto.forEach(btn => {
     btn.addEventListener('click', function () {
       const id = this.getAttribute('data-id');
       const pendiente = this.getAttribute('data-pendiente');
       formPago.setAttribute('action', base_url + 'prestamos/' + id);
       montoPago.value = pendiente;
-      modalPago.show();
+      metodoPago.value = 'EFECTIVO';
+      cambiarEstado(formPago);
     });
   });
 
   if (formPago) {
     formPago.addEventListener("submit", function (e) {
       e.preventDefault();
+      const pendiente = parseFloat(this.getAttribute('data-pendiente'));
+      const monto = parseFloat(montoPago.value);
+      if (isNaN(monto) || monto <= 0 || monto >= pendiente) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'El monto debe ser mayor a 0 y menor al pendiente',
+        });
+        return;
+      }
       cambiarEstado(this);
     });
   }
