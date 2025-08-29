@@ -113,7 +113,8 @@ Detalle del prestamo
                                     </td>
                                     <td scope="row"><?php echo fechaPerzo($detalle['fecha_venc']); ?></td>
                                     <td scope="row">
-                                        <span class="badge badge-success text-dark"><?php echo $detalle['importe_cuota']; ?></span>
+                                        <?php $pendiente = $detalle['importe_cuota'] - $detalle['pagado']; ?>
+                                        <span class="badge badge-success text-dark"><?php echo number_format($pendiente, 2); ?></span>
                                     </td>
                                     <td scope="row"><?php echo $estado; ?></td>
                                     <td>
@@ -122,7 +123,7 @@ Detalle del prestamo
                                                 <input type="hidden" name="_method" value="PUT">
                                                 <?php echo csrf_field(); ?>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="monto" value="<?php echo $detalle['importe_cuota']; ?>" class="form-control" style="max-width:100px" readonly>
+                                                    <input type="number" step="0.01" name="monto" value="<?php echo number_format($pendiente, 2, '.', ''); ?>" class="form-control" style="max-width:100px">
                                                     <select name="metodo" class="form-select" style="max-width:150px">
                                                         <option value="EFECTIVO">EFECTIVO</option>
                                                         <option value="TRANSFERENCIA">TRANSFERENCIA</option>
