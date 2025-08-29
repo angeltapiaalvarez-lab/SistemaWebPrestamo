@@ -1,9 +1,23 @@
-let formEstado = document.querySelectorAll(".formEstado");
 const btnCorreo = document.querySelector("#btnCorreo");
 const myModal = new bootstrap.Modal(document.getElementById('modalMensaje'));
+const modalPago = new bootstrap.Modal(document.getElementById('modalPago'));
+const formPago = document.getElementById('formPago');
+const montoPago = document.getElementById('monto');
+const btnPago = document.querySelectorAll('.btnPago');
+
 document.addEventListener("DOMContentLoaded", function () {
-  for (let i = 0; i < formEstado.length; i++) {
-    formEstado[i].addEventListener("submit", function (e) {
+  btnPago.forEach(btn => {
+    btn.addEventListener('click', function () {
+      const id = this.getAttribute('data-id');
+      const pendiente = this.getAttribute('data-pendiente');
+      formPago.setAttribute('action', base_url + 'prestamos/' + id);
+      montoPago.value = pendiente;
+      modalPago.show();
+    });
+  });
+
+  if (formPago) {
+    formPago.addEventListener("submit", function (e) {
       e.preventDefault();
       cambiarEstado(this);
     });
@@ -33,3 +47,4 @@ function cambiarEstado(form) {
     }
   });
 }
+

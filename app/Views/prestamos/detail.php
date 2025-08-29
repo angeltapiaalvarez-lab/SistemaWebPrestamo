@@ -119,18 +119,7 @@ Detalle del prestamo
                                     <td scope="row"><?php echo $estado; ?></td>
                                     <td>
                                         <?php if ($detalle['estado'] == 1) { ?>
-                                            <form action="<?php echo base_url('prestamos/' . $detalle['id']); ?>" method="post" class="formEstado">
-                                                <input type="hidden" name="_method" value="PUT">
-                                                <?php echo csrf_field(); ?>
-                                                <div class="input-group">
-                                                    <input type="number" step="0.01" name="monto" value="<?php echo number_format($pendiente, 2, '.', ''); ?>" class="form-control" style="max-width:100px">
-                                                    <select name="metodo" class="form-select" style="max-width:150px">
-                                                        <option value="EFECTIVO">EFECTIVO</option>
-                                                        <option value="TRANSFERENCIA">TRANSFERENCIA</option>
-                                                    </select>
-                                                    <button type="submit" class="btn btn-primary">Pagar</button>
-                                                </div>
-                                            </form>
+                                            <button type="button" class="btn btn-primary btnPago" data-id="<?php echo $detalle['id']; ?>" data-pendiente="<?php echo number_format($pendiente, 2, '.', ''); ?>">Pagar</button>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -154,6 +143,38 @@ Detalle del prestamo
 <?= $this->endSection('content'); ?>
 
 <?= $this->section('modal'); ?>
+<div class="modal fade" id="modalPago" tabindex="-1" role="dialog" aria-labelledby="pagoModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pagoModal">Pago parcial</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="formPago" action="" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="_method" value="PUT">
+                    <?php echo csrf_field(); ?>
+                    <div class="mb-3">
+                        <label for="monto" class="form-label">Monto</label>
+                        <input type="number" step="0.01" name="monto" id="monto" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="metodo" class="form-label">Método</label>
+                        <select name="metodo" id="metodo" class="form-select">
+                            <option value="EFECTIVO">EFECTIVO</option>
+                            <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Hacer pago</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="modalMensaje" tabindex="-1" role="dialog" aria-labelledby="formModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
