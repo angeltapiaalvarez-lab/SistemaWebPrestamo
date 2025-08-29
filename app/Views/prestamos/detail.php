@@ -120,7 +120,7 @@ Detalle del prestamo
                                     <td>
                                         <?php if ($detalle['estado'] == 1) { ?>
                                             <button type="button" class="btn btn-success btnPagoCompleto" data-id="<?php echo $detalle['id']; ?>" data-pendiente="<?php echo number_format($pendiente, 2, '.', ''); ?>">Pagar</button>
-                                            <button type="button" class="btn btn-primary btnPagoParcial" data-id="<?php echo $detalle['id']; ?>" data-pendiente="<?php echo number_format($pendiente, 2, '.', ''); ?>">Pago parcial</button>
+                                            <button type="button" class="btn btn-primary btnPagoParcial" data-id="<?php echo $detalle['id']; ?>" data-total="<?php echo number_format($pendiente_total, 2, '.', ''); ?>">Pago parcial</button>
                                         <?php } ?>
                                     </td>
                                 </tr>

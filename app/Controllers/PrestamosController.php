@@ -184,6 +184,12 @@ class PrestamosController extends BaseController
             ->where('detalle_prestamos.id_prestamo', $id)
             ->groupBy('detalle_prestamos.id')
             ->findAll();
+
+        $pendienteTotal = 0;
+        foreach ($data['detalles'] as $detalle) {
+            $pendienteTotal += ($detalle['importe_cuota'] - $detalle['pagado']);
+        }
+        $data['pendiente_total'] = $pendienteTotal;
         $data['pagos'] = $this->pagos
             ->select('pagos.*, d.cuota')
             ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
@@ -276,8 +282,27 @@ class PrestamosController extends BaseController
                 ->where('estado', '1')
                 ->orderBy('cuota', 'ASC')
                 ->findAll();
-
+            $cuotasInfo = [];
+            $totalPendiente = 0;
             foreach ($cuotasPendientes as $cuota) {
+                $pagado = $this->pagos->selectSum('monto')
+                    ->where('id_detalle_prestamo', $cuota['id'])
+                    ->first();
+                $pagado = $pagado['monto'] ?? 0;
+                $cuota['por_pagar'] = $cuota['importe_cuota'] - $pagado;
+                $totalPendiente += $cuota['por_pagar'];
+                $cuotasInfo[] = $cuota;
+            }
+
+            if ($monto > $totalPendiente) {
+                return redirect()->back()->with('respuesta', [
+                    'type'  => 'warning',
+                    'msg'   => 'El monto supera el total del préstamo pendiente',
+                    'title' => 'Aviso',
+                ]);
+            }
+
+            foreach ($cuotasInfo as $cuota) {
                 if ($cuota['cuota'] < $consulta['cuota']) {
                     continue;
                 }
@@ -285,11 +310,7 @@ class PrestamosController extends BaseController
                     break;
                 }
 
-                $pagado = $this->pagos->selectSum('monto')
-                    ->where('id_detalle_prestamo', $cuota['id'])
-                    ->first();
-                $pagado = $pagado['monto'] ?? 0;
-                $porPagar = $cuota['importe_cuota'] - $pagado;
+                $porPagar = $cuota['por_pagar'];
                 if ($porPagar <= 0) {
                     continue;
                 }
