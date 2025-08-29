@@ -1,4 +1,5 @@
-let formEstado = document.querySelectorAll(".formEstado");
+let formsPagoCompleto = document.querySelectorAll(".formPagoCompleto");
+let formsPagoParcial = document.querySelectorAll(".formPagoParcial");
 const btnCorreo = document.querySelector("#btnCorreo");
 const btnWhatsApp = document.querySelector("#btnWhatsApp");
 const btnWhatsappWeb = document.querySelector("#btnWhatsappWeb");
@@ -7,10 +8,28 @@ const num_whatsapp = document.querySelector("#num-whatsapp");
 const myModal = new bootstrap.Modal(document.getElementById('modalMensaje'));
 const modalWhatsApp = new bootstrap.Modal(document.getElementById('modalWhatsApp'));
 document.addEventListener("DOMContentLoaded", function () {
-  for (let i = 0; i < formEstado.length; i++) {
-    formEstado[i].addEventListener("submit", function (e) {
+  for (let i = 0; i < formsPagoCompleto.length; i++) {
+    formsPagoCompleto[i].addEventListener("submit", function (e) {
       e.preventDefault();
       cambiarEstado(this);
+    });
+  }
+
+  for (let i = 0; i < formsPagoParcial.length; i++) {
+    formsPagoParcial[i].addEventListener("submit", function (e) {
+      e.preventDefault();
+      let monto = parseFloat(this.querySelector('input[name="monto"]').value);
+      if (isNaN(monto) || monto <= 0) {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'MONTO INVÁLIDO',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      } else {
+        cambiarEstado(this);
+      }
     });
   }
 

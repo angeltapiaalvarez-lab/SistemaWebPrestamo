@@ -92,17 +92,24 @@ Detalle del prestamo
                                     <td scope="row"><?php echo $estado; ?></td>
                                     <td>
                                         <?php if ($detalle['estado'] == 1) { ?>
-                                            <form action="<?php echo base_url('prestamos/' . $detalle['id']); ?>" method="post" class="formEstado">
+                                            <form action="<?php echo base_url('prestamos/' . $detalle['id']); ?>" method="post" class="formPagoCompleto d-inline">
+                                                <input type="hidden" name="_method" value="PUT">
+                                                <?php echo csrf_field(); ?>
+                                                <div class="input-group mb-2">
+                                                    <input type="text" name="metodo" value="EFECTIVO" class="form-control" style="max-width:120px">
+                                                    <button type="submit" name="tipo" value="completo" class="btn btn-primary">Pagar</button>
+                                                </div>
+                                            </form>
+                                            <form action="<?php echo base_url('prestamos/' . $detalle['id']); ?>" method="post" class="formPagoParcial d-inline">
                                                 <input type="hidden" name="_method" value="PUT">
                                                 <?php echo csrf_field(); ?>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="monto" value="<?php echo $detalle['importe_cuota']; ?>" class="form-control" style="max-width:100px">
+                                                    <input type="number" step="0.01" name="monto" value="0.00" class="form-control" style="max-width:100px">
                                                     <input type="text" name="metodo" value="EFECTIVO" class="form-control" style="max-width:120px">
-                                                    <button type="submit" name="tipo" value="completo" class="btn btn-primary"><i class="fas fa-check-circle"></i></button>
                                                     <button type="submit" name="tipo" value="parcial" class="btn btn-warning">Pago parcial</button>
                                                 </div>
                                             </form>
-                                        <?php } ?>
+                                            <?php } ?>
                                     </td>
                                 </tr>
                             <?php } ?>
