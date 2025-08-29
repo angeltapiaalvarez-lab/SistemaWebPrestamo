@@ -232,10 +232,30 @@ class PrestamosController extends BaseController
                 return redirect()->back();
             }
 
-            // El monto del abono debe ser el mismo que el importe de la cuota,
-            // por lo que se ignora cualquier valor enviado desde el cliente.
-            $monto  = $consulta['importe_cuota'];
             $metodo = $this->request->getVar('metodo');
+            $monto  = $consulta['importe_cuota'];
+
+            if ($this->request->getVar('tipo') === 'parcial') {
+                $monto = (float) $this->request->getVar('monto');
+
+                $totalPrestamo = $this->detalle->selectSum('importe_cuota')
+                    ->where('id_prestamo', $consulta['id_prestamo'])
+                    ->first()['importe_cuota'] ?? 0;
+
+                $pagadoPrestamo = $this->pagos->selectSum('monto')
+                    ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
+                    ->where('d.id_prestamo', $consulta['id_prestamo'])
+                    ->first()['monto'] ?? 0;
+
+                $restante = $totalPrestamo - $pagadoPrestamo;
+
+                if ($monto <= 0 || $monto > $restante) {
+                    return redirect()->back()->with('respuesta', [
+                        'type' => 'danger',
+                        'msg'  => 'MONTO MAYOR AL SALDO DEL PRÉSTAMO',
+                    ]);
+                }
+            }
 
             $this->pagos->insert([
                 'id_detalle_prestamo' => $id,
@@ -244,12 +264,12 @@ class PrestamosController extends BaseController
                 'metodo'              => $metodo,
             ]);
 
-            $pagado = $this->pagos->selectSum('monto')
+            $pagadoDetalle = $this->pagos->selectSum('monto')
                 ->where('id_detalle_prestamo', $id)->first();
 
             $msg = 'PAGO REGISTRADO';
 
-            if ($pagado['monto'] >= $consulta['importe_cuota'] && $consulta['estado'] == 1) {
+            if ($pagadoDetalle['monto'] >= $consulta['importe_cuota'] && $consulta['estado'] == 1) {
                 $this->detalle->update($id, ['estado' => '0']);
 
                 if ($consulta['modalidad'] === 'DIARIO') {
