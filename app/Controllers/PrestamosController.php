@@ -105,13 +105,13 @@ class PrestamosController extends BaseController
                     }
                     $prestamo = $this->prestamos->getInsertID();
                     if ($prestamo > 0) {
-                        //calcular ganancia
+                        //calcular ganancia total del prestamo
                         $ganancia = $this->request->getVar('importe_credito')
-                            * ($this->request->getVar('tasa_interes') / 100);
-                        //calcular importe cuota
-                        $importe_cuota = ($this->request->getVar('importe_credito')
-                            / $this->request->getVar('cuotas'))
-                            + ($ganancia / $this->request->getVar('cuotas'));
+                            * ($this->request->getVar('tasa_interes') / 100)
+                            * $this->request->getVar('cuotas');
+                        //calcular importe por cuota incluyendo la ganancia
+                        $importe_cuota = ($this->request->getVar('importe_credito') + $ganancia)
+                            / $this->request->getVar('cuotas');
 
                         for ($i = 1; $i <= $this->request->getVar('cuotas'); $i++) {
                             $presDetalle = $this->detalle->insert([
