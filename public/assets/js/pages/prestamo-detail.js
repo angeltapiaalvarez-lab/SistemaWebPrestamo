@@ -4,6 +4,7 @@ const modalPago = new bootstrap.Modal(document.getElementById('modalPago'));
 const formPago = document.getElementById('formPago');
 const montoPago = document.getElementById('monto');
 const metodoPago = document.getElementById('metodo');
+const modoPago = document.getElementById('modo');
 const btnPagoParcial = document.querySelectorAll('.btnPagoParcial');
 const btnPagoCompleto = document.querySelectorAll('.btnPagoCompleto');
 
@@ -17,6 +18,9 @@ document.addEventListener("DOMContentLoaded", function () {
       montoPago.value = '';
       montoPago.setAttribute('max', pendiente);
       metodoPago.value = 'EFECTIVO';
+      if (modoPago) {
+        modoPago.value = 'ADMIN';
+      }
       modalPago.show();
     });
   });
@@ -28,6 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
       formPago.setAttribute('action', base_url + 'prestamos/' + id);
       montoPago.value = pendiente;
       metodoPago.value = 'EFECTIVO';
+      if (modoPago) {
+        modoPago.value = 'ADMIN';
+      }
       cambiarEstado(formPago);
     });
   });

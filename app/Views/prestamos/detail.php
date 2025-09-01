@@ -100,6 +100,8 @@ Detalle del prestamo
                                     $class = '';
                                     if ($detalle['estado'] == 1) {
                                         $estado = '<span class="badge badge-danger">PENDIENTE</span>';
+                                    } elseif ($detalle['estado'] == 2) {
+                                        $estado = '<span class="badge badge-warning text-dark">PARCIAL</span>';
                                     } else {
                                         $estado = '<span class="badge badge-success">PAGADO</span>';
                                     }
@@ -166,6 +168,13 @@ Detalle del prestamo
                         <select name="metodo" id="metodo" class="form-select">
                             <option value="EFECTIVO">EFECTIVO</option>
                             <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modo" class="form-label">Modo</label>
+                        <select name="modo" id="modo" class="form-select">
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="TO_PRINCIPAL">TO PRINCIPAL</option>
                         </select>
                     </div>
                 </div>
