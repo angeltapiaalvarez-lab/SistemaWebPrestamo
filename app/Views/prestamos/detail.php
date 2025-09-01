@@ -170,13 +170,6 @@ Detalle del prestamo
                             <option value="TRANSFERENCIA">TRANSFERENCIA</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="modo" class="form-label">Modo</label>
-                        <select name="modo" id="modo" class="form-select">
-                            <option value="ADMIN">ADMIN</option>
-                            <option value="TO_PRINCIPAL">TO PRINCIPAL</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Hacer pago</button>
