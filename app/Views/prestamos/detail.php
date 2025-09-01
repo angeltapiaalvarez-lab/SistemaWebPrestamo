@@ -122,6 +122,7 @@ Detalle del prestamo
                                     <td>
                                         <?php if ($detalle['estado'] == 1) { ?>
                                             <button type="button" class="btn btn-success btnPagoCompleto" data-id="<?php echo $detalle['id']; ?>" data-pendiente="<?php echo number_format($pendiente, 2, '.', ''); ?>">Pagar</button>
+                                            <button type="button" class="btn btn-warning btnAdelantoCuota" data-id="<?php echo $detalle['id']; ?>" data-total="<?php echo number_format($pendiente_total, 2, '.', ''); ?>" data-cuota="<?php echo number_format($pendiente, 2, '.', ''); ?>">Adelanto cuota</button>
                                             <button type="button" class="btn btn-primary btnPagoParcial" data-id="<?php echo $detalle['id']; ?>" data-total="<?php echo number_format($pendiente_total, 2, '.', ''); ?>">Pago parcial</button>
                                         <?php } ?>
                                     </td>
@@ -159,6 +160,7 @@ Detalle del prestamo
                 <div class="modal-body">
                     <input type="hidden" name="_method" value="PUT">
                     <?php echo csrf_field(); ?>
+                    <input type="hidden" name="tipo" id="tipo">
                     <div class="mb-3">
                         <label for="monto" class="form-label">Monto</label>
                         <input type="number" step="0.01" name="monto" id="monto" class="form-control">

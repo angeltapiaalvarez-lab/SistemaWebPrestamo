@@ -5,8 +5,10 @@ const formPago = document.getElementById('formPago');
 const montoPago = document.getElementById('monto');
 const metodoPago = document.getElementById('metodo');
 const modoPago = document.getElementById('modo');
+const tipoPago = document.getElementById('tipo');
 const btnPagoParcial = document.querySelectorAll('.btnPagoParcial');
 const btnPagoCompleto = document.querySelectorAll('.btnPagoCompleto');
+const btnAdelantoCuota = document.querySelectorAll('.btnAdelantoCuota');
 
 document.addEventListener("DOMContentLoaded", function () {
   btnPagoParcial.forEach(btn => {
@@ -21,6 +23,9 @@ document.addEventListener("DOMContentLoaded", function () {
       if (modoPago) {
         modoPago.value = 'ADMIN';
       }
+      if (tipoPago) {
+        tipoPago.value = 'PARCIAL';
+      }
       modalPago.show();
     });
   });
@@ -30,12 +35,36 @@ document.addEventListener("DOMContentLoaded", function () {
       const id = this.getAttribute('data-id');
       const pendiente = this.getAttribute('data-pendiente');
       formPago.setAttribute('action', base_url + 'prestamos/' + id);
+      formPago.setAttribute('data-pendiente', pendiente);
       montoPago.value = pendiente;
       metodoPago.value = 'EFECTIVO';
       if (modoPago) {
         modoPago.value = 'ADMIN';
       }
+      if (tipoPago) {
+        tipoPago.value = 'COMPLETO';
+      }
       cambiarEstado(formPago);
+    });
+  });
+
+  btnAdelantoCuota.forEach(btn => {
+    btn.addEventListener('click', function () {
+      const id = this.getAttribute('data-id');
+      const total = this.getAttribute('data-total');
+      const cuota = this.getAttribute('data-cuota');
+      formPago.setAttribute('action', base_url + 'prestamos/' + id);
+      formPago.setAttribute('data-pendiente', total);
+      montoPago.value = cuota;
+      montoPago.setAttribute('max', total);
+      metodoPago.value = 'EFECTIVO';
+      if (modoPago) {
+        modoPago.value = 'ADMIN';
+      }
+      if (tipoPago) {
+        tipoPago.value = 'ADELANTO';
+      }
+      modalPago.show();
     });
   });
 
