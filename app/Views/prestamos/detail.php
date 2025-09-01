@@ -90,7 +90,8 @@ Detalle del prestamo
                             <?php $total = 0;
                             $date = date('Y-m-d');
                             foreach ($detalles as $detalle) {
-                                $total += $detalle['importe_cuota'];
+                                $pendiente = $detalle['importe_cuota'] - $detalle['pagado'];
+                                $total += $pendiente;
                                 $estado = '<span class="badge badge-danger">PENDIENTE</span>';
                                 if ($date > $detalle['fecha_venc'] && $detalle['estado'] == 1) {
                                     $class = 'bg-danger';
@@ -115,14 +116,15 @@ Detalle del prestamo
                                     </td>
                                     <td scope="row"><?php echo fechaPerzo($detalle['fecha_venc']); ?></td>
                                     <td scope="row">
-                                        <?php $pendiente = $detalle['importe_cuota'] - $detalle['pagado']; ?>
                                         <span class="badge badge-success text-dark"><?php echo number_format($pendiente, 2); ?></span>
                                     </td>
                                     <td scope="row"><?php echo $estado; ?></td>
                                     <td>
-                                        <?php if ($detalle['estado'] == 1) { ?>
+                                        <?php if ($detalle['estado'] == 1 || $detalle['estado'] == 2) { ?>
                                             <button type="button" class="btn btn-success btnPagoCompleto" data-id="<?php echo $detalle['id']; ?>" data-pendiente="<?php echo number_format($pendiente, 2, '.', ''); ?>">Pagar</button>
-                                            <button type="button" class="btn btn-warning btnAdelantoCuota" data-id="<?php echo $detalle['id']; ?>" data-total="<?php echo number_format($pendiente_total, 2, '.', ''); ?>" data-cuota="<?php echo number_format($pendiente, 2, '.', ''); ?>">Adelanto cuota</button>
+                                            <?php if ($detalle['estado'] == 1) { ?>
+                                                <button type="button" class="btn btn-warning btnAdelantoCuota" data-id="<?php echo $detalle['id']; ?>" data-total="<?php echo number_format($pendiente_total, 2, '.', ''); ?>" data-cuota="<?php echo number_format($pendiente, 2, '.', ''); ?>">Adelanto cuota</button>
+                                            <?php } ?>
                                             <button type="button" class="btn btn-primary btnPagoParcial" data-id="<?php echo $detalle['id']; ?>" data-total="<?php echo number_format($pendiente_total, 2, '.', ''); ?>">Pago parcial</button>
                                         <?php } ?>
                                     </td>
