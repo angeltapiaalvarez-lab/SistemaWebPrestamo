@@ -12,7 +12,7 @@ class PagosModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_detalle_prestamo', 'monto', 'interes', 'mora', 'capital', 'cargos', 'fecha_pago', 'metodo', 'id_usuario'];
+    protected $allowedFields    = ['id_detalle_prestamo', 'monto', 'fecha_pago', 'metodo', 'id_usuario'];
 
     // Dates
     protected $useTimestamps = true;

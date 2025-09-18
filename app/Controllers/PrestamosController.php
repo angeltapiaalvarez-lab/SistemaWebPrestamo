@@ -83,7 +83,6 @@ class PrestamosController extends BaseController
                 'fecha' => date('Y-m-d H:i:s'),
                 'fecha_venc' => $fecha_venc,
                 'estado' => '1',
-                'saldo' => $this->request->getVar('importe_credito'),
                 'id_cliente' => $this->request->getVar('id_cliente'),
                 'id_usuario' => $this->session->id_usuario
             ];
@@ -106,25 +105,19 @@ class PrestamosController extends BaseController
                     }
                     $prestamo = $this->prestamos->getInsertID();
                     if ($prestamo > 0) {
-                        //calcular ganancia total del prestamo
+                        //calcular ganancia
                         $ganancia = $this->request->getVar('importe_credito')
-                            * ($this->request->getVar('tasa_interes') / 100)
-                            * $this->request->getVar('cuotas');
-                        //calcular importe por cuota incluyendo la ganancia
-                        $importe_cuota = ($this->request->getVar('importe_credito') + $ganancia)
-                            / $this->request->getVar('cuotas');
-                        $capital_cuota = $this->request->getVar('importe_credito') / $this->request->getVar('cuotas');
-                        $interes_cuota = $importe_cuota - $capital_cuota;
+                            * ($this->request->getVar('tasa_interes') / 100);
+                        //calcular importe cuota
+                        $importe_cuota = ($this->request->getVar('importe_credito')
+                            / $this->request->getVar('cuotas'))
+                            + ($ganancia / $this->request->getVar('cuotas'));
 
                         for ($i = 1; $i <= $this->request->getVar('cuotas'); $i++) {
                             $presDetalle = $this->detalle->insert([
                                 'cuota' => $i,
                                 'fecha_venc' => $fecha_venc,
                                 'importe_cuota' => $importe_cuota,
-                                'capital' => $capital_cuota,
-                                'interes' => $interes_cuota,
-                                'mora' => 0,
-                                'cargos' => 0,
                                 'id_prestamo' => $prestamo,
                                 'estado' => '1',
                             ]);
@@ -185,18 +178,7 @@ class PrestamosController extends BaseController
             ->join('usuarios AS u', 'prestamos.id_usuario = u.id')
             ->where('prestamos.id', $id)->first();
 
-        $data['detalles'] = $this->detalle
-            ->select('detalle_prestamos.*, COALESCE(SUM(pagos.monto),0) AS pagado')
-            ->join('pagos', 'pagos.id_detalle_prestamo = detalle_prestamos.id', 'left')
-            ->where('detalle_prestamos.id_prestamo', $id)
-            ->groupBy('detalle_prestamos.id')
-            ->findAll();
-
-        $pendienteTotal = 0;
-        foreach ($data['detalles'] as $detalle) {
-            $pendienteTotal += ($detalle['importe_cuota'] - $detalle['pagado']);
-        }
-        $data['pendiente_total'] = $pendienteTotal;
+        $data['detalles'] = $this->detalle->where('id_prestamo', $id)->findAll();
         $data['pagos'] = $this->pagos
             ->select('pagos.*, d.cuota')
             ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
@@ -248,7 +230,7 @@ class PrestamosController extends BaseController
     {
         if ($this->request->is('put') && verificar('abono prestamo', $this->session->permisos)) {
             $consulta = $this->detalle
-                ->select('detalle_prestamos.*, p.modalidad, p.tasa_interes, p.saldo, p.cuotas, p.importe')
+                ->select('detalle_prestamos.*, p.modalidad')
                 ->join('prestamos AS p', 'detalle_prestamos.id_prestamo = p.id')
                 ->where('detalle_prestamos.id', $id)->first();
 
@@ -272,131 +254,21 @@ class PrestamosController extends BaseController
                     ]);
             }
 
-            $monto  = (float)$this->request->getVar('monto');
+            // El monto del abono se toma del valor de la cuota para evitar modificaciones manuales
+            $monto = $consulta['importe_cuota'];
             $metodo = $this->request->getVar('metodo');
 
-            if ($monto <= 0) {
-                return redirect()->back();
-            }
+            $idPago = $this->pagos->insert([
+                'id_detalle_prestamo' => $id,
+                'monto'               => $monto,
+                'fecha_pago'          => date('Y-m-d H:i:s'),
+                'metodo'              => $metodo,
+                'id_usuario'          => $this->session->id_usuario,
+            ]);
 
-            $prestamoId     = $consulta['id_prestamo'];
-
-            $restante       = $monto;
-            $idPagoPrimero  = null;
-            $msg            = 'PAGO REGISTRADO';
-
-            $cuotasPendientes = $this->detalle
-                ->where('id_prestamo', $prestamoId)
-                ->where('estado !=', '0')
-                ->orderBy('cuota', 'ASC')
-                ->findAll();
-            $cuotasInfo = [];
-            $totalPendiente = 0;
-            foreach ($cuotasPendientes as $cuota) {
-                $pagado = $this->pagos
-                    ->select('COALESCE(SUM(interes),0) as interes, COALESCE(SUM(mora),0) as mora, COALESCE(SUM(capital),0) as capital, COALESCE(SUM(cargos),0) as cargos')
-                    ->where('id_detalle_prestamo', $cuota['id'])
-                    ->first();
-                $cuota['pendiente_interes'] = $cuota['interes'] - ($pagado['interes'] ?? 0);
-                $cuota['pendiente_mora']    = $cuota['mora'] - ($pagado['mora'] ?? 0);
-                $cuota['pendiente_capital'] = $cuota['capital'] - ($pagado['capital'] ?? 0);
-                $cuota['pendiente_cargos']  = $cuota['cargos'] - ($pagado['cargos'] ?? 0);
-                $cuota['por_pagar'] = $cuota['pendiente_interes'] + $cuota['pendiente_mora'] + $cuota['pendiente_capital'] + $cuota['pendiente_cargos'];
-                $totalPendiente += $cuota['por_pagar'];
-                $cuotasInfo[] = $cuota;
-            }
-
-            if ($monto > $totalPendiente) {
-                return redirect()->back()->with('respuesta', [
-                    'type'  => 'warning',
-                    'msg'   => 'El monto supera el total del préstamo pendiente',
-                    'title' => 'Aviso',
-                ]);
-            }
-
-            $saldoActual = $consulta['saldo'] ?? 0;
-            $capitalAplicado = 0;
-
-            foreach ($cuotasInfo as $cuota) {
-                if ($cuota['cuota'] < $consulta['cuota']) {
-                    continue;
-                }
-                if ($restante <= 0) {
-                    break;
-                }
-
-                $porPagar = $cuota['por_pagar'];
-                if ($porPagar <= 0) {
-                    continue;
-                }
-
-                $abonoInteres = min($restante, $cuota['pendiente_interes']);
-                $restante -= $abonoInteres;
-
-                $abonoMora = min($restante, $cuota['pendiente_mora']);
-                $restante -= $abonoMora;
-
-                $abonoCapital = min($restante, $cuota['pendiente_capital']);
-                $restante -= $abonoCapital;
-
-                $abonoCargos = min($restante, $cuota['pendiente_cargos']);
-                $restante -= $abonoCargos;
-
-                $totalAbono = $abonoInteres + $abonoMora + $abonoCapital + $abonoCargos;
-
-                if ($totalAbono > 0) {
-                    $idPago = $this->pagos->insert([
-                        'id_detalle_prestamo' => $cuota['id'],
-                        'monto'               => $totalAbono,
-                        'interes'             => $abonoInteres,
-                        'mora'                => $abonoMora,
-                        'capital'             => $abonoCapital,
-                        'cargos'              => $abonoCargos,
-                        'fecha_pago'          => date('Y-m-d H:i:s'),
-                        'metodo'              => $metodo,
-                        'id_usuario'          => $this->session->id_usuario,
-                    ]);
-
-                    if ($idPago && $idPagoPrimero === null) {
-                        $idPagoPrimero = $idPago;
-                    }
-
-                    if ($idPago) {
-                        $descripcion = 'Prestamo ID ' . $prestamoId . ', Cuota ' . $cuota['cuota'] . ', Pago ID ' . $idPago;
-                        $this->transacciones->insert([
-                            'accion'      => 'PAGO',
-                            'descripcion' => $descripcion,
-                            'id_usuario'  => $this->session->id_usuario,
-                        ]);
-                    }
-                }
-
-                $pendiente_interes = $cuota['pendiente_interes'] - $abonoInteres;
-                $pendiente_mora    = $cuota['pendiente_mora'] - $abonoMora;
-                $pendiente_capital = $cuota['pendiente_capital'] - $abonoCapital;
-                $pendiente_cargos  = $cuota['pendiente_cargos'] - $abonoCargos;
-
-                if ($pendiente_interes <= 0 && $pendiente_mora <= 0 && $pendiente_capital <= 0 && $pendiente_cargos <= 0) {
-                    $this->detalle->update($cuota['id'], ['estado' => '0']);
-                } else {
-                    $this->detalle->update($cuota['id'], ['estado' => '2']);
-                }
-
-                $capitalAplicado += $abonoCapital;
-            }
-
-            if ($capitalAplicado > 0) {
-                $nuevoSaldo = $saldoActual - $capitalAplicado;
-                if ($nuevoSaldo < 0) {
-                    $nuevoSaldo = 0;
-                }
-                $this->prestamos->update($prestamoId, ['saldo' => $nuevoSaldo]);
-            }
-
-            $idPagoPrimero = $idPagoPrimero ?? null;
-
-            // Enviar recibo por correo solo del primer pago registrado
-            if ($idPagoPrimero) {
+            // Enviar recibo por correo si el pago se registró correctamente
+            if ($idPago) {
+                // Datos del pago para generar el recibo
                 $pagoData = $this->pagos
                     ->select(
                         'pagos.*, d.cuota, d.id_prestamo, p.id AS prestamo, c.identidad, c.num_identidad, c.nombre AS cliente, c.apellido, c.telefono, c.direccion, c.correo'
@@ -404,7 +276,7 @@ class PrestamosController extends BaseController
                     ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
                     ->join('prestamos AS p', 'd.id_prestamo = p.id')
                     ->join('clientes AS c', 'p.id_cliente = c.id')
-                    ->where('pagos.id', $idPagoPrimero)
+                    ->where('pagos.id', $idPago)
                     ->first();
 
                 $empresa = $this->empresa->first();
@@ -424,11 +296,12 @@ class PrestamosController extends BaseController
                     $dompdf->setPaper('A4', 'vertical');
                     $dompdf->render();
 
+                    // Guardar archivo temporalmente
                     $dirRecibos = WRITEPATH . 'recibos';
                     if (!is_dir($dirRecibos)) {
                         mkdir($dirRecibos, 0777, true);
                     }
-                    $nombreArchivo = $dirRecibos . DIRECTORY_SEPARATOR . 'recibo_pago_' . $idPagoPrimero . '.pdf';
+                    $nombreArchivo = $dirRecibos . DIRECTORY_SEPARATOR . 'recibo_pago_' . $idPago . '.pdf';
                     file_put_contents($nombreArchivo, $dompdf->output());
 
                     $body = '<p>Adjunto encontrá el recibo de su pago.</p>';
@@ -439,34 +312,59 @@ class PrestamosController extends BaseController
                         $body,
                         $empresa['correo'],
                         $empresa['nombre'],
-                        [['path' => $nombreArchivo, 'name' => 'recibo_pago_' . $idPagoPrimero . '.pdf']]
+                        [['path' => $nombreArchivo, 'name' => 'recibo_pago_' . $idPago . '.pdf']]
                     );
 
                     @unlink($nombreArchivo);
                 }
             }
 
-            $proximo = $this->detalle
-                ->where('id_prestamo', $prestamoId)
-                ->where('estado', '1')
-                ->orderBy('cuota', 'ASC')
-                ->first();
-
-            if (!empty($proximo)) {
-                $this->prestamos->update($prestamoId, ['fecha_venc' => $proximo['fecha_venc']]);
-                $msg = 'Ha realizado el pago';
-            } else {
-                $this->prestamos->update($prestamoId, ['estado' => '2']);
-                $msg = 'PRESTAMO FINALIZADO';
+            if ($idPago) {
+                $descripcion = 'Prestamo ID ' . $consulta['id_prestamo'] . ', Cuota ' . $consulta['cuota'] . ', Pago ID ' . $idPago;
+                $this->transacciones->insert([
+                    'accion'      => 'PAGO',
+                    'descripcion' => $descripcion,
+                    'id_usuario'  => $this->session->id_usuario,
+                ]);
             }
 
-            return redirect()->to(base_url('prestamos/' . $prestamoId . '/detail'))
+            $pagado = $this->pagos->selectSum('monto')
+                ->where('id_detalle_prestamo', $id)->first();
+
+            $msg = 'PAGO REGISTRADO';
+
+            if ($pagado['monto'] >= $consulta['importe_cuota'] && $consulta['estado'] == 1) {
+                $this->detalle->update($id, ['estado' => '0']);
+
+                if ($consulta['modalidad'] === 'QUINCENAL') {
+                    $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+15 days'));
+                } else if ($consulta['modalidad'] === 'MENSUAL') {
+                    $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+30 days'));
+                } else {
+                    $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+15 days'));
+                }
+
+                $datos = $this->detalle->where([
+                    'id_prestamo' => $consulta['id_prestamo'],
+                    'estado' => '1'
+                ])->first();
+
+                if (!empty($datos)) {
+                    $this->prestamos->update($consulta['id_prestamo'], ['fecha_venc' => $fecha_venc]);
+                    $msg = 'Ha realizado el pago';
+                } else {
+                    $this->prestamos->update($consulta['id_prestamo'], ['estado' => '2']);
+                    $msg = 'PRESTAMO FINALIZADO';
+                }
+            }
+
+            return redirect()->to(base_url('prestamos/' . $consulta['id_prestamo'] . '/detail'))
                 ->with('respuesta', [
                     'type' => 'success',
                     'msg'  => $msg,
                     'title' => '¡Pago realizado!',
                 ])
-                ->with('id_pago', $idPagoPrimero);
+                ->with('id_pago', $idPago);
         } else {
             return view('permisos');
         }
