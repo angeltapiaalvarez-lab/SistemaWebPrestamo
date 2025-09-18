@@ -12,7 +12,7 @@ class DetPrestamoModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['cuota', 'fecha_venc', 'importe_cuota', 'capital', 'interes', 'mora', 'cargos', 'estado', 'id_prestamo'];
+    protected $allowedFields    = ['cuota', 'fecha_venc', 'importe_cuota', 'estado', 'id_prestamo'];
 
     // Dates
     protected $useTimestamps = true;
