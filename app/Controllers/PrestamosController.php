@@ -185,6 +185,20 @@ class PrestamosController extends BaseController
             ->where('d.id_prestamo', $id)
             ->orderBy('pagos.fecha_pago', 'ASC')
             ->findAll();
+
+        $totalCuotas = array_reduce($data['detalles'], static function ($carry, $detalle) {
+            return $carry + (float) ($detalle['importe_cuota'] ?? 0);
+        }, 0);
+
+        $totalPagado = $this->pagos
+            ->selectSum('monto')
+            ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
+            ->where('d.id_prestamo', $id)
+            ->first();
+
+        $pagado = isset($totalPagado['monto']) ? (float) $totalPagado['monto'] : 0.0;
+
+        $data['total_restante'] = max(0, $totalCuotas - $pagado);
         $data['active'] = 'prestamo';
         return view('prestamos/detail', $data);
     }

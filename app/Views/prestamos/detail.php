@@ -87,10 +87,9 @@ Detalle del prestamo
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $total = 0;
+                            <?php
                             $date = date('Y-m-d');
                             foreach ($detalles as $detalle) {
-                                $total += $detalle['importe_cuota'];
                                 $estado = '<span class="badge badge-danger">PENDIENTE</span>';
                                 if ($date > $detalle['fecha_venc'] && $detalle['estado'] == 1) {
                                     $class = 'bg-danger';
@@ -136,7 +135,7 @@ Detalle del prestamo
                             <?php } ?>
                             <tr>
                                 <td colspan="3" class="text-end">
-                                    <h3>Total <?php echo number_format($total, 2); ?></h3>
+                                    <h3>Total <?php echo number_format($total_restante ?? 0, 2); ?></h3>
                                 </td>
                                 <td colspan="2"></td>
                             </tr>
