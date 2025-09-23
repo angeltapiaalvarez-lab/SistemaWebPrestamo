@@ -39,6 +39,7 @@ Historial de préstamos
                         <tr>
                             <th>#</th>
                             <th>Cliente</th>
+                            <th>Moneda</th>
                             <th>Importe</th>
                             <th>Modalidad</th>
                             <th>Tasa interes</th>
@@ -46,11 +47,12 @@ Historial de préstamos
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $i = 1; $total = 0; foreach ($prestamos as $p) { $total += $p['importe']; ?>
+                        <?php $i = 1; foreach ($prestamos as $p) { ?>
                             <tr>
                                 <td><?= $i++; ?></td>
                                 <td><?= $p['cliente']; ?></td>
-                                <td><?= $p['importe']; ?></td>
+                                <td><?= $p['moneda_label'] ?? (currency_name($p['moneda'] ?? 'NIO') . ' (' . ($p['moneda'] ?? 'NIO') . ')'); ?></td>
+                                <td><?= $p['importe_formateado'] ?? format_currency($p['importe'], $p['moneda'] ?? 'NIO'); ?></td>
                                 <td><?= $p['modalidad']; ?></td>
                                 <td><?= $p['tasa_interes']; ?></td>
                                 <td><?= fechaPerzo($p['fecha_venc']); ?></td>
@@ -58,11 +60,15 @@ Historial de préstamos
                         <?php } ?>
                     </tbody>
                     <tfoot>
-                        <tr>
-                            <th colspan="2" class="text-end">Total</th>
-                            <th><?= number_format($total, 2); ?></th>
-                            <th colspan="3"></th>
-                        </tr>
+                        <?php if (!empty($totales_moneda)) : ?>
+                            <?php foreach ($totales_moneda as $codigo => $montoTotal) : ?>
+                                <tr>
+                                    <th colspan="3" class="text-end">Total <?= currency_name($codigo); ?> (<?= $codigo; ?>)</th>
+                                    <th><?= format_currency($montoTotal, $codigo); ?></th>
+                                    <th colspan="3"></th>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tfoot>
                 </table>
             </div>

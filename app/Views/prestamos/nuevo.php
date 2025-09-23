@@ -16,6 +16,7 @@ Nuevo prestamo
         <?php } ?>
         <form action="<?php echo base_url('prestamos'); ?>" method="post" autocomplete="off">
             <?php echo csrf_field(); ?>
+            <?php $monedaSeleccionada = set_value('moneda', $moneda ?? 'NIO'); ?>
             <div class="row">
                 <div class="col-lg-8">
                     <div class="form-group">
@@ -29,8 +30,22 @@ Nuevo prestamo
                     </div>
                     <div class="row">
                         <div class="col-lg-6 form-group">
+                            <label>Moneda</label>
+                            <select class="form-select" id="moneda" name="moneda">
+                                <?php foreach (currency_options() as $codigo => $nombre) { ?>
+                                    <option value="<?= $codigo; ?>" <?= set_select('moneda', $codigo, $monedaSeleccionada === $codigo); ?>><?= esc($nombre); ?></option>
+                                <?php } ?>
+                            </select>
+                            <?php if (!empty($errors['moneda'])) { ?>
+                                <span class="text-danger"><?php echo $errors['moneda']; ?></span>
+                            <?php } ?>
+                        </div>
+                        <div class="col-lg-6 form-group">
                             <label>Importe</label>
-                        <input type="number" step="0.01" min="0" id="importe_credito" name="importe_credito" class="form-control" value="<?php echo set_value('importe_credito'); ?>" placeholder="Importe">
+                            <div class="input-group">
+                                <span class="input-group-text" data-symbol-target><?= esc(currency_symbol($monedaSeleccionada)); ?></span>
+                                <input type="number" step="0.01" min="0" id="importe_credito" name="importe_credito" class="form-control" value="<?php echo set_value('importe_credito'); ?>" placeholder="Importe">
+                            </div>
                             <?php if (!empty($errors['importe_credito'])) { ?>
                                 <span class="text-danger"><?php echo $errors['importe_credito']; ?></span>
                             <?php } ?>
@@ -75,15 +90,24 @@ Nuevo prestamo
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label>Importe x cuota</label>
-                        <input type="text" id="importe_cuota" name="importe_cuota" class="form-control" value="<?php echo set_value('importe_cuota'); ?>" placeholder="0.00" readonly>
+                        <div class="input-group">
+                            <span class="input-group-text" data-symbol-target><?= esc(currency_symbol($monedaSeleccionada)); ?></span>
+                            <input type="text" id="importe_cuota" name="importe_cuota" class="form-control" value="<?php echo set_value('importe_cuota'); ?>" placeholder="0.00" readonly>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Total a pagar</label>
-                        <input type="text" id="total_pagar" name="total_pagar" class="form-control" value="<?php echo set_value('total_pagar'); ?>" placeholder="0.00" readonly>
+                        <div class="input-group">
+                            <span class="input-group-text" data-symbol-target><?= esc(currency_symbol($monedaSeleccionada)); ?></span>
+                            <input type="text" id="total_pagar" name="total_pagar" class="form-control" value="<?php echo set_value('total_pagar'); ?>" placeholder="0.00" readonly>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Interes generado</label>
-                        <input type="text" id="interes_generado" name="interes_generado" class="form-control" value="<?php echo set_value('interes_generado'); ?>" placeholder="0.00" readonly>
+                        <div class="input-group">
+                            <span class="input-group-text" data-symbol-target><?= esc(currency_symbol($monedaSeleccionada)); ?></span>
+                            <input type="text" id="interes_generado" name="interes_generado" class="form-control" value="<?php echo set_value('interes_generado'); ?>" placeholder="0.00" readonly>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Fecha</label>

@@ -65,6 +65,10 @@ class PrestamosController extends BaseController
     public function create()
     {
         if ($this->request->is('post') && verificar('nuevo prestamo', $this->session->permisos)) {
+            $moneda = strtoupper($this->request->getVar('moneda'));
+            if (!array_key_exists($moneda, currency_options())) {
+                $moneda = 'NIO';
+            }
             $fecha = date('Y-m-d');
             //calcular vencimiento
             if ($this->request->getVar('modalidad') === 'QUINCENAL') {
@@ -77,6 +81,7 @@ class PrestamosController extends BaseController
             $data = [
                 'cliente' => $this->request->getVar('cliente'),
                 'importe' => $this->request->getVar('importe_credito'),
+                'moneda' => $moneda,
                 'modalidad' => $this->request->getVar('modalidad'),
                 'tasa_interes' => $this->request->getVar('tasa_interes'),
                 'cuotas' => $this->request->getVar('cuotas'),
@@ -92,7 +97,7 @@ class PrestamosController extends BaseController
                 'estado' => '1',
             ])->first();
 
-            $verificarSaldo = $this->cajas->calcularMovimientos($this->session->id_usuario);
+            $verificarSaldo = $this->cajas->calcularMovimientos($this->session->id_usuario, $moneda);
             if ($verificarSaldo['saldo'] >= $this->request->getVar('importe_credito')) {
                 if (empty($sqlCliente)) {
                     if ($this->prestamos->insert($data) === false) {
@@ -100,6 +105,7 @@ class PrestamosController extends BaseController
                         $data['empresa'] = $this->empresa->first();
                         $data['modalidad'] = $this->request->getVar('modalidad');
                         $data['cuotas'] = $this->request->getVar('cuotas');
+                        $data['moneda'] = $moneda;
                         $data['active'] = 'prestamo';
                         return view('prestamos/nuevo', $data);
                     }
@@ -135,7 +141,7 @@ class PrestamosController extends BaseController
 
                         $this->transacciones->insert([
                             'accion'      => 'CREAR',
-                            'descripcion' => 'Prestamo ID ' . $prestamo,
+                            'descripcion' => 'Prestamo ID ' . $prestamo . ' (' . $moneda . ')',
                             'id_usuario'  => $this->session->id_usuario,
                         ]);
 
@@ -159,7 +165,7 @@ class PrestamosController extends BaseController
             } else {
                 return redirect()->to(base_url('prestamos'))->with('respuesta', [
                     'type' => 'warning',
-                    'msg' => 'SALDO INSUFICIENTE',
+                    'msg' => 'SALDO INSUFICIENTE EN ' . currency_name($moneda),
                 ]);
             }
         }else{
@@ -178,13 +184,24 @@ class PrestamosController extends BaseController
             ->join('usuarios AS u', 'prestamos.id_usuario = u.id')
             ->where('prestamos.id', $id)->first();
 
+        $monedaPrestamo = $data['prestamo']['moneda'] ?? 'NIO';
+        $data['moneda_simbolo'] = currency_symbol($monedaPrestamo);
+        $data['moneda_nombre'] = currency_name($monedaPrestamo);
+
         $data['detalles'] = $this->detalle->where('id_prestamo', $id)->findAll();
         $data['pagos'] = $this->pagos
-            ->select('pagos.*, d.cuota')
+            ->select('pagos.*, d.cuota, p.moneda AS moneda')
             ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
+            ->join('prestamos AS p', 'd.id_prestamo = p.id')
             ->where('d.id_prestamo', $id)
             ->orderBy('pagos.fecha_pago', 'ASC')
             ->findAll();
+
+        $data['pagos'] = array_map(static function ($pago) use ($monedaPrestamo) {
+            $moneda = $pago['moneda'] ?? $monedaPrestamo;
+            $pago['monto_formateado'] = format_currency($pago['monto'], $moneda);
+            return $pago;
+        }, $data['pagos']);
 
         $totalCuotas = array_reduce($data['detalles'], static function ($carry, $detalle) {
             return $carry + (float) ($detalle['importe_cuota'] ?? 0);
@@ -213,6 +230,10 @@ class PrestamosController extends BaseController
             ->join('clientes AS c', 'prestamos.id_cliente = c.id')
             ->join('usuarios AS u', 'prestamos.id_usuario = u.id')
             ->where('prestamos.id', $id)->first();
+
+        $monedaPrestamo = $data['prestamo']['moneda'] ?? 'NIO';
+        $data['moneda_simbolo'] = currency_symbol($monedaPrestamo);
+        $data['moneda_nombre'] = currency_name($monedaPrestamo);
 
         $data['detalles'] = $this->detalle->where('id_prestamo', $id)->findAll();
         $data['empresa'] = $this->empresa->first();
@@ -451,14 +472,20 @@ class PrestamosController extends BaseController
                 ->join('clientes AS c', 'prestamos.id_cliente = c.id')
                 ->join('usuarios AS u', 'prestamos.id_usuario = u.id')
                 ->where('prestamos.estado != 0')->findAll();
-            for ($i = 0; $i < count($data); $i++) {
-                $data[$i]['vencimiento'] = fechaPerzo($data[$i]['fecha_venc']);
+            foreach ($data as $index => $row) {
+                $data[$index]['vencimiento'] = fechaPerzo($row['fecha_venc']);
                 $ganancia = $this->detalle->selectSum('importe_cuota')->where([
                     'estado' => '0',
-                    'id_prestamo' => $data[$i]['id']
+                    'id_prestamo' => $row['id']
                 ])->first();
-                $data[$i]['ganancia'] = ($ganancia['importe_cuota'] != null) ? number_format($ganancia['importe_cuota'] - $data[$i]['importe'], 2) : '-' . number_format($data[$i]['importe'], 2);
-                $data[$i]['gd'] = ($ganancia['importe_cuota'] != null) ? $ganancia['importe_cuota'] - $data[$i]['importe'] : '-' . $data[$i]['importe'];
+                $gananciaValor = ($ganancia['importe_cuota'] != null)
+                    ? (float) $ganancia['importe_cuota'] - (float) $row['importe']
+                    : - (float) $row['importe'];
+                $data[$index]['ganancia'] = format_currency($gananciaValor, $row['moneda']);
+                $data[$index]['gd'] = $gananciaValor;
+                $data[$index]['importe_formateado'] = format_currency($row['importe'], $row['moneda']);
+                $data[$index]['moneda_label'] = currency_name($row['moneda']) . ' (' . $row['moneda'] . ')';
+                $data[$index]['simbolo'] = currency_symbol($row['moneda']);
             }
             echo json_encode($data, JSON_UNESCAPED_UNICODE);
             die();

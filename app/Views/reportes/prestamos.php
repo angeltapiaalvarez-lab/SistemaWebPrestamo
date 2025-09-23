@@ -38,6 +38,7 @@
             <tr>
                 <th class="text-left">#</th>
                 <th class="text-left">Cliente</th>
+                <th class="text-left">Moneda</th>
                 <th class="text-left">Importe</th>
                 <th class="text-left">Modalidad</th>
                 <th class="text-left">Tasa interes</th>
@@ -46,10 +47,8 @@
         </thead>
         <tbody>
             <?php $item = 1;
-            $total = 0;
             $date = date('Y-m-d');
             foreach ($prestamos as $prestamo) {
-                $total += $prestamo['importe'];
                 if ($date > $prestamo['fecha_venc']) {
                     $class = 'bg-danger';
                 } else if ($date == $prestamo['fecha_venc']) {
@@ -61,19 +60,25 @@
                 <tr class="<?php echo $class; ?>">
                     <td><?php echo $item; ?></td>
                     <td><?php echo $prestamo['cliente']; ?></td>
-                    <td><?php echo $prestamo['importe']; ?></td>
+                    <td><?php echo $prestamo['moneda_label'] ?? (currency_name($prestamo['moneda'] ?? 'NIO') . ' (' . ($prestamo['moneda'] ?? 'NIO') . ')'); ?></td>
+                    <td><?php echo $prestamo['importe_formateado'] ?? format_currency($prestamo['importe'], $prestamo['moneda'] ?? 'NIO'); ?></td>
                     <td><?php echo $prestamo['modalidad']; ?></td>
                     <td><?php echo $prestamo['tasa_interes']; ?></td>
                     <td><?php echo fechaPerzo($prestamo['fecha_venc']); ?></td>
                 </tr>
             <?php $item++;
             } ?>
-            <tr>
-                <td colspan="3" class="text-right">
-                    <h3>Total <?php echo number_format($total, 2); ?></h3>
-                </td>
-                <td></td>
-            </tr>
+            <?php if (!empty($totales_moneda)) : ?>
+                <?php foreach ($totales_moneda as $codigo => $montoTotal) : ?>
+                    <tr>
+                        <td colspan="3" class="text-right">
+                            <h3>Total <?php echo currency_name($codigo) . ' (' . $codigo . ')'; ?></h3>
+                        </td>
+                        <td><?php echo format_currency($montoTotal, $codigo); ?></td>
+                        <td colspan="3"></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </tbody>
     </table>
     <div class="mensaje">

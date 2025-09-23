@@ -67,6 +67,7 @@ Detalle del prestamo
                             <li class="list-group-item"><i class="fas fa-tag"></i> Cuotas: <?php echo $prestamo['cuotas']; ?></li>
                             <li class="list-group-item"><i class="fas fa-calendar"></i> Modalidad: <?php echo $prestamo['modalidad']; ?></li>
                             <li class="list-group-item"><i class="fas fa-user"></i> Atendido: <?php echo $prestamo['usuario'] . ' ' . $prestamo['user_apellido']; ?></li>
+                            <li class="list-group-item"><i class="fas fa-money-bill"></i> Moneda: <?php echo $moneda_nombre ?? currency_name($prestamo['moneda'] ?? 'NIO'); ?></li>
                         </ul>
                     </div>
                 </div>
@@ -111,8 +112,8 @@ Detalle del prestamo
                                         </button>
                                     </td>
                                     <td scope="row"><?php echo fechaPerzo($detalle['fecha_venc']); ?></td>
-                                    <td scope="row">
-                                        <span class="badge badge-success text-dark"><?php echo $detalle['importe_cuota']; ?></span>
+                                <td scope="row">
+                                        <span class="badge badge-success text-dark"><?php echo format_currency($detalle['importe_cuota'], $prestamo['moneda'] ?? 'NIO'); ?></span>
                                     </td>
                                     <td scope="row"><?php echo $estado; ?></td>
                                     <td>
@@ -121,7 +122,8 @@ Detalle del prestamo
                                                 <input type="hidden" name="_method" value="PUT">
                                                 <?php echo csrf_field(); ?>
                                                 <div class="input-group">
-                                                    <input type="number" step="0.01" name="monto" value="<?php echo $detalle['importe_cuota']; ?>" class="form-control" style="max-width:100px" readonly>
+                                                    <span class="input-group-text"><?php echo $moneda_simbolo ?? currency_symbol($prestamo['moneda'] ?? 'NIO'); ?></span>
+                                                    <input type="number" step="0.01" name="monto" value="<?php echo $detalle['importe_cuota']; ?>" class="form-control" style="max-width:120px" readonly>
                                                     <select name="metodo" class="form-select" style="max-width:150px">
                                                         <option value="EFECTIVO">EFECTIVO</option>
                                                         <option value="TRANSFERENCIA">TRANSFERENCIA</option>
@@ -135,7 +137,7 @@ Detalle del prestamo
                             <?php } ?>
                             <tr>
                                 <td colspan="3" class="text-end">
-                                    <h3>Total <?php echo number_format($total_restante ?? 0, 2); ?></h3>
+                                    <h3>Total <?php echo format_currency($total_restante ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></h3>
                                 </td>
                                 <td colspan="2"></td>
                             </tr>
