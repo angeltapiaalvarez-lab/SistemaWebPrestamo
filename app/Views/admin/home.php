@@ -86,7 +86,24 @@ Datos de la empresa
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                                     <div class="card-content">
                                         <h5 class="font-15">Saldo</h5>
-                                        <h2 class="mb-3 font-18"><?php echo $cajas['decimales']['saldo']; ?></h2>
+                                        <?php if (!empty($cajas)) : ?>
+                                            <ul class="list-unstyled mb-2">
+                                                <?php foreach ($cajas as $codigo => $info) : ?>
+                                                    <li class="mb-2">
+                                                        <span class="d-block font-18 font-weight-bold">
+                                                            <?= esc($info['simbolo'] ?? currency_symbol($codigo)); ?>
+                                                            <?= esc($info['decimales']['saldo'] ?? number_format(0, 2)); ?>
+                                                        </span>
+                                                        <small class="text-muted">
+                                                            <?= esc($info['nombre'] ?? currency_name($codigo)); ?>
+                                                            (<?= esc($codigo); ?>)
+                                                        </small>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php else : ?>
+                                            <h2 class="mb-3 font-18"><?= esc(currency_symbol('NIO')); ?> 0.00</h2>
+                                        <?php endif; ?>
                                         <a class="mb-0" href="<?php echo base_url('cajas'); ?>">VER DETALLE</a>
                                     </div>
                                 </div>

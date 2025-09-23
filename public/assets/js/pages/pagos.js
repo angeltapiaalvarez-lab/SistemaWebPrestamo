@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', function(){
             { data: 'id' },
             { data: 'prestamo' },
             { data: 'cuota' },
-            { data: 'monto' },
+            { data: 'moneda_label' },
+            { data: 'monto_formateado' },
             { data: 'metodo' },
             { data: 'usuario' },
             { data: 'fecha_pago' }

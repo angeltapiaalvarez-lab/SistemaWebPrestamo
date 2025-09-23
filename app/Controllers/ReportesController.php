@@ -38,6 +38,7 @@ class ReportesController extends BaseController
         $data['active'] = 'reportesHistorial';
         $data['prestamos'] = [];
         $data['mensaje'] = '';
+        $data['totales_moneda'] = [];
         if ($fechaInicio > $fechaFin) {
             $data['mensaje'] = 'Rango de fechas inválido.';
         } else {
@@ -45,9 +46,17 @@ class ReportesController extends BaseController
             if (empty($data['prestamos'])) {
                 $data['mensaje'] = 'No hay datos para el rango seleccionado.';
             } else {
+                $data['totales_moneda'] = [];
                 for ($i = 0; $i < count($data['prestamos']); $i++) {
                     $result = $this->clientes->select('nombre, apellido')->where('id', $data['prestamos'][$i]['id_cliente'])->first();
                     $data['prestamos'][$i]['cliente'] = $result['nombre'] . ' ' . $result['apellido'];
+                    $moneda = $data['prestamos'][$i]['moneda'] ?? 'NIO';
+                    $data['prestamos'][$i]['importe_formateado'] = format_currency($data['prestamos'][$i]['importe'], $moneda);
+                    $data['prestamos'][$i]['moneda_label'] = currency_name($moneda) . ' (' . $moneda . ')';
+                    if (!isset($data['totales_moneda'][$moneda])) {
+                        $data['totales_moneda'][$moneda] = 0;
+                    }
+                    $data['totales_moneda'][$moneda] += (float) $data['prestamos'][$i]['importe'];
                 }
             }
         }
@@ -75,9 +84,17 @@ class ReportesController extends BaseController
         }
         $data['titulo'] = 'Historial de préstamos';
 
+        $data['totales_moneda'] = [];
         for ($i = 0; $i < count($data['prestamos']); $i++) {
             $result = $this->clientes->select('nombre, apellido')->where('id', $data['prestamos'][$i]['id_cliente'])->first();
             $data['prestamos'][$i]['cliente'] = $result['nombre'] . ' ' . $result['apellido'];
+            $moneda = $data['prestamos'][$i]['moneda'] ?? 'NIO';
+            $data['prestamos'][$i]['importe_formateado'] = format_currency($data['prestamos'][$i]['importe'], $moneda);
+            $data['prestamos'][$i]['moneda_label'] = currency_name($moneda) . ' (' . $moneda . ')';
+            if (!isset($data['totales_moneda'][$moneda])) {
+                $data['totales_moneda'][$moneda] = 0;
+            }
+            $data['totales_moneda'][$moneda] += (float) $data['prestamos'][$i]['importe'];
         }
         $data['empresa'] = $this->empresa->first();
         $data['usuario'] = $this->session->nombre;
@@ -134,39 +151,49 @@ class ReportesController extends BaseController
 
         $spreadsheet->setActiveSheetIndex(0);
 
-        $spreadsheet->getActiveSheet()->getStyle('A1:E1')->getFill()
+        $spreadsheet->getActiveSheet()->getStyle('A1:F1')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('FFFF0000');
 
         $hojaActiva = $spreadsheet->getActiveSheet();
         $hojaActiva->getColumnDimension('A')->setWidth('50');
-        $hojaActiva->getColumnDimension('B')->setWidth('15');
-        $hojaActiva->getColumnDimension('C')->setWidth('20');
+        $hojaActiva->getColumnDimension('B')->setWidth('20');
+        $hojaActiva->getColumnDimension('C')->setWidth('15');
         $hojaActiva->getColumnDimension('D')->setWidth('20');
-        $hojaActiva->getColumnDimension('E')->setWidth('40');
+        $hojaActiva->getColumnDimension('E')->setWidth('20');
+        $hojaActiva->getColumnDimension('F')->setWidth('40');
 
 
         $hojaActiva->setCellValue('A1', 'CLIENTE');
-        $hojaActiva->setCellValue('B1', 'IMPORTE');
-        $hojaActiva->setCellValue('C1', 'MODALIDAD');
-        $hojaActiva->setCellValue('D1', 'TASA INTERES');
-        $hojaActiva->setCellValue('E1', 'F. VENCIMIENTO');
+        $hojaActiva->setCellValue('B1', 'MONEDA');
+        $hojaActiva->setCellValue('C1', 'IMPORTE');
+        $hojaActiva->setCellValue('D1', 'MODALIDAD');
+        $hojaActiva->setCellValue('E1', 'TASA INTERES');
+        $hojaActiva->setCellValue('F1', 'F. VENCIMIENTO');
 
         $fila = 2;
-        $total = 0;
+        $totales = [];
         foreach ($results as $prestamo) {
             $result = $this->clientes->select('nombre, apellido')->where('id', $prestamo['id_cliente'])->first();
             $hojaActiva->setCellValue('A' . $fila, $result['nombre'] . ' ' . $result['apellido']);
-            $hojaActiva->setCellValue('B' . $fila, $prestamo['importe']);
-            $hojaActiva->setCellValue('C' . $fila, $prestamo['modalidad']);
-            $hojaActiva->setCellValue('D' . $fila, $prestamo['tasa_interes']);
-            $hojaActiva->setCellValue('E' . $fila, fechaPerzo($prestamo['fecha_venc']));
-            $total += $prestamo['importe'];
+            $moneda = $prestamo['moneda'] ?? 'NIO';
+            $hojaActiva->setCellValue('B' . $fila, $moneda);
+            $hojaActiva->setCellValue('C' . $fila, $prestamo['importe']);
+            $hojaActiva->setCellValue('D' . $fila, $prestamo['modalidad']);
+            $hojaActiva->setCellValue('E' . $fila, $prestamo['tasa_interes']);
+            $hojaActiva->setCellValue('F' . $fila, fechaPerzo($prestamo['fecha_venc']));
+            if (!isset($totales[$moneda])) {
+                $totales[$moneda] = 0;
+            }
+            $totales[$moneda] += (float) $prestamo['importe'];
             $fila++;
         }
-        $hojaActiva->setCellValue('A' . $fila, 'Total');
-        $hojaActiva->setCellValue('B' . $fila, $total);
-        $fila += 2;
+        foreach ($totales as $codigo => $valor) {
+            $hojaActiva->setCellValue('A' . $fila, 'Total ' . currency_name($codigo) . ' (' . $codigo . ')');
+            $hojaActiva->setCellValue('C' . $fila, $valor);
+            $fila++;
+        }
+        $fila += 1;
         $hojaActiva->setCellValue('A' . $fila, 'Generado por: ' . $this->session->nombre);
         $hojaActiva->setCellValue('B' . $fila, 'Fecha: ' . date('Y-m-d H:i:s'));
 

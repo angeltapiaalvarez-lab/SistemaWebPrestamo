@@ -60,6 +60,7 @@
             </tr>
         </table>
     </div>
+    <p><strong>Moneda:</strong> <?php echo $moneda_nombre ?? currency_name($prestamo['moneda'] ?? 'NIO'); ?></p>
     <h5 class="title">Datos de las cuotas</h5>
     <table id="container-cuotas">
         <thead>
@@ -95,14 +96,14 @@
                     <td><?php echo $item; ?></td>
                     <td>Cuota <?php echo $detalle['cuota']; ?></td>
                     <td><?php echo fechaPerzo($detalle['fecha_venc']); ?></td>
-                    <td><?php echo $detalle['importe_cuota']; ?></td>
+                    <td><?php echo format_currency($detalle['importe_cuota'], $prestamo['moneda'] ?? 'NIO'); ?></td>
                     <td><?php echo $estado; ?></td>
                 </tr>
             <?php $item++;
             } ?>
             <tr>
                 <td colspan="4" class="text-right">
-                    <h3>Total <?php echo number_format($total, 2); ?></h3>
+                    <h3>Total <?php echo format_currency($total, $prestamo['moneda'] ?? 'NIO'); ?></h3>
                 </td>
                 <td></td>
             </tr>

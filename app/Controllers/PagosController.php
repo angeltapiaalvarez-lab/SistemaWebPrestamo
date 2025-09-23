@@ -37,12 +37,19 @@ class PagosController extends BaseController
     {
         if ($this->request->is('get')) {
             $data = $this->pagos
-                ->select('pagos.*, p.id AS prestamo, d.cuota, CONCAT(u.nombre, " ", u.apellido) AS usuario')
+                ->select('pagos.*, p.id AS prestamo, p.moneda, d.cuota, CONCAT(u.nombre, " ", u.apellido) AS usuario')
                 ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
                 ->join('prestamos AS p', 'd.id_prestamo = p.id')
                 ->join('usuarios AS u', 'pagos.id_usuario = u.id')
                 ->orderBy('pagos.fecha_pago', 'DESC')
                 ->findAll();
+
+            $data = array_map(static function ($pago) {
+                $moneda = $pago['moneda'] ?? 'NIO';
+                $pago['moneda_label'] = currency_name($moneda) . ' (' . $moneda . ')';
+                $pago['monto_formateado'] = format_currency($pago['monto'], $moneda);
+                return $pago;
+            }, $data);
             echo json_encode($data, JSON_UNESCAPED_UNICODE);
             die();
         }
@@ -55,7 +62,7 @@ class PagosController extends BaseController
         }
 
         $data['pago'] = $this->pagos
-            ->select('pagos.*, d.cuota, d.id_prestamo, p.id AS prestamo, c.identidad, c.num_identidad, c.nombre AS cliente, c.apellido, c.telefono, c.direccion')
+            ->select('pagos.*, d.cuota, d.id_prestamo, p.id AS prestamo, p.moneda, c.identidad, c.num_identidad, c.nombre AS cliente, c.apellido, c.telefono, c.direccion')
             ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
             ->join('prestamos AS p', 'd.id_prestamo = p.id')
             ->join('clientes AS c', 'p.id_cliente = c.id')

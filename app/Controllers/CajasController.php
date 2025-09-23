@@ -7,22 +7,41 @@ use App\Models\CajasModel;
 
 class CajasController extends BaseController
 {
-    private $cajas, $session;
+    private $cajas, $session, $monedas;
     public function __construct()
     {
         helper(['form']);
         $this->cajas = new CajasModel();
         $this->session = session();
+        $this->monedas = currency_options();
     }
     public function index()
     {
         if (!verificar('ver saldo', $this->session->permisos)) {
             return view('permisos');
         }
-        $data['caja'] = $this->cajas->where([
+        $registros = $this->cajas->where([
             'estado' => '1',
             'id_usuario' => $this->session->id_usuario
-        ])->first();
+        ])->findAll();
+
+        $data['cajas'] = [];
+        foreach ($registros as $caja) {
+            $codigo = strtoupper($caja['moneda'] ?? 'NIO');
+            $data['cajas'][$codigo] = $caja;
+        }
+
+        $data['monedas'] = $this->monedas;
+        $seleccionada = $this->request->getGet('moneda');
+        if (!array_key_exists($seleccionada, $this->monedas)) {
+            $seleccionada = array_key_first($this->monedas);
+        }
+        $data['monedaSeleccionada'] = $seleccionada;
+
+        $data['resumen'] = [];
+        foreach (array_keys($this->monedas) as $codigo) {
+            $data['resumen'][$codigo] = $this->cajas->calcularMovimientos($this->session->id_usuario, $codigo);
+        }
         $data['active'] = 'caja';
         return view('cajas/index', $data);
     }
@@ -32,6 +51,12 @@ class CajasController extends BaseController
         if (!verificar('ver saldo', $this->session->permisos)) {
             return view('permisos');
         }
+        $seleccionada = $this->request->getGet('moneda');
+        if (!array_key_exists($seleccionada, $this->monedas)) {
+            $seleccionada = array_key_first($this->monedas);
+        }
+        $data['monedas'] = $this->monedas;
+        $data['monedaSeleccionada'] = $seleccionada;
         $data['active'] = 'caja';
         return view('cajas/nuevo', $data);
     }
@@ -39,19 +64,27 @@ class CajasController extends BaseController
     public function create()
     {
         if ($this->request->is('post') && verificar('ver saldo', $this->session->permisos)) {
+            $moneda = strtoupper($this->request->getVar('moneda'));
+            if (!array_key_exists($moneda, $this->monedas)) {
+                $moneda = array_key_first($this->monedas);
+            }
             $data = [
                 'id_caja' => $this->request->getVar('id_caja'),
                 'monto_inicial' => $this->request->getVar('monto'),
                 'fecha_apertura' => date('Y-m-d H:i:s'),
+                'moneda' => $moneda,
                 'id_usuario' => $this->session->id_usuario
             ];
             $consulta = $this->cajas->where([
                 'estado' => '1',
-                'id_usuario' => $this->session->id_usuario
+                'id_usuario' => $this->session->id_usuario,
+                'moneda' => $moneda
             ])->first();
             if (empty($consulta)) {
                 if ($this->cajas->insert($data) === false) {
                     $data['errors'] = $this->cajas->errors();
+                    $data['monedas'] = $this->monedas;
+                    $data['monedaSeleccionada'] = $moneda;
                     $data['active'] = 'caja';
                     return view('cajas/nuevo', $data);
                 }
@@ -62,7 +95,7 @@ class CajasController extends BaseController
             } else {
                 return redirect()->to(base_url('cajas'))->with('respuesta', [
                     'type' => 'danger',
-                    'msg' => 'YA TIENES UN MONTO INICAL',
+                    'msg' => 'YA TIENES UN MONTO INICIAL PARA ' . currency_name($moneda),
                 ]);
             }
         } else {
@@ -76,6 +109,7 @@ class CajasController extends BaseController
             return view('permisos');
         }
         $data['caja'] = $this->cajas->where('id', $id)->first();
+        $data['monedas'] = $this->monedas;
         $data['active'] = 'caja';
         return view('cajas/edit', $data);
     }
@@ -83,14 +117,20 @@ class CajasController extends BaseController
     public function update($id)
     {
         if ($this->request->is('put') && verificar('ver saldo', $this->session->permisos)) {
+            $moneda = strtoupper($this->request->getVar('moneda'));
+            if (!array_key_exists($moneda, $this->monedas)) {
+                $moneda = array_key_first($this->monedas);
+            }
             $data = [
                 'id_caja' => $this->request->getVar('id_caja'),
-                'monto_inicial' => $this->request->getVar('monto')
+                'monto_inicial' => $this->request->getVar('monto'),
+                'moneda' => $moneda,
             ];
 
             if ($this->cajas->update($id, $data) === false) {
                 $data['errors'] = $this->cajas->errors();
                 $data['caja'] = $this->cajas->where('id', $id)->first();
+                $data['monedas'] = $this->monedas;
                 $data['active'] = 'caja';
                 return view('cajas/edit', $data);
             }
@@ -108,9 +148,14 @@ class CajasController extends BaseController
         if (!verificar('ver saldo', $this->session->permisos)) {
             $data = [];
         }else{
-            $data = $this->cajas->calcularMovimientos($this->session->id_usuario);
+            $moneda = $this->request->getGet('moneda');
+            if (!array_key_exists($moneda, $this->monedas)) {
+                $moneda = array_key_first($this->monedas);
+            }
+            $data = $this->cajas->calcularMovimientos($this->session->id_usuario, $moneda);
+            $data['moneda_nombre'] = currency_name($moneda);
             echo json_encode($data);
-        }        
+        }
         die();
     }
 }

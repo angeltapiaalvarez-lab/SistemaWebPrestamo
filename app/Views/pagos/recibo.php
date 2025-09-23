@@ -73,7 +73,7 @@
             <tr>
                 <td><?php echo $pago['id_prestamo']; ?></td>
                 <td>Cuota <?php echo $pago['cuota']; ?></td>
-                <td><?php echo $pago['monto']; ?></td>
+                <td><?php echo format_currency($pago['monto'], $pago['moneda'] ?? 'NIO'); ?></td>
                 <td><?php echo $pago['metodo']; ?></td>
             </tr>
         </tbody>
