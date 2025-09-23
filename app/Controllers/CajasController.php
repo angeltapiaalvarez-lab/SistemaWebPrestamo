@@ -10,7 +10,7 @@ class CajasController extends BaseController
     private $cajas, $session, $monedas;
     public function __construct()
     {
-        helper(['form']);
+        helper(['form', 'moneda']);
         $this->cajas = new CajasModel();
         $this->session = session();
         $this->monedas = currency_options();
