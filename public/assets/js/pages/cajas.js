@@ -1,5 +1,16 @@
+let chartInicial = null;
+let chartIngreso = null;
+
 document.addEventListener('DOMContentLoaded', function () {
-  movimientoGrafico();
+  const monedaSelect = document.getElementById('monedaSelect');
+  const monedaInicial = monedaSelect ? monedaSelect.value : 'NIO';
+  movimientoGrafico(monedaInicial);
+
+  if (monedaSelect) {
+    monedaSelect.addEventListener('change', function (e) {
+      movimientoGrafico(e.target.value);
+    });
+  }
 });
 
 function getChartOptions(legendFontColor) {
@@ -35,8 +46,8 @@ function getChartOptions(legendFontColor) {
   return baseOptions;
 }
 
-function movimientoGrafico() {
-  const url = base_url + 'cajas/movimientos';
+function movimientoGrafico(moneda) {
+  const url = base_url + 'cajas/movimientos?moneda=' + encodeURIComponent(moneda);
   const http = new XMLHttpRequest();
   http.open('GET', url, true);
   http.send();
@@ -46,11 +57,23 @@ function movimientoGrafico() {
       const darkMode = document.body.classList.contains('dark');
       const legendFontColor = darkMode ? '#ffffff' : '#343a40';
 
+      const badgeInicial = document.getElementById('badgeMonedaInicial');
+      const badgeSaldo = document.getElementById('badgeMonedaSaldo');
+      if (badgeInicial) {
+        badgeInicial.textContent = `${res.simbolo ?? ''} ${res.moneda_nombre ?? ''}`.trim();
+      }
+      if (badgeSaldo) {
+        badgeSaldo.textContent = `${res.simbolo ?? ''} ${res.moneda_nombre ?? ''}`.trim();
+      }
+
       // Monto inicial vs Egresos
       const canvasInicial = document.getElementById('inicialEgreso');
       canvasInicial.height = 400;
       const ctxInicial = canvasInicial.getContext('2d');
-      new Chart(ctxInicial, {
+      if (chartInicial) {
+        chartInicial.destroy();
+      }
+      chartInicial = new Chart(ctxInicial, {
         type: 'pie',
         data: {
           datasets: [
@@ -69,8 +92,8 @@ function movimientoGrafico() {
             }
           ],
           labels: [
-            'Monto inicial: ' + res.decimales.inicial,
-            'Egresos: ' + res.decimales.egreso
+            'Monto inicial: ' + res.simbolo + ' ' + res.decimales.inicial,
+            'Egresos: ' + res.simbolo + ' ' + res.decimales.egreso
           ]
         },
         options: getChartOptions(legendFontColor)
@@ -80,7 +103,10 @@ function movimientoGrafico() {
       const canvasIngreso = document.getElementById('ingresoSaldo');
       canvasIngreso.height = 400;
       const ctxIngreso = canvasIngreso.getContext('2d');
-      new Chart(ctxIngreso, {
+      if (chartIngreso) {
+        chartIngreso.destroy();
+      }
+      chartIngreso = new Chart(ctxIngreso, {
         type: 'pie',
         data: {
           datasets: [
@@ -99,8 +125,8 @@ function movimientoGrafico() {
             }
           ],
           labels: [
-            'Ingresos: ' + res.decimales.ingreso,
-            'Saldo: ' + res.decimales.saldo
+            'Ingresos: ' + res.simbolo + ' ' + res.decimales.ingreso,
+            'Saldo: ' + res.simbolo + ' ' + res.decimales.saldo
           ]
         },
         options: getChartOptions(legendFontColor)

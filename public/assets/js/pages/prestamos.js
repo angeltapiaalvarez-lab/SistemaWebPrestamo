@@ -7,6 +7,17 @@ const total_pagar = document.querySelector('#total_pagar');
 const interes_generado = document.querySelector('#interes_generado');
 const errorCliente = document.querySelector('#errorCliente');
 const cliente = document.querySelector('#cliente');
+const moneda = document.querySelector('#moneda');
+const symbolTargets = document.querySelectorAll('[data-symbol-target]');
+
+const obtenerSimbolo = (codigo) => (codigo === 'USD' ? '$' : 'C$');
+
+const actualizarSimbolos = (codigo) => {
+  const simbolo = obtenerSimbolo(codigo);
+  symbolTargets.forEach((elemento) => {
+    elemento.textContent = simbolo;
+  });
+};
 document.addEventListener('DOMContentLoaded', function(){
     $("#cliente").autocomplete({
         source: function( request, response ) {
@@ -44,6 +55,13 @@ document.addEventListener('DOMContentLoaded', function(){
             id_cliente.value = '';
         }
       });
+
+      if (moneda) {
+        actualizarSimbolos(moneda.value);
+        moneda.addEventListener('change', function(e){
+          actualizarSimbolos(e.target.value);
+        });
+      }
 
       //calcular importe
       importe_credito.addEventListener('keyup', function(e){

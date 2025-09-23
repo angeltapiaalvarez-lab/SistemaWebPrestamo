@@ -41,7 +41,12 @@ class AdminController extends BaseController
         $data['usuarios'] = $this->usuarios->where('estado', '1')->countAllResults();
         $data['clientes'] = $this->clientes->where('estado', '1')->countAllResults();
         $data['prestamos'] = $this->prestamos->where('estado', '1')->countAllResults();
-        $data['cajas'] = $this->cajas->calcularMovimientos($this->session->id_usuario);
+        $data['cajas'] = [];
+        foreach (currency_options() as $codigo => $nombre) {
+            $resumen = $this->cajas->calcularMovimientos($this->session->id_usuario, $codigo);
+            $resumen['nombre'] = $nombre;
+            $data['cajas'][$codigo] = $resumen;
+        }
         $data['active'] = 'dashboard';
         return view('admin/home', $data);
     }

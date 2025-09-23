@@ -24,6 +24,7 @@ Historial prestamos
                             #
                         </th>
                         <th>Cliente</th>
+                        <th>Moneda</th>
                         <th>Importe</th>
                         <th>Modalidad</th>
                         <th>F. venc.</th>

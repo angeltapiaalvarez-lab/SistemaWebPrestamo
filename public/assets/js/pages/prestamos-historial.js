@@ -52,7 +52,8 @@ document.addEventListener("DOMContentLoaded", function () {
           return data;
         },
       },
-      { data: "importe" },
+      { data: "moneda_label" },
+      { data: "importe_formateado" },
       { data: "modalidad" },
       { data: "vencimiento" },
       {

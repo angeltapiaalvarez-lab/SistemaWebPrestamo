@@ -17,6 +17,7 @@ Historial de pagos
                         <th>#</th>
                         <th>Prestamo</th>
                         <th>Cuota</th>
+                        <th>Moneda</th>
                         <th>Monto</th>
                         <th>Metodo</th>
                         <th>Usuario</th>

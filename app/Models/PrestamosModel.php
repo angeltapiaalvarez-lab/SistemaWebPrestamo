@@ -12,7 +12,7 @@ class PrestamosModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['importe', 'modalidad', 'tasa_interes', 'cuotas', 'fecha', 'fecha_venc', 'estado', 'id_cliente', 'id_usuario'];
+    protected $allowedFields    = ['importe', 'moneda', 'modalidad', 'tasa_interes', 'cuotas', 'fecha', 'fecha_venc', 'estado', 'id_cliente', 'id_usuario'];
 
     // Dates
     protected $useTimestamps = true;
@@ -30,6 +30,7 @@ class PrestamosModel extends Model
                 'required' => 'El importe credito es requerido'
             ],
         ],
+        'moneda' => 'required|in_list[NIO,USD]',
         'modalidad' => 'required',
         'tasa_interes' => 'required',
         'cuotas' => 'required',
