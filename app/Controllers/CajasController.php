@@ -73,6 +73,7 @@ class CajasController extends BaseController
                 'monto_inicial' => $this->request->getVar('monto'),
                 'fecha_apertura' => date('Y-m-d H:i:s'),
                 'moneda' => $moneda,
+                'estado' => '1',
                 'id_usuario' => $this->session->id_usuario
             ];
             $consulta = $this->cajas->where([
