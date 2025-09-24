@@ -43,6 +43,7 @@ class CajasController extends BaseController
                 'id_caja' => $this->request->getVar('id_caja'),
                 'monto_inicial' => $this->request->getVar('monto'),
                 'fecha_apertura' => date('Y-m-d H:i:s'),
+                'estado' => '1',
                 'id_usuario' => $this->session->id_usuario
             ];
             $consulta = $this->cajas->where([
@@ -85,7 +86,8 @@ class CajasController extends BaseController
         if ($this->request->is('put') && verificar('ver saldo', $this->session->permisos)) {
             $data = [
                 'id_caja' => $this->request->getVar('id_caja'),
-                'monto_inicial' => $this->request->getVar('monto')
+                'monto_inicial' => $this->request->getVar('monto'),
+                'estado' => '1'
             ];
 
             if ($this->cajas->update($id, $data) === false) {
