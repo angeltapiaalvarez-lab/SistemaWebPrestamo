@@ -3,8 +3,8 @@ if (!function_exists('currency_options')) {
     function currency_options(): array
     {
         return [
-            'NIO' => 'Córdobas nicaragüenses',
-            'USD' => 'Dólares estadounidenses',
+            'NIO' => 'Córdobas',
+            'USD' => 'Dólares',
         ];
     }
 }
