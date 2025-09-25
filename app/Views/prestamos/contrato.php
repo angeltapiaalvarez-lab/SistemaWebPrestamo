@@ -65,7 +65,7 @@
     <table id="container-cuotas">
         <thead>
             <tr>
-                <th class="text-left">#</th>
+                <th class="text-left">Cuotas</th>
                 <th class="text-left">Pago</th>
                 <th class="text-left">Interés</th>
                 <th class="text-left">Capital</th>

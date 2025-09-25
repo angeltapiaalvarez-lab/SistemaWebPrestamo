@@ -114,7 +114,7 @@ Detalle del prestamo
                     <table class="table table-striped align-middle">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
+                                <th scope="col">Cuotas</th>
                                 <th scope="col">Pago</th>
                                 <th scope="col">Interés</th>
                                 <th scope="col">Capital</th>
