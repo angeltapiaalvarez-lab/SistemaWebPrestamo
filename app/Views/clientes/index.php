@@ -19,12 +19,6 @@ if (verificar('nuevo cliente', $_SESSION['permisos'])) { ?>
                 <?php echo session()->getFlashdata('respuesta')['msg']; ?>
             </div>
         <?php } ?>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label>Buscar cliente</label>
-                <input type="text" id="buscarCliente" class="form-control" placeholder="Cédula o ID">
-            </div>
-        </div>
         <div class="table-responsive">
             <table class="table table-striped nowrap" id="tblClientes" style="width:100%">
                 <thead>
