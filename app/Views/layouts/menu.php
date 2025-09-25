@@ -38,7 +38,7 @@
             <li class="dropdown <?php echo ($active == 'dashboard') ? 'active' : ''; ?>">
                 <a href="<?php echo base_url('dashboard'); ?>" class="nav-link">
                     <i class="fa-solid fa-chart-pie mx-1"></i>
-                    <span>Dashboard</span></a>
+                    <span>Panel</span></a>
             </li>
             <?php if (
                 verificar('actualizar empresa', $_SESSION['permisos'])
@@ -57,7 +57,7 @@
                             <li><a class="nav-link <?php echo ($active == 'config') ? 'text-success' : ''; ?>" href="<?php echo base_url('admin'); ?>">Configuración</a></li>
                         <?php }
                         if (verificar('backup', $_SESSION['permisos'])) { ?>
-                            <li><a class="nav-link" href="<?php echo base_url('backup'); ?>">Backup</a></li>
+                            <li><a class="nav-link" href="<?php echo base_url('backup'); ?>">Respaldo</a></li>
                         <?php } ?>
                     </ul>
                 </li>
@@ -83,7 +83,7 @@
                 <li class="dropdown <?php echo ($active == 'prestamo') ? 'active' : ''; ?>">
                     <a href="#" class="menu-toggle nav-link has-dropdown">
                         <i class="fa-regular fa-credit-card mx-1"></i>
-                        <span>Prestamos</span></a>
+                        <span>Préstamos</span></a>
                     <ul class="dropdown-menu">
                         <?php if (verificar('nuevo prestamo', $_SESSION['permisos'])) { ?>
                             <li><a class="nav-link" href="<?php echo base_url('prestamos'); ?>">Nuevo</a></li>
@@ -116,8 +116,8 @@
                         <span>Reportes</span></a>
                     <ul class="dropdown-menu">
                         <?php if (verificar('abono prestamo', $_SESSION['permisos'])) { ?>
-                            <li><a class="nav-link <?php echo ($active == 'pago') ? 'text-success' : ''; ?>" href="<?php echo base_url('pagos'); ?>">Historial Pagos</a></li>
-                            <li><a class="nav-link <?php echo ($active == 'transaccion') ? 'text-success' : ''; ?>" href="<?php echo base_url('transacciones'); ?>">Historial Transacciones</a></li>
+                            <li><a class="nav-link <?php echo ($active == 'pago') ? 'text-success' : ''; ?>" href="<?php echo base_url('pagos'); ?>">Historial de pagos</a></li>
+                            <li><a class="nav-link <?php echo ($active == 'transaccion') ? 'text-success' : ''; ?>" href="<?php echo base_url('transacciones'); ?>">Historial de transacciones</a></li>
                         <?php }
                         if (verificar('pdf prestamos', $_SESSION['permisos']) || verificar('excel prestamos', $_SESSION['permisos'])) { ?>
                             <li><a class="nav-link <?php echo ($active == 'reportesHistorial') ? 'text-success' : ''; ?>" href="<?php echo base_url('reportes/historial'); ?>">Historial Préstamos</a></li>

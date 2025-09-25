@@ -30,7 +30,7 @@ if (verificar('nuevo cliente', $_SESSION['permisos'])) { ?>
                         <th>Identidad</th>
                         <th>N° identidad</th>
                         <th>Nombres</th>
-                        <th>Telefono</th>
+                        <th>Teléfono</th>
                         <th>Correo</th>
                         <th>Direccion</th>
                         <th>Prestamo activo</th>

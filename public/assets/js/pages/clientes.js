@@ -98,15 +98,15 @@ document.addEventListener('DOMContentLoaded', function(){
 
 function eliminarRegistro(form){
     const accion = form.getAttribute('data-accion');
-    const mensaje = accion === 'activar' ? 'Esta seguro de activar?' : 'Esta seguro de desactivar?';
+    const mensaje = accion === 'activar' ? '¿Está seguro de activar?' : '¿Está seguro de desactivar?';
     Swal.fire({
-        title: 'Mensaje?',
+        title: '¿Mensaje?',
         text: mensaje,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Continuar!'
+        confirmButtonText: '¡Sí, continuar!'
       }).then((result) => {
         if (result.isConfirmed) {
           form.submit();

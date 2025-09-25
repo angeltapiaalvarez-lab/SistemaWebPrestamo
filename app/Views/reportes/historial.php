@@ -42,7 +42,7 @@ Historial de préstamos
                             <th>Moneda</th>
                             <th>Importe</th>
                             <th>Modalidad</th>
-                            <th>Tasa interes</th>
+                            <th>Tasa de interés</th>
                             <th>F. vencimiento</th>
                         </tr>
                     </thead>

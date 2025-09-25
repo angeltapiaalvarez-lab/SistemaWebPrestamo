@@ -1,12 +1,12 @@
 <?= $this->extend('layouts/principal/main'); ?>
 <?= $this->section('title'); ?>
-login
+Iniciar sesión
 <?= $this->endSection('title'); ?>
 
 <?= $this->section('content'); ?>
 <div class="card card-primary">
   <div class="card-header">
-    <h4>Login</h4>
+    <h4>Iniciar sesión</h4>
   </div>
   <div class="card-body">
     <img src="<?php echo base_url('assets/img/logo.png'); ?>" class="img-fluid rounded-top" alt="LOGO" width="200">
@@ -18,7 +18,7 @@ login
     <form method="POST" action="<?= base_url('login'); ?>" autocomplete="off">
       <?= csrf_field() ?>
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="email">Correo electrónico</label>
         <input id="email" type="text" class="form-control" name="email" value="<?= set_value('email'); ?>" placeholder="Correo electrónico" tabindex="1" autofocus>
         <?php if (isset($validator)) { ?>
           <span class="text-danger"><?php echo $validator->getError('email'); ?></span>
@@ -26,10 +26,10 @@ login
       </div>
       <div class="form-group">
         <div class="d-block">
-          <label for="password" class="control-label">Password</label>
+          <label for="password" class="control-label">Contraseña</label>
           <div class="float-right">
             <a href="<?php echo base_url('forgot'); ?>" class="text-small">
-              Olvidaste tu contraseña?
+              ¿Olvidaste tu contraseña?
             </a>
           </div>
         </div>
@@ -46,7 +46,7 @@ login
       </div>
       <div class="form-group text-end">
         <button type="submit" class="btn btn-primary btn-lg" tabindex="4">
-          Login
+          Iniciar sesión
         </button>
       </div>
     </form>

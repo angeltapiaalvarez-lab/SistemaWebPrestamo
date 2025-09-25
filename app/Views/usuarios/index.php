@@ -27,7 +27,7 @@ if (verificar('nuevo usuario', $_SESSION['permisos'])) { ?>
                             #
                         </th>
                         <th>Nombre</th>
-                        <th>Telefono</th>
+                        <th>Teléfono</th>
                         <th>Correo</th>
                         <th>Direccion</th>
                         <th>Rol</th>

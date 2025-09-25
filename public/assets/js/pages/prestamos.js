@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function(){
         minLength: 2,
         select: function( event, ui ) {
             id_cliente.value = ui.item.id;
-            console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );
         }
       } );
 
@@ -66,12 +65,8 @@ document.addEventListener('DOMContentLoaded', function(){
       //calcular importe
       importe_credito.addEventListener('keyup', function(e){
         if (e.target.value != '') {
-            //validacion de interes
-            let interes = (tasa_interes.value == '' || tasa_interes.value < 1)
-             ? 0 : tasa_interes.value;
-            //validacion de cuotas
-            let cuotas_total = (cuotas.value == '' || cuotas.value < 0) 
-            ? 0 : cuotas.value;
+            const interes = Math.max(parseFloat(tasa_interes.value) || 0, 0);
+            const cuotas_total = Math.max(parseInt(cuotas.value, 10) || 0, 0);
             calcularTotal(e.target.value, cuotas_total, interes);
         } else {
             limpiarCampos()
@@ -81,12 +76,8 @@ document.addEventListener('DOMContentLoaded', function(){
       // calcular cuotas
       cuotas.addEventListener('change', function(e){
         if (e.target.value != '') {
-            //validacion de interes
-            let interes = (tasa_interes.value == '' || tasa_interes.value < 1)
-             ? 0 : tasa_interes.value;
-            //validacion de importe
-            let importe = (importe_credito.value == '' || importe_credito.value < 0) 
-            ? 0 : importe_credito.value;
+            const interes = Math.max(parseFloat(tasa_interes.value) || 0, 0);
+            const importe = Math.max(parseFloat(importe_credito.value) || 0, 0);
             calcularTotal(importe, e.target.value, interes);
         } else {
             limpiarCampos()
@@ -96,12 +87,8 @@ document.addEventListener('DOMContentLoaded', function(){
       // calcular interes
       tasa_interes.addEventListener('keyup', function(e){
         if (e.target.value != '') {
-            //validacion de cuotas
-            let cuotas_total = (cuotas.value == '' || cuotas.value < 0) 
-            ? 0 : cuotas.value;
-            //validacion de importe
-            let importe = (importe_credito.value == '' || importe_credito.value < 0) 
-            ? 0 : importe_credito.value;
+            const cuotas_total = Math.max(parseInt(cuotas.value, 10) || 0, 0);
+            const importe = Math.max(parseFloat(importe_credito.value) || 0, 0);
             calcularTotal(importe, cuotas_total, e.target.value);
         } else {
             limpiarCampos();
@@ -110,18 +97,28 @@ document.addEventListener('DOMContentLoaded', function(){
 })
 
 function calcularTotal(importe, cuotas, interes) {
-    let ganacia = parseFloat(importe) * (parseInt(interes) / 100);
-    //calcular importe por cuotas
-    let importeCuota = 0;
-    if (cuotas > 0) {
-        importeCuota = (parseFloat(importe) / parseInt(cuotas)) + (parseFloat(ganacia) / parseInt(cuotas));
-    }
-    //asignar el value en el input
-    importe_cuota.value = importeCuota.toFixed(2);
-    interes_generado.value = ganacia.toFixed(2);
+    const principal = Math.max(parseFloat(importe) || 0, 0);
+    const numeroCuotas = Math.max(parseInt(cuotas, 10) || 0, 0);
+    const tasa = Math.max(parseFloat(interes) || 0, 0) / 100;
 
-    const totalPagar = parseFloat(importe_cuota.value) * parseInt(cuotas);
+    if (principal <= 0 || numeroCuotas <= 0) {
+        limpiarCampos();
+        return;
+    }
+
+    let importeCuota = 0;
+    if (tasa > 0) {
+        importeCuota = principal * (tasa / (1 - Math.pow(1 + tasa, -numeroCuotas)));
+    } else {
+        importeCuota = principal / numeroCuotas;
+    }
+
+    const totalPagar = importeCuota * numeroCuotas;
+    const interesTotal = totalPagar - principal;
+
+    importe_cuota.value = importeCuota.toFixed(2);
     total_pagar.value = totalPagar.toFixed(2);
+    interes_generado.value = interesTotal.toFixed(2);
 }
 
 function limpiarCampos() {
