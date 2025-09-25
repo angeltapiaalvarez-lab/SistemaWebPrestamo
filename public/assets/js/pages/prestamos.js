@@ -18,6 +18,92 @@ const actualizarSimbolos = (codigo) => {
     elemento.textContent = simbolo;
   });
 };
+
+const redondear = (valor, precision = 2) => {
+  const factor = 10 ** precision;
+  return Math.round((Number.parseFloat(valor) || 0) * factor) / factor;
+};
+
+const calcularTablaAmortizacion = (principal, tasaPeriodo, cuotasTotales, precision = 2) => {
+  const principalNormalizado = Math.max(Number.parseFloat(principal) || 0, 0);
+  const cuotas = Math.max(Number.parseInt(cuotasTotales, 10) || 0, 0);
+  const tasa = Math.max(Number.parseFloat(tasaPeriodo) || 0, 0);
+
+  if (principalNormalizado <= 0 || cuotas === 0) {
+    return {
+      pago: 0,
+      total: 0,
+      interes: 0,
+    };
+  }
+
+  const pagoBase = tasa > 0
+    ? principalNormalizado * (tasa / (1 - Math.pow(1 + tasa, -cuotas)))
+    : principalNormalizado / cuotas;
+
+  const pagoRedondeado = redondear(pagoBase, precision);
+
+  let saldo = principalNormalizado;
+  let capitalAcumulado = 0;
+  let interesAcumulado = 0;
+  let totalPagos = 0;
+
+  for (let numero = 1; numero <= cuotas; numero++) {
+    const interesCuota = tasa > 0 ? saldo * tasa : 0;
+    let interesRedondeado = redondear(interesCuota, precision);
+    let capitalRedondeado = redondear(pagoRedondeado - interesRedondeado, precision);
+
+    if (capitalRedondeado < 0) {
+      capitalRedondeado = 0;
+    }
+
+    if (capitalRedondeado > saldo) {
+      capitalRedondeado = saldo;
+    }
+
+    let pagoCuota = pagoRedondeado;
+    if (numero === cuotas) {
+      capitalRedondeado = redondear(principalNormalizado - capitalAcumulado, precision);
+      if (capitalRedondeado < 0) {
+        capitalRedondeado = 0;
+      }
+      interesRedondeado = redondear(pagoRedondeado - capitalRedondeado, precision);
+      pagoCuota = redondear(capitalRedondeado + interesRedondeado, precision);
+      saldo = 0;
+    } else {
+      saldo = redondear(Math.max(saldo - capitalRedondeado, 0), precision);
+    }
+
+    capitalAcumulado = redondear(capitalAcumulado + capitalRedondeado, precision);
+    interesAcumulado = redondear(interesAcumulado + interesRedondeado, precision);
+    totalPagos = redondear(totalPagos + pagoCuota, precision);
+  }
+
+  return {
+    pago: pagoRedondeado,
+    total: totalPagos,
+    interes: interesAcumulado,
+  };
+};
+
+const recalcularImportes = () => {
+  const importe = Math.max(Number.parseFloat(importe_credito.value) || 0, 0);
+  const cuotasTotal = Math.max(Number.parseInt(cuotas.value, 10) || 0, 0);
+  const interes = Math.max(Number.parseFloat(tasa_interes.value) || 0, 0);
+
+  if (importe <= 0 || cuotasTotal <= 0) {
+    limpiarCampos();
+    return;
+  }
+
+  const tasaPeriodo = interes / 100;
+  const tabla = calcularTablaAmortizacion(importe, tasaPeriodo, cuotasTotal);
+
+  importe_cuota.value = tabla.pago.toFixed(2);
+  total_pagar.value = tabla.total.toFixed(2);
+  interes_generado.value = tabla.interes.toFixed(2);
+};
+
 document.addEventListener('DOMContentLoaded', function(){
     $("#cliente").autocomplete({
         source: function( request, response ) {
@@ -62,64 +148,23 @@ document.addEventListener('DOMContentLoaded', function(){
         });
       }
 
-      //calcular importe
-      importe_credito.addEventListener('keyup', function(e){
-        if (e.target.value != '') {
-            const interes = Math.max(parseFloat(tasa_interes.value) || 0, 0);
-            const cuotas_total = Math.max(parseInt(cuotas.value, 10) || 0, 0);
-            calcularTotal(e.target.value, cuotas_total, interes);
-        } else {
-            limpiarCampos()
+      const recalcularSiHayDatos = () => {
+        if (importe_credito.value !== '' && cuotas.value !== '') {
+          recalcularImportes();
         }
-      })
+      };
+
+      //calcular importe
+      importe_credito.addEventListener('input', recalcularSiHayDatos);
 
       // calcular cuotas
-      cuotas.addEventListener('change', function(e){
-        if (e.target.value != '') {
-            const interes = Math.max(parseFloat(tasa_interes.value) || 0, 0);
-            const importe = Math.max(parseFloat(importe_credito.value) || 0, 0);
-            calcularTotal(importe, e.target.value, interes);
-        } else {
-            limpiarCampos()
-        }
-      })
+      cuotas.addEventListener('change', recalcularSiHayDatos);
 
       // calcular interes
-      tasa_interes.addEventListener('keyup', function(e){
-        if (e.target.value != '') {
-            const cuotas_total = Math.max(parseInt(cuotas.value, 10) || 0, 0);
-            const importe = Math.max(parseFloat(importe_credito.value) || 0, 0);
-            calcularTotal(importe, cuotas_total, e.target.value);
-        } else {
-            limpiarCampos();
-        }
-      })
+      tasa_interes.addEventListener('input', recalcularSiHayDatos);
+
+      recalcularSiHayDatos();
 })
-
-function calcularTotal(importe, cuotas, interes) {
-    const principal = Math.max(parseFloat(importe) || 0, 0);
-    const numeroCuotas = Math.max(parseInt(cuotas, 10) || 0, 0);
-    const tasa = Math.max(parseFloat(interes) || 0, 0) / 100;
-
-    if (principal <= 0 || numeroCuotas <= 0) {
-        limpiarCampos();
-        return;
-    }
-
-    let importeCuota = 0;
-    if (tasa > 0) {
-        importeCuota = principal * (tasa / (1 - Math.pow(1 + tasa, -numeroCuotas)));
-    } else {
-        importeCuota = principal / numeroCuotas;
-    }
-
-    const totalPagar = importeCuota * numeroCuotas;
-    const interesTotal = totalPagar - principal;
-
-    importe_cuota.value = importeCuota.toFixed(2);
-    total_pagar.value = totalPagar.toFixed(2);
-    interes_generado.value = interesTotal.toFixed(2);
-}
 
 function limpiarCampos() {
     importe_cuota.value = '0.00';

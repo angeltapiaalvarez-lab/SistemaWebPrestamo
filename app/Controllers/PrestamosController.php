@@ -12,6 +12,8 @@ use App\Models\PagosModel;
 use App\Models\TransaccionesModel;
 
 // reference the Dompdf namespace
+use DateInterval;
+use DateTimeImmutable;
 use Dompdf\Dompdf;
 
 class PrestamosController extends BaseController
@@ -69,24 +71,19 @@ class PrestamosController extends BaseController
             if (!array_key_exists($moneda, currency_options())) {
                 $moneda = 'NIO';
             }
-            $fecha = date('Y-m-d');
-            //calcular vencimiento
-            if ($this->request->getVar('modalidad') === 'QUINCENAL') {
-                $fecha_venc = date('Y-m-d', strtotime($fecha . '+15 days'));
-            } else if ($this->request->getVar('modalidad') === 'MENSUAL') {
-                $fecha_venc = date('Y-m-d', strtotime($fecha . '+30 days'));
-            } else {
-                $fecha_venc = date('Y-m-d', strtotime($fecha . '+15 days'));
-            }
+            $fechaPrestamo = $this->obtenerFechaPrestamo();
+            $modalidad = (string) $this->request->getVar('modalidad');
+            $diaReferencia = (int) $fechaPrestamo->format('d');
+            $fechaVencimientoInicial = $this->calcularFechaVencimientoInicial($fechaPrestamo, $modalidad, $diaReferencia);
             $data = [
                 'cliente' => $this->request->getVar('cliente'),
                 'importe' => $this->request->getVar('importe_credito'),
                 'moneda' => $moneda,
-                'modalidad' => $this->request->getVar('modalidad'),
+                'modalidad' => $modalidad,
                 'tasa_interes' => $this->request->getVar('tasa_interes'),
                 'cuotas' => $this->request->getVar('cuotas'),
-                'fecha' => date('Y-m-d H:i:s'),
-                'fecha_venc' => $fecha_venc,
+                'fecha' => $fechaPrestamo->setTime((int) date('H'), (int) date('i'), (int) date('s'))->format('Y-m-d H:i:s'),
+                'fecha_venc' => $fechaVencimientoInicial->format('Y-m-d'),
                 'estado' => '1',
                 'id_cliente' => $this->request->getVar('id_cliente'),
                 'id_usuario' => $this->session->id_usuario
@@ -121,23 +118,22 @@ class PrestamosController extends BaseController
                             $totalCuotas
                         );
 
-                        $fechaCuota = $fecha_venc;
-                        foreach ($tablaAmortizacion['tabla'] as $detalleCuota) {
+                        $fechasCuotas = $this->generarFechasCuotas(
+                            $fechaVencimientoInicial,
+                            $modalidad,
+                            $totalCuotas,
+                            $diaReferencia
+                        );
+
+                        foreach ($tablaAmortizacion['tabla'] as $indice => $detalleCuota) {
+                            $fechaCuota = $fechasCuotas[$indice] ?? $fechaVencimientoInicial;
                             $this->detalle->insert([
                                 'cuota' => (int) $detalleCuota['cuota'],
-                                'fecha_venc' => $fechaCuota,
+                                'fecha_venc' => $fechaCuota->format('Y-m-d'),
                                 'importe_cuota' => (float) $detalleCuota['pago'],
                                 'id_prestamo' => $prestamo,
                                 'estado' => '1',
                             ]);
-
-                            if ($this->request->getVar('modalidad') === 'QUINCENAL') {
-                                $fechaCuota = date('Y-m-d', strtotime($fechaCuota . '+15 days'));
-                            } else if ($this->request->getVar('modalidad') === 'MENSUAL') {
-                                $fechaCuota = date('Y-m-d', strtotime($fechaCuota . '+30 days'));
-                            } else {
-                                $fechaCuota = date('Y-m-d', strtotime($fechaCuota . '+15 days'));
-                            }
                         }
 
                         $this->transacciones->insert([
@@ -599,5 +595,72 @@ class PrestamosController extends BaseController
         }else{
             return view('permisos');
         }
+    }
+
+    private function obtenerFechaPrestamo(): DateTimeImmutable
+    {
+        $fechaFormulario = $this->request->getVar('fecha');
+
+        if (!empty($fechaFormulario)) {
+            $fecha = DateTimeImmutable::createFromFormat('Y-m-d', $fechaFormulario);
+            if ($fecha instanceof DateTimeImmutable) {
+                return $fecha;
+            }
+        }
+
+        return new DateTimeImmutable(date('Y-m-d'));
+    }
+
+    private function calcularFechaVencimientoInicial(DateTimeImmutable $fechaPrestamo, string $modalidad, int $diaReferencia): DateTimeImmutable
+    {
+        if ($modalidad === 'MENSUAL') {
+            return $this->sumarMesManteniendoDia($fechaPrestamo, $diaReferencia);
+        }
+
+        if ($modalidad === 'QUINCENAL') {
+            return $fechaPrestamo->add(new DateInterval('P15D'));
+        }
+
+        return $fechaPrestamo->add(new DateInterval('P15D'));
+    }
+
+    /**
+     * @return DateTimeImmutable[]
+     */
+    private function generarFechasCuotas(DateTimeImmutable $fechaInicial, string $modalidad, int $totalCuotas, int $diaReferencia): array
+    {
+        $fechas = [];
+        $fechaCuota = $fechaInicial;
+
+        for ($numero = 1; $numero <= $totalCuotas; $numero++) {
+            $fechas[] = $fechaCuota;
+
+            if ($modalidad === 'MENSUAL') {
+                $fechaCuota = $this->sumarMesManteniendoDia($fechaCuota, $diaReferencia);
+            } else {
+                $fechaCuota = $fechaCuota->add(new DateInterval('P15D'));
+            }
+        }
+
+        return $fechas;
+    }
+
+    private function sumarMesManteniendoDia(DateTimeImmutable $fechaBase, int $diaReferencia): DateTimeImmutable
+    {
+        $fechaPrimerDia = $fechaBase->setDate(
+            (int) $fechaBase->format('Y'),
+            (int) $fechaBase->format('m'),
+            1
+        );
+
+        $fechaProximoMes = $fechaPrimerDia->add(new DateInterval('P1M'));
+        $ultimoDiaMes = (int) $fechaProximoMes->format('t');
+        $diaFinal = min($diaReferencia, $ultimoDiaMes);
+
+        return $fechaProximoMes->setDate(
+            (int) $fechaProximoMes->format('Y'),
+            (int) $fechaProximoMes->format('m'),
+            $diaFinal
+        );
     }
 }
