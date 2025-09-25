@@ -20,13 +20,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function cambiarEstado(form) {
   Swal.fire({
-    title: "Mensaje?",
-    text: "Esta seguro de que desea realizar el pago!",
+    title: "¿Mensaje?",
+    text: "¿Está seguro de que desea realizar el pago?",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Si!",
+    confirmButtonText: "¡Sí!",
   }).then((result) => {
     if (result.isConfirmed) {
       form.submit();

@@ -120,13 +120,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function eliminarRegistro(form) {
   Swal.fire({
-    title: "Mensaje?",
-    text: "Esta seguro de eliminar!",
+    title: "¿Mensaje?",
+    text: "¿Está seguro de eliminar?",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Eliminar!",
+    confirmButtonText: "¡Sí, eliminar!",
   }).then((result) => {
     if (result.isConfirmed) {
       form.submit();

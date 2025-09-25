@@ -6,7 +6,7 @@ Detalle del prestamo
 <?= $this->section('content'); ?>
 <div class="card">
     <div class="card-header">
-        <h4>Detalle del prestamo</h4>
+        <h4>Detalle del préstamo</h4>
     </div>
     <div class="card-body">
         <?php
@@ -73,16 +73,53 @@ Detalle del prestamo
                 </div>
             </div>
             <div class="col-lg-12">
-                <div class="mb-3">
-                    <a href="<?php echo base_url('prestamos/' . $prestamo['id'] . '/reporte'); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Estado de Cuenta</a>
+                <div class="mb-3 d-flex flex-wrap gap-2">
+                    <a href="<?php echo base_url('prestamos/' . $prestamo['id'] . '/reporte'); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Estado de cuenta</a>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="card-body">
+                                <span class="text-muted text-uppercase small">Total del préstamo</span>
+                                <p class="h5 mb-0"><?php echo format_currency($total_programado ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="card-body">
+                                <span class="text-muted text-uppercase small">Interés total</span>
+                                <p class="h5 mb-0"><?php echo format_currency($total_interes_programado ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="card-body">
+                                <span class="text-muted text-uppercase small">Pagado</span>
+                                <p class="h5 mb-0"><?php echo format_currency($total_pagado ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="card-body">
+                                <span class="text-muted text-uppercase small">Saldo pendiente</span>
+                                <p class="h5 mb-0"><?php echo format_currency($total_restante ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-striped align-middle">
                         <thead>
                             <tr>
-                                <th scope="col">Cuotas</th>
+                                <th scope="col">#</th>
+                                <th scope="col">Pago</th>
+                                <th scope="col">Interés</th>
+                                <th scope="col">Capital</th>
+                                <th scope="col">Saldo pendiente</th>
                                 <th scope="col">Vencimiento</th>
-                                <th scope="col">Importe x cuota</th>
                                 <th scope="col">Estado</th>
                                 <th scope="col">Abono</th>
                             </tr>
@@ -104,18 +141,23 @@ Detalle del prestamo
                                         $estado = '<span class="badge badge-success">PAGADO</span>';
                                     }
                                 }
+
+                                $desglose = $detalle['desglose'] ?? [];
+                                $pagoProgramado = (float) ($desglose['pago'] ?? $detalle['importe_cuota'] ?? 0);
+                                $interesCuota = (float) ($desglose['interes'] ?? 0);
+                                $capitalCuota = (float) ($desglose['capital'] ?? ($pagoProgramado - $interesCuota));
+                                $saldoPendiente = (float) ($desglose['saldo'] ?? 0);
                             ?>
                                 <tr class="<?php echo $class; ?>">
-                                    <td scope="row">
-                                        <button type="button" class="btn btn-outline-secondary">
-                                            Cuota <span class="badge badge-transparent text-dark"><?php echo $detalle['cuota']; ?></span>
-                                        </button>
+                                    <td>
+                                        <span class="badge bg-secondary">Cuota <?php echo $detalle['cuota']; ?></span>
                                     </td>
-                                    <td scope="row"><?php echo fechaPerzo($detalle['fecha_venc']); ?></td>
-                                <td scope="row">
-                                        <span class="badge badge-success text-dark"><?php echo format_currency($detalle['importe_cuota'], $prestamo['moneda'] ?? 'NIO'); ?></span>
-                                    </td>
-                                    <td scope="row"><?php echo $estado; ?></td>
+                                    <td><?php echo format_currency($pagoProgramado, $prestamo['moneda'] ?? 'NIO'); ?></td>
+                                    <td><?php echo format_currency($interesCuota, $prestamo['moneda'] ?? 'NIO'); ?></td>
+                                    <td><?php echo format_currency($capitalCuota, $prestamo['moneda'] ?? 'NIO'); ?></td>
+                                    <td><?php echo format_currency($saldoPendiente, $prestamo['moneda'] ?? 'NIO'); ?></td>
+                                    <td><?php echo fechaPerzo($detalle['fecha_venc']); ?></td>
+                                    <td><?php echo $estado; ?></td>
                                     <td>
                                         <?php if ($detalle['estado'] == 1) { ?>
                                             <form action="<?php echo base_url('prestamos/' . $detalle['id']); ?>" method="post" class="formEstado">
@@ -135,18 +177,9 @@ Detalle del prestamo
                                     </td>
                                 </tr>
                             <?php } ?>
-                            <tr>
-                                <td colspan="3" class="text-end">
-                                    <h3>Total <?php echo format_currency($total_restante ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></h3>
-                                </td>
-                                <td colspan="2"></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
-
-
-
             </div>
         </div>
     </div>
@@ -159,7 +192,7 @@ Detalle del prestamo
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="formModal">Mensaje</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>

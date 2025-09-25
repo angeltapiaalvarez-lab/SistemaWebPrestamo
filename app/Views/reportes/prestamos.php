@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -17,7 +17,7 @@
             <td class="info-empresa">
                 <p><?php echo $empresa['nombre']; ?></p>
                 <p><?php echo $empresa['identidad']; ?></p>
-                <p>Telefono: <?php echo $empresa['telefono']; ?></p>
+                <p>Teléfono: <?php echo $empresa['telefono']; ?></p>
                 <p>Dirección: <?php echo $empresa['direccion']; ?></p>
             </td>
             <td class="info-fecha">
@@ -41,7 +41,7 @@
                 <th class="text-left">Moneda</th>
                 <th class="text-left">Importe</th>
                 <th class="text-left">Modalidad</th>
-                <th class="text-left">Tasa interes</th>
+                <th class="text-left">Tasa de interés</th>
                 <th class="text-left">F. vencimiento</th>
             </tr>
         </thead>

@@ -48,7 +48,7 @@ Datos de la empresa
                     <?php } ?>
                 </div>
                 <div class="form-group col-lg-4">
-                    <label>Tasa interes <span class="text-danger">*</span></label>
+                    <label>Tasa de interés <span class="text-danger">*</span></label>
                     <input type="number" name="tasa_interes" class="form-control" value="<?php echo set_value('tasa_interes', $admin['tasa_interes']); ?>" placeholder="0">
                     <?php if (!empty($errors['tasa_interes'])) { ?>
                         <span class="text-danger"><?php echo $errors['tasa_interes']; ?></span>

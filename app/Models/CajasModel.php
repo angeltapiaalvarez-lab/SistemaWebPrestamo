@@ -55,23 +55,57 @@ class CajasModel extends Model
             'moneda' => $moneda,
         ])->first();
 
+        helper('prestamo');
+
         $detPrestamo = new DetPrestamoModel();
         $detalles = $detPrestamo
-            ->select('detalle_prestamos.importe_cuota, detalle_prestamos.estado, p.importe, p.cuotas')
+            ->select('detalle_prestamos.id_prestamo, detalle_prestamos.cuota, detalle_prestamos.importe_cuota, detalle_prestamos.estado, p.importe, p.cuotas, p.tasa_interes')
             ->join('prestamos AS p', 'detalle_prestamos.id_prestamo = p.id')
             ->where('p.id_usuario', $id_usuario)
             ->where('p.estado !=', '0')
             ->where('p.moneda', $moneda)
             ->findAll();
 
-        $capital = 0;
-        $interes = 0;
+        $capital = 0.0;
+        $interes = 0.0;
+
+        $prestamosAgrupados = [];
         foreach ($detalles as $detalle) {
-            if ($detalle['estado'] == 0) {
-                $capitalCuota  = $detalle['importe'] / $detalle['cuotas'];
-                $interesCuota  = $detalle['importe_cuota'] - $capitalCuota;
-                $capital      += $capitalCuota;
-                $interes      += $interesCuota;
+            $idPrestamo = (int) ($detalle['id_prestamo'] ?? 0);
+            if (!isset($prestamosAgrupados[$idPrestamo])) {
+                $prestamosAgrupados[$idPrestamo] = [
+                    'prestamo' => [
+                        'importe' => (float) ($detalle['importe'] ?? 0),
+                        'cuotas' => (int) ($detalle['cuotas'] ?? 0),
+                        'tasa_interes' => (float) ($detalle['tasa_interes'] ?? 0),
+                    ],
+                    'cuotas' => [],
+                ];
+            }
+            $prestamosAgrupados[$idPrestamo]['cuotas'][] = $detalle;
+        }
+
+        foreach ($prestamosAgrupados as $infoPrestamo) {
+            $prestamoInfo = $infoPrestamo['prestamo'];
+            $tabla = generarTablaAmortizacionFrancesa(
+                (float) ($prestamoInfo['importe'] ?? 0),
+                ((float) ($prestamoInfo['tasa_interes'] ?? 0)) / 100,
+                (int) ($prestamoInfo['cuotas'] ?? 0)
+            );
+
+            $mapaCuotas = [];
+            foreach ($tabla['tabla'] as $fila) {
+                $mapaCuotas[(int) $fila['cuota']] = $fila;
+            }
+
+            foreach ($infoPrestamo['cuotas'] as $detalleCuota) {
+                if (($detalleCuota['estado'] ?? 1) == 0) {
+                    $numeroCuota = (int) ($detalleCuota['cuota'] ?? 0);
+                    if (isset($mapaCuotas[$numeroCuota])) {
+                        $capital += (float) ($mapaCuotas[$numeroCuota]['capital'] ?? 0);
+                        $interes += (float) ($mapaCuotas[$numeroCuota]['interes'] ?? 0);
+                    }
+                }
             }
         }
 

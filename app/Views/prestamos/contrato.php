@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -17,7 +17,7 @@
             <td class="info-empresa">
                 <p><?php echo $empresa['nombre']; ?></p>
                 <p><?php echo $empresa['identidad']; ?></p>
-                <p>Telefono: <?php echo $empresa['telefono']; ?></p>
+                <p>Teléfono: <?php echo $empresa['telefono']; ?></p>
                 <p>Dirección: <?php echo $empresa['direccion']; ?></p>
             </td>
             <td class="info-fecha">
@@ -65,19 +65,19 @@
     <table id="container-cuotas">
         <thead>
             <tr>
-                <th class="text-left">Item</th>
-                <th class="text-left">Cuota</th>
+                <th class="text-left">#</th>
+                <th class="text-left">Pago</th>
+                <th class="text-left">Interés</th>
+                <th class="text-left">Capital</th>
+                <th class="text-left">Saldo pendiente</th>
                 <th class="text-left">Vencimiento</th>
-                <th class="text-left">Importe x cuota</th>
                 <th class="text-left">Estado</th>
             </tr>
         </thead>
         <tbody>
             <?php $item = 1;
-            $total = 0;
             $date = date('Y-m-d');
             foreach ($detalles as $detalle) {
-                $total += $detalle['importe_cuota'];
                 $estado = '<span class="text-danger">PENDIENTE</span>';
                 if ($date > $detalle['fecha_venc'] && $detalle['estado'] == 1) {
                     $class = 'bg-danger';
@@ -91,21 +91,30 @@
                         $estado = '<span class="text-success">PAGADO</span>';
                     }
                 }
+
+                $desglose = $detalle['desglose'] ?? [];
+                $pagoProgramado = (float) ($desglose['pago'] ?? $detalle['importe_cuota'] ?? 0);
+                $interesCuota = (float) ($desglose['interes'] ?? 0);
+                $capitalCuota = (float) ($desglose['capital'] ?? ($pagoProgramado - $interesCuota));
+                $saldoPendiente = (float) ($desglose['saldo'] ?? 0);
             ?>
                 <tr class="<?php echo $class; ?>">
-                    <td><?php echo $item; ?></td>
-                    <td>Cuota <?php echo $detalle['cuota']; ?></td>
+                    <td><?php echo $item; ?> (Cuota <?php echo $detalle['cuota']; ?>)</td>
+                    <td><?php echo format_currency($pagoProgramado, $prestamo['moneda'] ?? 'NIO'); ?></td>
+                    <td><?php echo format_currency($interesCuota, $prestamo['moneda'] ?? 'NIO'); ?></td>
+                    <td><?php echo format_currency($capitalCuota, $prestamo['moneda'] ?? 'NIO'); ?></td>
+                    <td><?php echo format_currency($saldoPendiente, $prestamo['moneda'] ?? 'NIO'); ?></td>
                     <td><?php echo fechaPerzo($detalle['fecha_venc']); ?></td>
-                    <td><?php echo format_currency($detalle['importe_cuota'], $prestamo['moneda'] ?? 'NIO'); ?></td>
                     <td><?php echo $estado; ?></td>
                 </tr>
             <?php $item++;
             } ?>
             <tr>
-                <td colspan="4" class="text-right">
-                    <h3>Total <?php echo format_currency($total, $prestamo['moneda'] ?? 'NIO'); ?></h3>
-                </td>
-                <td></td>
+                <td colspan="2" class="text-right"><strong>Total programado:</strong> <?php echo format_currency($total_programado ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></td>
+                <td><strong>Interés:</strong> <?php echo format_currency($total_interes_programado ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></td>
+                <td><strong>Capital:</strong> <?php echo format_currency(($prestamo['importe'] ?? 0), $prestamo['moneda'] ?? 'NIO'); ?></td>
+                <td><strong>Saldo:</strong> <?php echo format_currency($total_restante ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></td>
+                <td colspan="2"></td>
             </tr>
         </tbody>
     </table>

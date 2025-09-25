@@ -18,7 +18,7 @@ Olvidaste tu contraseña
         <form method="POST" action="<?= base_url('reset'); ?>" autocomplete="off">
             <?= csrf_field() ?>
             <div class="form-group">
-                <label for="email">Email</label>
+                <label for="email">Correo electrónico</label>
                 <input id="email" type="text" class="form-control" name="email" value="<?= set_value('email'); ?>" placeholder="Correo electrónico" tabindex="1" autofocus>
                 <?php if (isset($validator)) { ?>
                     <span class="text-danger"><?php echo $validator->getError('email'); ?></span>

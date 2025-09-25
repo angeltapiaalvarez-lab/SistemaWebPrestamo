@@ -20,7 +20,7 @@ class PrestamosController extends BaseController
         $detalle, $session, $reglas, $cajas, $pagos, $transacciones;
     public function __construct()
     {
-        helper(['form', 'fecha', 'email']);
+        helper(['form', 'fecha', 'email', 'prestamo']);
         $this->empresa = new AdminModel();
         $this->clientes = new ClientesModel();
         $this->prestamos = new PrestamosModel();
@@ -111,31 +111,32 @@ class PrestamosController extends BaseController
                     }
                     $prestamo = $this->prestamos->getInsertID();
                     if ($prestamo > 0) {
-                        //calcular ganancia
-                        $ganancia = $this->request->getVar('importe_credito')
-                            * ($this->request->getVar('tasa_interes') / 100);
-                        //calcular importe cuota
-                        $importe_cuota = ($this->request->getVar('importe_credito')
-                            / $this->request->getVar('cuotas'))
-                            + ($ganancia / $this->request->getVar('cuotas'));
+                        $importeCredito = (float) $this->request->getVar('importe_credito');
+                        $totalCuotas = (int) $this->request->getVar('cuotas');
+                        $tasaPeriodo = ((float) $this->request->getVar('tasa_interes')) / 100;
 
-                        for ($i = 1; $i <= $this->request->getVar('cuotas'); $i++) {
-                            $presDetalle = $this->detalle->insert([
-                                'cuota' => $i,
-                                'fecha_venc' => $fecha_venc,
-                                'importe_cuota' => $importe_cuota,
+                        $tablaAmortizacion = generarTablaAmortizacionFrancesa(
+                            $importeCredito,
+                            $tasaPeriodo,
+                            $totalCuotas
+                        );
+
+                        $fechaCuota = $fecha_venc;
+                        foreach ($tablaAmortizacion['tabla'] as $detalleCuota) {
+                            $this->detalle->insert([
+                                'cuota' => (int) $detalleCuota['cuota'],
+                                'fecha_venc' => $fechaCuota,
+                                'importe_cuota' => (float) $detalleCuota['pago'],
                                 'id_prestamo' => $prestamo,
                                 'estado' => '1',
                             ]);
-                            //consulta de vencimiento
-                            $consulta = $this->detalle->where('id', $presDetalle)->first();
-                            //calcular vencimiento
+
                             if ($this->request->getVar('modalidad') === 'QUINCENAL') {
-                                $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+15 days'));
+                                $fechaCuota = date('Y-m-d', strtotime($fechaCuota . '+15 days'));
                             } else if ($this->request->getVar('modalidad') === 'MENSUAL') {
-                                $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+30 days'));
+                                $fechaCuota = date('Y-m-d', strtotime($fechaCuota . '+30 days'));
                             } else {
-                                $fecha_venc = date('Y-m-d', strtotime($consulta['fecha_venc'] . '+15 days'));
+                                $fechaCuota = date('Y-m-d', strtotime($fechaCuota . '+15 days'));
                             }
                         }
 
@@ -188,7 +189,17 @@ class PrestamosController extends BaseController
         $data['moneda_simbolo'] = currency_symbol($monedaPrestamo);
         $data['moneda_nombre'] = currency_name($monedaPrestamo);
 
-        $data['detalles'] = $this->detalle->where('id_prestamo', $id)->findAll();
+        $detalles = $this->detalle
+            ->where('id_prestamo', $id)
+            ->orderBy('cuota', 'ASC')
+            ->findAll();
+
+        $amortizacionData = $this->obtenerAmortizacionDetallada($data['prestamo'], $detalles);
+
+        $data['detalles'] = $amortizacionData['detalles'];
+        $data['amortizacion'] = $amortizacionData['amortizacion'];
+        $totalCuotasProgramado = $amortizacionData['total_programado'];
+        $data['total_interes_programado'] = $amortizacionData['total_interes'];
         $data['pagos'] = $this->pagos
             ->select('pagos.*, d.cuota, p.moneda AS moneda')
             ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
@@ -203,9 +214,7 @@ class PrestamosController extends BaseController
             return $pago;
         }, $data['pagos']);
 
-        $totalCuotas = array_reduce($data['detalles'], static function ($carry, $detalle) {
-            return $carry + (float) ($detalle['importe_cuota'] ?? 0);
-        }, 0);
+        $totalCuotas = $totalCuotasProgramado;
 
         $totalPagado = $this->pagos
             ->selectSum('monto')
@@ -215,7 +224,9 @@ class PrestamosController extends BaseController
 
         $pagado = isset($totalPagado['monto']) ? (float) $totalPagado['monto'] : 0.0;
 
-        $data['total_restante'] = max(0, $totalCuotas - $pagado);
+        $data['total_programado'] = $totalCuotasProgramado;
+        $data['total_pagado'] = $pagado;
+        $data['total_restante'] = max(0, $totalCuotasProgramado - $pagado);
         $data['active'] = 'prestamo';
         return view('prestamos/detail', $data);
     }
@@ -235,7 +246,26 @@ class PrestamosController extends BaseController
         $data['moneda_simbolo'] = currency_symbol($monedaPrestamo);
         $data['moneda_nombre'] = currency_name($monedaPrestamo);
 
-        $data['detalles'] = $this->detalle->where('id_prestamo', $id)->findAll();
+        $detallesReporte = $this->detalle
+            ->where('id_prestamo', $id)
+            ->orderBy('cuota', 'ASC')
+            ->findAll();
+
+        $amortizacionReporte = $this->obtenerAmortizacionDetallada($data['prestamo'], $detallesReporte);
+        $data['detalles'] = $amortizacionReporte['detalles'];
+        $data['amortizacion'] = $amortizacionReporte['amortizacion'];
+        $data['total_programado'] = $amortizacionReporte['total_programado'];
+        $data['total_interes_programado'] = $amortizacionReporte['total_interes'];
+
+        $totalPagadoReporte = $this->pagos
+            ->selectSum('monto')
+            ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
+            ->where('d.id_prestamo', $id)
+            ->first();
+
+        $pagadoReporte = isset($totalPagadoReporte['monto']) ? (float) $totalPagadoReporte['monto'] : 0.0;
+        $data['total_pagado'] = $pagadoReporte;
+        $data['total_restante'] = max(0, $amortizacionReporte['total_programado'] - $pagadoReporte);
         $data['empresa'] = $this->empresa->first();
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
@@ -490,6 +520,59 @@ class PrestamosController extends BaseController
             echo json_encode($data, JSON_UNESCAPED_UNICODE);
             die();
         }
+    }
+
+    private function obtenerAmortizacionDetallada(array $prestamo, array $detalles): array
+    {
+        $importePrestamo = (float) ($prestamo['importe'] ?? 0);
+        $totalCuotasPrestamo = (int) ($prestamo['cuotas'] ?? 0);
+        $tasaPeriodoPrestamo = ((float) ($prestamo['tasa_interes'] ?? 0)) / 100;
+
+        $tablaAmortizacion = generarTablaAmortizacionFrancesa(
+            $importePrestamo,
+            $tasaPeriodoPrestamo,
+            $totalCuotasPrestamo
+        );
+
+        $mapaAmortizacion = [];
+        foreach ($tablaAmortizacion['tabla'] as $detalleAmortizacion) {
+            $mapaAmortizacion[(int) $detalleAmortizacion['cuota']] = $detalleAmortizacion;
+        }
+
+        foreach ($detalles as $index => $detalle) {
+            $numeroCuota = (int) ($detalle['cuota'] ?? 0);
+            if (isset($mapaAmortizacion[$numeroCuota])) {
+                $pagoProgramado = (float) ($mapaAmortizacion[$numeroCuota]['pago'] ?? 0);
+                if (abs(((float) ($detalle['importe_cuota'] ?? 0)) - $pagoProgramado) >= 0.01) {
+                    $this->detalle->update($detalle['id'], ['importe_cuota' => $pagoProgramado]);
+                    $detalles[$index]['importe_cuota'] = $pagoProgramado;
+                }
+                $detalles[$index]['desglose'] = $mapaAmortizacion[$numeroCuota];
+            }
+        }
+
+        $totalProgramado = array_reduce(
+            $tablaAmortizacion['tabla'],
+            static function ($carry, $detalleAmortizacion) {
+                return $carry + (float) ($detalleAmortizacion['pago'] ?? 0);
+            },
+            0.0
+        );
+
+        $totalInteres = array_reduce(
+            $tablaAmortizacion['tabla'],
+            static function ($carry, $detalleAmortizacion) {
+                return $carry + (float) ($detalleAmortizacion['interes'] ?? 0);
+            },
+            0.0
+        );
+
+        return [
+            'detalles' => $detalles,
+            'amortizacion' => $tablaAmortizacion['tabla'],
+            'total_programado' => $totalProgramado,
+            'total_interes' => $totalInteres,
+        ];
     }
 
     public function delete($id)

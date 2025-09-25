@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -17,7 +17,7 @@
             <td class="info-empresa">
                 <p><?php echo $empresa['nombre']; ?></p>
                 <p><?php echo $empresa['identidad']; ?></p>
-                <p>Telefono: <?php echo $empresa['telefono']; ?></p>
+                <p>Teléfono: <?php echo $empresa['telefono']; ?></p>
                 <p>Dirección: <?php echo $empresa['direccion']; ?></p>
             </td>
             <td class="info-fecha">
