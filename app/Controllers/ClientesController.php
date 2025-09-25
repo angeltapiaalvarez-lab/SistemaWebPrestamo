@@ -155,6 +155,20 @@ class ClientesController extends BaseController
                 ]);
             }
             $nuevoEstado = ($cliente['estado'] == 1) ? 0 : 1;
+
+            if ($nuevoEstado === 0) {
+                $tienePrestamoActivo = $this->prestamos
+                    ->where('id_cliente', $idCliente)
+                    ->where('estado', '1')
+                    ->countAllResults();
+
+                if ($tienePrestamoActivo > 0) {
+                    return redirect()->to(base_url('clientes'))->with('respuesta', [
+                        'type' => 'warning',
+                        'msg' => 'EL CLIENTE TIENE UN PRÉSTAMO ACTIVO',
+                    ]);
+                }
+            }
             $data = $this->clientes->update($idCliente, ['estado' => $nuevoEstado]);
             if ($data) {
                 $accion = ($nuevoEstado == 1) ? 'ACTIVAR' : 'ELIMINAR';

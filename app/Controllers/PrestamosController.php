@@ -195,7 +195,8 @@ class PrestamosController extends BaseController
         $data['detalles'] = $amortizacionData['detalles'];
         $data['amortizacion'] = $amortizacionData['amortizacion'];
         $totalCuotasProgramado = $amortizacionData['total_programado'];
-        $data['total_interes_programado'] = $amortizacionData['total_interes'];
+        $totalInteresProgramado = $amortizacionData['total_interes'];
+        $data['total_interes_programado'] = $totalInteresProgramado;
         $data['pagos'] = $this->pagos
             ->select('pagos.*, d.cuota, p.moneda AS moneda')
             ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
@@ -220,9 +221,16 @@ class PrestamosController extends BaseController
 
         $pagado = isset($totalPagado['monto']) ? (float) $totalPagado['monto'] : 0.0;
 
+        $totalPrestamo = isset($data['prestamo']['importe']) ? (float) $data['prestamo']['importe'] : 0.0;
+        $totalAPagar = $totalPrestamo + $totalInteresProgramado;
+        $saldoPendientePrestamo = max(0, $totalPrestamo - $pagado);
+
         $data['total_programado'] = $totalCuotasProgramado;
         $data['total_pagado'] = $pagado;
         $data['total_restante'] = max(0, $totalCuotasProgramado - $pagado);
+        $data['total_prestamo'] = $totalPrestamo;
+        $data['total_a_pagar'] = $totalAPagar;
+        $data['saldo_pendiente_prestamo'] = $saldoPendientePrestamo;
         $data['active'] = 'prestamo';
         return view('prestamos/detail', $data);
     }

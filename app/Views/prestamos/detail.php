@@ -77,15 +77,23 @@ Detalle del prestamo
                     <a href="<?php echo base_url('prestamos/' . $prestamo['id'] . '/reporte'); ?>" target="_blank" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Estado de cuenta</a>
                 </div>
                 <div class="row g-3 mb-3">
-                    <div class="col-sm-6 col-lg-3">
+                    <div class="col-sm-6 col-xl">
                         <div class="card h-100 shadow-sm border-0">
                             <div class="card-body">
-                                <span class="text-muted text-uppercase small">Total del préstamo</span>
-                                <p class="h5 mb-0"><?php echo format_currency($total_programado ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></p>
+                                <span class="text-muted text-uppercase small">Total a pagar</span>
+                                <p class="h5 mb-0"><?php echo format_currency($total_a_pagar ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3">
+                    <div class="col-sm-6 col-xl">
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="card-body">
+                                <span class="text-muted text-uppercase small">Total préstamo</span>
+                                <p class="h5 mb-0"><?php echo format_currency($total_prestamo ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl">
                         <div class="card h-100 shadow-sm border-0">
                             <div class="card-body">
                                 <span class="text-muted text-uppercase small">Interés total</span>
@@ -93,7 +101,7 @@ Detalle del prestamo
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3">
+                    <div class="col-sm-6 col-xl">
                         <div class="card h-100 shadow-sm border-0">
                             <div class="card-body">
                                 <span class="text-muted text-uppercase small">Pagado</span>
@@ -101,11 +109,11 @@ Detalle del prestamo
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3">
+                    <div class="col-sm-6 col-xl">
                         <div class="card h-100 shadow-sm border-0">
                             <div class="card-body">
                                 <span class="text-muted text-uppercase small">Saldo pendiente</span>
-                                <p class="h5 mb-0"><?php echo format_currency($total_restante ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></p>
+                                <p class="h5 mb-0"><?php echo format_currency($saldo_pendiente_prestamo ?? 0, $prestamo['moneda'] ?? 'NIO'); ?></p>
                             </div>
                         </div>
                     </div>
