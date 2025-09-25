@@ -16,7 +16,7 @@
             </td>
             <td class="info-empresa">
                 <p><?php echo $empresa['nombre']; ?></p>
-                <p><?php echo $empresa['identidad']; ?></p>
+                <p>RUC: <?php echo $empresa['identidad']; ?></p>
                 <p>Teléfono: <?php echo $empresa['telefono']; ?></p>
                 <p>Dirección: <?php echo $empresa['direccion']; ?></p>
             </td>
