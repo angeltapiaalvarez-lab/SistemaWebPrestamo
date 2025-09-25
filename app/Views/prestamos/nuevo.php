@@ -111,7 +111,7 @@ Nuevo prestamo
                     </div>
                     <div class="form-group">
                         <label>Fecha</label>
-                        <input type="date" id="fecha" name="fecha" value="<?php echo date('Y-m-d'); ?>" class="form-control" value="<?php echo set_value('fecha'); ?>" readonly>
+                        <input type="date" id="fecha" name="fecha" value="<?= set_value('fecha', date('Y-m-d')); ?>" class="form-control" readonly>
                     </div>
                 </div>
             </div>
