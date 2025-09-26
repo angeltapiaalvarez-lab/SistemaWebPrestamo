@@ -5,15 +5,17 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\AdminModel;
 use App\Models\UsuariosModel;
+use App\Models\TransaccionesModel;
 
 class LoginController extends BaseController
 {
-    private $reglas, $usuarios, $session;
+    private $reglas, $usuarios, $transacciones, $session;
 
     public function __construct()
     {
         helper(['form', 'email']);
         $this->usuarios = new UsuariosModel();
+        $this->transacciones = new TransaccionesModel();
         $this->session = session();
     }
 
@@ -54,6 +56,11 @@ class LoginController extends BaseController
                         'permisos' => $permisos,
                     ];
                     $this->session->set($datos);
+                    $this->transacciones->insert([
+                        'accion'      => 'LOGIN',
+                        'descripcion' => 'Inicio de sesión del usuario ID ' . $result['id'],
+                        'id_usuario'  => $result['id'],
+                    ]);
                     return redirect()->to(base_url('dashboard'))->with('respuesta', [
                         'type' => 'success',
                         'msg' => 'HAS INICIADO SESION CORRECTAMENTE',
