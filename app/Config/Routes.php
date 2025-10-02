@@ -40,6 +40,7 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
 
     $routes->get('/admin', 'AdminController::index');
     $routes->get('/dashboard', 'AdminController::dashboard');
+    $routes->get('/manual', 'ManualController::index');
     $routes->get('/backup', 'AdminController::createBackup');
     $routes->get('/prestamosMes/(:num)', 'AdminController::prestamosMes/$1');
     $routes->put('/admin/(:num)', 'AdminController::update/$1');
