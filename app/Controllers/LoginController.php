@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\AdminModel;
 use App\Models\UsuariosModel;
 use App\Models\TransaccionesModel;
+use App\Models\PermisosModel;
 
 class LoginController extends BaseController
 {
@@ -47,7 +48,23 @@ class LoginController extends BaseController
                 ])->first();
             if ($result != null) {
                 if (password_verify($this->request->getVar('password'), $result['clave'])) {
-                    $permisos = ($result['permisos'] != null) ? json_decode($result['permisos'], true) : [];
+                    $permisos = [];
+                    if ($result['id'] == 1) {
+                        $permisosModel = new PermisosModel();
+                        $permisosSistema = $permisosModel->findAll();
+                        foreach ($permisosSistema as $permiso) {
+                            $campos = json_decode($permiso['campos'], true);
+                            if (is_array($campos)) {
+                                $permisos = array_merge($permisos, $campos);
+                            }
+                        }
+                        $permisos = array_values(array_unique(array_merge($permisos, ['historial pagos', 'historial transacciones', 'historial prestamos'])));
+                    } else {
+                        $permisos = ($result['permisos'] != null) ? json_decode($result['permisos'], true) : [];
+                    }
+                    if (!is_array($permisos)) {
+                        $permisos = [];
+                    }
                     $datos = [
                         'id_usuario' => $result['id'],
                         'rol' => $result['rol'],

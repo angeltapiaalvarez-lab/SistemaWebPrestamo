@@ -20,7 +20,11 @@ Nuevo rol
                         <span class="text-danger"><?php echo $errors['nombre']; ?></span>
                     <?php } ?>
                 </div>
-                <?php foreach ($permisos as $permiso) { ?>
+                <?php foreach ($permisos as $permiso) {
+                    if (in_array($permiso['modulo'], ['pagos', 'transacciones'])) {
+                        continue;
+                    }
+                ?>
                     <div class="col-lg-4">
                         <div class="accordion" id="accordion<?php echo $permiso['modulo']; ?>">
                             <div class="accordion-item">
@@ -31,7 +35,15 @@ Nuevo rol
                                 </h2>
                                 <div id="collapse<?php echo $permiso['id']; ?>" class="accordion-collapse collapse fade" aria-labelledby="heading<?php echo $permiso['id']; ?>" data-bs-parent="#accordion<?php echo $permiso['modulo']; ?>">
                                     <div class="accordion-body">
-                                        <?php $lista = json_decode($permiso['campos'], true);
+                                        <?php
+                                        $lista = json_decode($permiso['campos'], true);
+                                        if (!is_array($lista)) {
+                                            $lista = [];
+                                        }
+                                        if ($permiso['modulo'] === 'reportes') {
+                                            $extrasReportes = ['historial pagos', 'historial transacciones', 'historial prestamos'];
+                                            $lista = array_values(array_unique(array_merge($lista, $extrasReportes)));
+                                        }
                                         for ($i = 0; $i < count($lista); $i++) { ?>
                                             <div class="form-check">
                                               <input class="form-check" type="checkbox" value="<?php echo $lista[$i]; ?>" name="permisos[]"
