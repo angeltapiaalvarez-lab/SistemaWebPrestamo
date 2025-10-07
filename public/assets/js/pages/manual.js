@@ -15,20 +15,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const showTab = (triggerId) => {
+        if (!triggerId || typeof bootstrap === 'undefined' || typeof bootstrap.Tab === 'undefined') {
+            return false;
+        }
+        const triggerEl = document.getElementById(triggerId);
+        if (triggerEl) {
+            const tabInstance = bootstrap.Tab.getOrCreateInstance(triggerEl);
+            tabInstance.show();
+            return true;
+        }
+        return false;
+    };
+
+    const getTabTriggerForTarget = (targetId) => {
+        if (!targetId) {
+            return null;
+        }
+        const linkWithTab = document.querySelector(`[data-scroll-target="${targetId}"][data-target-tab]`);
+        return linkWithTab ? linkWithTab.getAttribute('data-target-tab') : null;
+    };
+
     document.querySelectorAll('[data-scroll-target]').forEach((link) => {
         link.addEventListener('click', (event) => {
             event.preventDefault();
             const targetId = link.getAttribute('data-scroll-target');
-            smoothScroll(targetId);
-            if (targetId) {
-                history.replaceState(null, '', `#${targetId}`);
+            const tabTriggerId = link.getAttribute('data-target-tab');
+
+            const executeScroll = () => {
+                smoothScroll(targetId);
+                if (targetId) {
+                    history.replaceState(null, '', `#${targetId}`);
+                }
+            };
+
+            if (tabTriggerId && showTab(tabTriggerId)) {
+                setTimeout(executeScroll, 150);
+                return;
             }
+
+            executeScroll();
         });
     });
 
     if (window.location.hash) {
         const initialTarget = window.location.hash.replace('#', '');
-        smoothScroll(initialTarget);
+        const initialTab = getTabTriggerForTarget(initialTarget);
+        if (initialTab && showTab(initialTab)) {
+            setTimeout(() => {
+                smoothScroll(initialTarget);
+            }, 150);
+        } else {
+            smoothScroll(initialTarget);
+        }
     }
 
     const guidedTourButton = document.getElementById('guided-tour');
