@@ -46,7 +46,7 @@ class PermisosSeeder extends Seeder
         ];
         $data[6] = [
             'modulo'    => 'reportes',
-            'campos'    => json_encode(['pdf prestamos', 'excel prestamos']),
+            'campos'    => json_encode(['pdf prestamos', 'excel prestamos', 'historial pagos', 'historial transacciones', 'historial prestamos']),
             'created_at'    => date('Y-m-d H:i:s'),
             'updated_at'    => date('Y-m-d H:i:s'),
         ];
