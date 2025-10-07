@@ -26,7 +26,7 @@ class PagosController extends BaseController
 
     public function index()
     {
-        if (!verificar('abono prestamo', $this->session->permisos)) {
+        if (!verificar('historial pagos', $this->session->permisos)) {
             return view('permisos');
         }
         $data['active'] = 'pago';
