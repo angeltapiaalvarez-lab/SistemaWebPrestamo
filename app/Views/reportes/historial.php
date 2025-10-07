@@ -24,9 +24,7 @@ Historial de préstamos
                 <input type="date" name="fecha_fin" class="form-control" value="<?= $fecha_fin; ?>" required>
             </div>
             <div class="col-md-4 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary me-2">Generar</button>
-                <a href="<?= base_url('reportesPdf?fecha_inicio=' . $fecha_inicio . '&fecha_fin=' . $fecha_fin); ?>" target="_blank" class="btn btn-danger me-2">Exportar PDF</a>
-                <a href="<?= base_url('reportesExcel?fecha_inicio=' . $fecha_inicio . '&fecha_fin=' . $fecha_fin); ?>" class="btn btn-success">Exportar Excel</a>
+                <button type="submit" class="btn btn-primary">Generar</button>
             </div>
         </form>
         <?php if ($mensaje != '') { ?>

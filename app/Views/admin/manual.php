@@ -19,9 +19,6 @@ Manual de usuario
                     <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#manualSteps" role="button" aria-expanded="false" aria-controls="manualSteps">
                         <i class="fa-solid fa-list-check me-1"></i> Ver paso a paso
                     </a>
-                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="tooltip" title="Pasa el puntero sobre los íconos <i class='fa-solid fa-circle-info'></i> para descubrir recomendaciones rápidas.">
-                        <i class="fa-solid fa-circle-info me-1"></i>Consejos rápidos
-                    </button>
                 </div>
                 <div class="collapse mt-3" id="manualSteps">
                     <div class="card card-body border">
@@ -34,6 +31,17 @@ Manual de usuario
                         </ol>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="card mb-4" id="gestion-roles">
+            <div class="card-header">
+                <h5 class="mb-0">Manejo de roles por usuario</h5>
+            </div>
+            <div class="card-body">
+                <p>Administra los permisos desde el módulo <a href="<?= base_url('roles'); ?>" class="fw-bold">Roles</a>. Allí puedes crear perfiles personalizados definiendo qué menús y acciones están disponibles.</p>
+                <p>Una vez creado el rol, ingresa a <a href="<?= base_url('usuarios'); ?>" class="fw-bold">Usuarios</a> para asignarlo. Cada usuario puede tener un único rol activo y los cambios se aplican en el próximo inicio de sesión.</p>
+                <p>Para mantener el control, revisa periódicamente la lista de usuarios y desactiva los accesos que ya no sean necesarios. Los roles predeterminados se pueden duplicar para agilizar configuraciones similares.</p>
             </div>
         </div>
 
@@ -71,19 +79,6 @@ Manual de usuario
                                     <div class="accordion-body">
                                         <p id="creacion-clientes">Ingresa al módulo <a href="<?= base_url('clientes/crear'); ?>">Agregar cliente</a> y completa los datos básicos: identificación, información de contacto y clasificación comercial. Los campos marcados con <span class="badge bg-info text-dark" data-bs-toggle="tooltip" title="Información requerida para cumplir con políticas KYC">obligatorio</span> deben completarse antes de guardar.</p>
                                         <p>Adjunta documentos de soporte desde la sección <strong>Archivos</strong>. Se aceptan formatos PDF o imagen y cada carga queda registrada con fecha y usuario responsable.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingValidaciones">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseValidaciones" aria-expanded="false" aria-controls="collapseValidaciones">
-                                        Validaciones y clasificación
-                                    </button>
-                                </h2>
-                                <div id="collapseValidaciones" class="accordion-collapse collapse" aria-labelledby="headingValidaciones" data-bs-parent="#clientesAccordion">
-                                    <div class="accordion-body">
-                                        <p>Utiliza los indicadores de riesgo para asignar un nivel de confianza al nuevo cliente. El sistema calcula automáticamente la <strong data-bs-toggle="tooltip" title="Promedio de días que tarda el cliente en cumplir compromisos">puntualidad histórica</strong> si ya existen operaciones previas.</p>
-                                        <p>En la pestaña <strong>Referencias</strong> registra información adicional (garantes, referencias comerciales) para agilizar evaluaciones futuras.</p>
                                     </div>
                                 </div>
                             </div>
@@ -130,19 +125,6 @@ Manual de usuario
                                     </div>
                                 </div>
                             </div>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingAjustes">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAjustes" aria-expanded="false" aria-controls="collapseAjustes">
-                                        Ajustes, renovaciones y cierre
-                                    </button>
-                                </h2>
-                                <div id="collapseAjustes" class="accordion-collapse collapse" aria-labelledby="headingAjustes" data-bs-parent="#prestamosAccordion">
-                                    <div class="accordion-body">
-                                        <p>Utiliza la opción <strong>Renovar</strong> para generar un nuevo préstamo reutilizando los datos del cliente y del aval. El sistema conservará el historial anterior y marcará la operación como renovada.</p>
-                                        <p>Al liquidar un préstamo, registra el estado <strong data-bs-toggle="tooltip" title="Marca el préstamo como finalizado y bloquea nuevos cargos">Cerrado</strong> y adjunta el comprobante final. Así podrás generar cartas de finiquito directamente desde el expediente.</p>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="pills-reportes" role="tabpanel" aria-labelledby="pills-reportes-tab">
@@ -181,8 +163,8 @@ Manual de usuario
                                 </h2>
                                 <div id="collapseReportesOperativos" class="accordion-collapse collapse" aria-labelledby="headingReportesOperativos" data-bs-parent="#reportesAccordion">
                                     <div class="accordion-body">
-                                        <p>Genera listados personalizados desde <a href="<?= base_url('reportes/historial'); ?>">Historial Préstamos</a> aplicando filtros de fecha, producto y estado. Puedes exportar a PDF o Excel para compartir con el comité de riesgos.</p>
-                                        <p>Para análisis profundos, descarga el archivo Excel y utiliza tablas dinámicas. Recuerda resguardar los informes en el repositorio autorizado y clasificar su nivel de confidencialidad.</p>
+                                        <p>Genera listados personalizados desde <a href="<?= base_url('reportes/historial'); ?>">Historial Préstamos</a> aplicando filtros de fecha, producto y estado. Utiliza la vista en pantalla para revisar la información antes de descargarla manualmente si necesitas compartirla.</p>
+                                        <p>Si requieres conservar un respaldo, imprime desde el navegador o copia los datos a tu formato de análisis y sigue las políticas de resguardo definidas por tu organización.</p>
                                     </div>
                                 </div>
                             </div>
@@ -201,6 +183,9 @@ Manual de usuario
                 <nav class="nav flex-column manual-toc">
                     <a class="nav-link px-0" href="#creacion-clientes" data-scroll-target="creacion-clientes">
                         <i class="fa-solid fa-user-plus me-2"></i>Creación de clientes
+                    </a>
+                    <a class="nav-link px-0" href="#gestion-roles" data-scroll-target="gestion-roles">
+                        <i class="fa-solid fa-user-shield me-2"></i>Manejo de roles
                     </a>
                     <a class="nav-link px-0" href="#gestion-prestamos" data-scroll-target="gestion-prestamos">
                         <i class="fa-solid fa-hand-holding-dollar me-2"></i>Gestión y creación de préstamos

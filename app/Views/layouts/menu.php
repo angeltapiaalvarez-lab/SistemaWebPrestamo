@@ -109,9 +109,7 @@
             if (
                 verificar('historial pagos', $_SESSION['permisos']) ||
                 verificar('historial transacciones', $_SESSION['permisos']) ||
-                verificar('historial prestamos', $_SESSION['permisos']) ||
-                verificar('pdf prestamos', $_SESSION['permisos']) ||
-                verificar('excel prestamos', $_SESSION['permisos'])
+                verificar('historial prestamos', $_SESSION['permisos'])
             ) { ?>
                 <li class="dropdown <?php echo (
                                             $active == 'pago' ||
@@ -129,9 +127,7 @@
                             <li><a class="nav-link <?php echo ($active == 'transaccion') ? 'text-success' : ''; ?>" href="<?php echo base_url('transacciones'); ?>">Historial de transacciones</a></li>
                         <?php }
                         if (
-                            verificar('historial prestamos', $_SESSION['permisos']) ||
-                            verificar('pdf prestamos', $_SESSION['permisos']) ||
-                            verificar('excel prestamos', $_SESSION['permisos'])
+                            verificar('historial prestamos', $_SESSION['permisos'])
                         ) { ?>
                             <li><a class="nav-link <?php echo ($active == 'reportesHistorial') ? 'text-success' : ''; ?>" href="<?php echo base_url('reportes/historial'); ?>">Historial Préstamos</a></li>
                         <?php } ?>
