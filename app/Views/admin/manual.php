@@ -19,6 +19,9 @@ Manual de usuario
                     <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#manualSteps" role="button" aria-expanded="false" aria-controls="manualSteps">
                         <i class="fa-solid fa-list-check me-1"></i> Ver paso a paso
                     </a>
+                    <a class="btn btn-outline-secondary" href="#gestion-roles" data-scroll-target="gestion-roles" data-target-tab="pills-roles-tab">
+                        <i class="fa-solid fa-user-shield me-1"></i> Roles y permisos
+                    </a>
                 </div>
                 <div class="collapse mt-3" id="manualSteps">
                     <div class="card card-body border">
@@ -34,23 +37,17 @@ Manual de usuario
             </div>
         </div>
 
-        <div class="card mb-4" id="gestion-roles">
-            <div class="card-header">
-                <h5 class="mb-0">Manejo de roles por usuario</h5>
-            </div>
-            <div class="card-body">
-                <p>Administra los permisos desde el módulo <a href="<?= base_url('roles'); ?>" class="fw-bold">Roles</a>. Allí puedes crear perfiles personalizados definiendo qué menús y acciones están disponibles.</p>
-                <p>Una vez creado el rol, ingresa a <a href="<?= base_url('usuarios'); ?>" class="fw-bold">Usuarios</a> para asignarlo. Cada usuario puede tener un único rol activo y los cambios se aplican en el próximo inicio de sesión.</p>
-                <p>Para mantener el control, revisa periódicamente la lista de usuarios y desactiva los accesos que ya no sean necesarios. Los roles predeterminados se pueden duplicar para agilizar configuraciones similares.</p>
-            </div>
-        </div>
-
         <div class="card mb-4">
             <div class="card-header">
                 <ul class="nav nav-pills" id="manual-tab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="pills-clientes-tab" data-bs-toggle="tab" data-bs-target="#pills-clientes" type="button" role="tab" aria-controls="pills-clientes" aria-selected="true">
                             Creación de clientes
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-roles-tab" data-bs-toggle="tab" data-bs-target="#pills-roles" type="button" role="tab" aria-controls="pills-roles" aria-selected="false">
+                            Manejo de roles por usuario
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -92,6 +89,36 @@ Manual de usuario
                                     <div class="accordion-body">
                                         <p>Desde <a href="<?= base_url('clientes'); ?>">Listado de clientes</a> puedes editar información, inactivar registros o asignar ejecutivos responsables. Usa los filtros por estado y zona para localizar rápidamente a un cliente.</p>
                                         <p>Registra notas de visitas o cambios relevantes para conservar una bitácora actualizada. Todas las modificaciones quedan auditadas y se notifican a los supervisores.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-roles" role="tabpanel" aria-labelledby="pills-roles-tab">
+                        <div class="accordion" id="rolesAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingRolesConfig">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRolesConfig" aria-expanded="true" aria-controls="collapseRolesConfig">
+                                        Configuración de roles
+                                    </button>
+                                </h2>
+                                <div id="collapseRolesConfig" class="accordion-collapse collapse show" aria-labelledby="headingRolesConfig" data-bs-parent="#rolesAccordion">
+                                    <div class="accordion-body">
+                                        <h5 id="gestion-roles" class="fw-bold mb-3">Manejo de roles por usuario</h5>
+                                        <p>Administra los permisos desde el módulo <a href="<?= base_url('roles'); ?>" class="fw-bold">Roles</a>. Allí puedes crear perfiles personalizados definiendo qué menús y acciones están disponibles.</p>
+                                        <p>Una vez creado el rol, ingresa a <a href="<?= base_url('usuarios'); ?>" class="fw-bold">Usuarios</a> para asignarlo. Cada usuario puede tener un único rol activo y los cambios se aplican en el próximo inicio de sesión.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingRolesControl">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRolesControl" aria-expanded="false" aria-controls="collapseRolesControl">
+                                        Buenas prácticas y control
+                                    </button>
+                                </h2>
+                                <div id="collapseRolesControl" class="accordion-collapse collapse" aria-labelledby="headingRolesControl" data-bs-parent="#rolesAccordion">
+                                    <div class="accordion-body">
+                                        <p>Para mantener el control, revisa periódicamente la lista de usuarios y desactiva los accesos que ya no sean necesarios. Los roles predeterminados se pueden duplicar para agilizar configuraciones similares.</p>
                                     </div>
                                 </div>
                             </div>
@@ -184,7 +211,7 @@ Manual de usuario
                     <a class="nav-link px-0" href="#creacion-clientes" data-scroll-target="creacion-clientes">
                         <i class="fa-solid fa-user-plus me-2"></i>Creación de clientes
                     </a>
-                    <a class="nav-link px-0" href="#gestion-roles" data-scroll-target="gestion-roles">
+                    <a class="nav-link px-0" href="#gestion-roles" data-scroll-target="gestion-roles" data-target-tab="pills-roles-tab">
                         <i class="fa-solid fa-user-shield me-2"></i>Manejo de roles
                     </a>
                     <a class="nav-link px-0" href="#gestion-prestamos" data-scroll-target="gestion-prestamos">

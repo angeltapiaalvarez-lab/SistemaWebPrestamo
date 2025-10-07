@@ -43,6 +43,7 @@ Nuevo rol
                                         if ($permiso['modulo'] === 'reportes') {
                                             $extrasReportes = ['historial pagos', 'historial transacciones', 'historial prestamos'];
                                             $lista = array_values(array_unique(array_merge($lista, $extrasReportes)));
+                                            $lista = array_values(array_diff($lista, ['pdf prestamos', 'excel prestamos']));
                                         }
                                         for ($i = 0; $i < count($lista); $i++) { ?>
                                             <div class="form-check">
