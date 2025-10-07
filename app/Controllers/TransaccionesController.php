@@ -17,7 +17,7 @@ class TransaccionesController extends BaseController
 
     public function index()
     {
-        if (!verificar('abono prestamo', $this->session->permisos)) {
+        if (!verificar('historial transacciones', $this->session->permisos)) {
             return view('permisos');
         }
         $data['active'] = 'transaccion';
