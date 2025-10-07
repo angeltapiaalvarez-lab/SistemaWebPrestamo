@@ -40,12 +40,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     html: 'Consulta indicadores clave y accesos directos desde el <a href="' + base_url + 'dashboard">panel</a>.',
                 },
                 {
-                    title: 'Clientes y préstamos',
-                    html: 'Registra nuevos clientes y gestiona préstamos activos en los módulos dedicados del menú lateral.',
+                    title: 'Registrar clientes',
+                    html: 'Captura datos y soportes desde <a href="' + base_url + 'clientes/crear">Agregar cliente</a> para habilitar nuevas operaciones.',
                 },
                 {
-                    title: 'Pagos y reportes',
-                    html: 'Visualiza movimientos financieros en <a href="' + base_url + 'pagos">Pagos</a> y descarga informes desde <a href="' + base_url + 'reportes/historial">Reportes</a>.',
+                    title: 'Configurar préstamos',
+                    html: 'Define montos, tasas y calendarios en <a href="' + base_url + 'prestamos">Nuevo préstamo</a> y realiza seguimiento desde Historial.',
+                },
+                {
+                    title: 'Reportes y respaldos',
+                    html: 'Analiza el desempeño en el panel y exporta información desde <a href="' + base_url + 'reportes/historial">Reportes</a> o genera copias en <a href="' + base_url + 'backup">Respaldo</a>.',
                 },
             ];
 

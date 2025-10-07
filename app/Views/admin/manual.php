@@ -27,10 +27,10 @@ Manual de usuario
                     <div class="card card-body border">
                         <ol class="mb-0">
                             <li id="paso-inicio">Inicia sesión con tu usuario autorizado en <strong><?= base_url(); ?></strong>.</li>
-                            <li>Personaliza tu perfil desde <a href="<?= base_url('usuarios/profile'); ?>" class="fw-bold">Mi cuenta</a> y verifica tus permisos.</li>
-                            <li>Consulta el panel principal para revisar indicadores clave y atajos hacia los módulos más utilizados.</li>
-                            <li>Registra clientes, crea préstamos y realiza seguimientos desde los menús laterales.</li>
-                            <li>Descarga reportes o genera respaldos para mantener la operación documentada.</li>
+                            <li>Desde <a href="<?= base_url('clientes'); ?>" class="fw-bold">Clientes</a> registra a la nueva persona o empresa y adjunta sus soportes.</li>
+                            <li>Configura los préstamos desde <a href="<?= base_url('prestamos'); ?>" class="fw-bold">Préstamos</a> y valida el calendario de pagos sugerido.</li>
+                            <li>Da seguimiento a la cartera en <a href="<?= base_url('prestamos/historial'); ?>" class="fw-bold">Historial</a> y registra abonos oportunamente.</li>
+                            <li>Consulta el <a href="<?= base_url('dashboard'); ?>" class="fw-bold">panel</a> y los reportes descargables para supervisar la operación.</li>
                         </ol>
                     </div>
                 </div>
@@ -41,13 +41,13 @@ Manual de usuario
             <div class="card-header">
                 <ul class="nav nav-pills" id="manual-tab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="pills-primeros-tab" data-bs-toggle="tab" data-bs-target="#pills-primeros" type="button" role="tab" aria-controls="pills-primeros" aria-selected="true">
-                            Primeros pasos
+                        <button class="nav-link active" id="pills-clientes-tab" data-bs-toggle="tab" data-bs-target="#pills-clientes" type="button" role="tab" aria-controls="pills-clientes" aria-selected="true">
+                            Creación de clientes
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="pills-prestamos-tab" data-bs-toggle="tab" data-bs-target="#pills-prestamos" type="button" role="tab" aria-controls="pills-prestamos" aria-selected="false">
-                            Gestión de préstamos
+                            Gestión y creación de préstamos
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -59,31 +59,44 @@ Manual de usuario
             </div>
             <div class="card-body">
                 <div class="tab-content" id="manual-tabContent">
-                    <div class="tab-pane fade show active" id="pills-primeros" role="tabpanel" aria-labelledby="pills-primeros-tab">
-                        <div class="accordion" id="primerosPasosAccordion">
+                    <div class="tab-pane fade show active" id="pills-clientes" role="tabpanel" aria-labelledby="pills-clientes-tab">
+                        <div class="accordion" id="clientesAccordion">
                             <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingLogin">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLogin" aria-expanded="true" aria-controls="collapseLogin">
-                                        Acceso y panel principal
+                                <h2 class="accordion-header" id="headingNuevoCliente">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNuevoCliente" aria-expanded="true" aria-controls="collapseNuevoCliente">
+                                        Registrar un nuevo cliente
                                     </button>
                                 </h2>
-                                <div id="collapseLogin" class="accordion-collapse collapse show" aria-labelledby="headingLogin" data-bs-parent="#primerosPasosAccordion">
+                                <div id="collapseNuevoCliente" class="accordion-collapse collapse show" aria-labelledby="headingNuevoCliente" data-bs-parent="#clientesAccordion">
                                     <div class="accordion-body">
-                                        <p id="primeros-pasos">Una vez autenticado, llegarás al panel con indicadores de <strong data-bs-toggle="tooltip" title="Usuarios activos registrados en la plataforma">usuarios</strong>, <strong data-bs-toggle="tooltip" title="Clientes sin préstamos en mora">clientes</strong> y <strong data-bs-toggle="tooltip" title="Total de préstamos generados en el periodo">préstamos</strong>. Usa los accesos directos para navegar rápidamente hacia cada módulo.</p>
-                                        <p>Recuerda que puedes alternar el tema visual desde el selector ubicado en la parte superior derecha si necesitas más contraste.</p>
+                                        <p id="creacion-clientes">Ingresa al módulo <a href="<?= base_url('clientes/crear'); ?>">Agregar cliente</a> y completa los datos básicos: identificación, información de contacto y clasificación comercial. Los campos marcados con <span class="badge bg-info text-dark" data-bs-toggle="tooltip" title="Información requerida para cumplir con políticas KYC">obligatorio</span> deben completarse antes de guardar.</p>
+                                        <p>Adjunta documentos de soporte desde la sección <strong>Archivos</strong>. Se aceptan formatos PDF o imagen y cada carga queda registrada con fecha y usuario responsable.</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingPerfil">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePerfil" aria-expanded="false" aria-controls="collapsePerfil">
-                                        Gestión de perfil
+                                <h2 class="accordion-header" id="headingValidaciones">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseValidaciones" aria-expanded="false" aria-controls="collapseValidaciones">
+                                        Validaciones y clasificación
                                     </button>
                                 </h2>
-                                <div id="collapsePerfil" class="accordion-collapse collapse" aria-labelledby="headingPerfil" data-bs-parent="#primerosPasosAccordion">
+                                <div id="collapseValidaciones" class="accordion-collapse collapse" aria-labelledby="headingValidaciones" data-bs-parent="#clientesAccordion">
                                     <div class="accordion-body">
-                                        <p>Actualiza tu foto, contraseña y datos de contacto desde la sección <a href="<?= base_url('usuarios/profile'); ?>">Perfil</a>. Mantener esta información vigente permite auditorías más ágiles y notificaciones oportunas.</p>
-                                        <p>Si pierdes acceso, utiliza la opción <a href="<?= base_url('forgot'); ?>">¿Olvidaste tu contraseña?</a> y sigue el asistente de recuperación enviado a tu correo.</p>
+                                        <p>Utiliza los indicadores de riesgo para asignar un nivel de confianza al nuevo cliente. El sistema calcula automáticamente la <strong data-bs-toggle="tooltip" title="Promedio de días que tarda el cliente en cumplir compromisos">puntualidad histórica</strong> si ya existen operaciones previas.</p>
+                                        <p>En la pestaña <strong>Referencias</strong> registra información adicional (garantes, referencias comerciales) para agilizar evaluaciones futuras.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingSeguimientoCliente">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeguimientoCliente" aria-expanded="false" aria-controls="collapseSeguimientoCliente">
+                                        Actualización y seguimiento
+                                    </button>
+                                </h2>
+                                <div id="collapseSeguimientoCliente" class="accordion-collapse collapse" aria-labelledby="headingSeguimientoCliente" data-bs-parent="#clientesAccordion">
+                                    <div class="accordion-body">
+                                        <p>Desde <a href="<?= base_url('clientes'); ?>">Listado de clientes</a> puedes editar información, inactivar registros o asignar ejecutivos responsables. Usa los filtros por estado y zona para localizar rápidamente a un cliente.</p>
+                                        <p>Registra notas de visitas o cambios relevantes para conservar una bitácora actualizada. Todas las modificaciones quedan auditadas y se notifican a los supervisores.</p>
                                     </div>
                                 </div>
                             </div>
@@ -99,8 +112,8 @@ Manual de usuario
                                 </h2>
                                 <div id="collapseCrearPrestamo" class="accordion-collapse collapse show" aria-labelledby="headingCrearPrestamo" data-bs-parent="#prestamosAccordion">
                                     <div class="accordion-body">
-                                        <p id="gestion-prestamos">Ingresa a <a href="<?= base_url('prestamos'); ?>">Nuevo préstamo</a> para iniciar el proceso. Completa los datos financieros, selecciona al cliente correspondiente y define el calendario de pagos. Los campos cuentan con <span class="badge bg-info text-dark" data-bs-toggle="tooltip" title="Información contextual del campo">ayudas contextuales</span> para guiarte.</p>
-                                        <p>Antes de guardar, valida las tasas y revisa el resumen del cálculo. Puedes adjuntar comentarios internos que sólo serán visibles para el equipo autorizado.</p>
+                                        <p id="gestion-prestamos">Ingresa a <a href="<?= base_url('prestamos'); ?>">Nuevo préstamo</a> para iniciar el proceso. Selecciona al cliente previamente creado, define el tipo de producto, tasa y periodicidad. El simulador mostrará la cuota estimada según los parámetros ingresados.</p>
+                                        <p>Antes de confirmar, revisa la tabla de amortización y usa el botón <strong data-bs-toggle="tooltip" title="Permite recalcular cuotas antes de guardar">Recalcular</strong> si modificas montos o plazos. Adjunta condiciones particulares o garantías en el campo de observaciones.</p>
                                     </div>
                                 </div>
                             </div>
@@ -112,8 +125,21 @@ Manual de usuario
                                 </h2>
                                 <div id="collapseSeguimiento" class="accordion-collapse collapse" aria-labelledby="headingSeguimiento" data-bs-parent="#prestamosAccordion">
                                     <div class="accordion-body">
-                                        <p>Accede al <a href="<?= base_url('prestamos/historial'); ?>">Historial</a> para revisar los estados de cada préstamo. Usa los filtros superiores para segmentar por fechas, clientes o niveles de mora.</p>
-                                        <p>Desde el detalle puedes registrar pagos, emitir recibos y agregar notas de seguimiento. Aprovecha la integración con <a href="<?= base_url('pagos'); ?>">Historial de pagos</a> para conciliar los abonos realizados.</p>
+                                        <p>Accede al <a href="<?= base_url('prestamos/historial'); ?>">Historial</a> para revisar los estados de cada préstamo. Usa los filtros superiores para segmentar por fechas, clientes, niveles de mora o ejecutivos asignados.</p>
+                                        <p>Desde el detalle puedes registrar pagos, programar recordatorios y generar recibos. Aprovecha la integración con <a href="<?= base_url('pagos'); ?>">Historial de pagos</a> para conciliar abonos y detectar atrasos.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingAjustes">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAjustes" aria-expanded="false" aria-controls="collapseAjustes">
+                                        Ajustes, renovaciones y cierre
+                                    </button>
+                                </h2>
+                                <div id="collapseAjustes" class="accordion-collapse collapse" aria-labelledby="headingAjustes" data-bs-parent="#prestamosAccordion">
+                                    <div class="accordion-body">
+                                        <p>Utiliza la opción <strong>Renovar</strong> para generar un nuevo préstamo reutilizando los datos del cliente y del aval. El sistema conservará el historial anterior y marcará la operación como renovada.</p>
+                                        <p>Al liquidar un préstamo, registra el estado <strong data-bs-toggle="tooltip" title="Marca el préstamo como finalizado y bloquea nuevos cargos">Cerrado</strong> y adjunta el comprobante final. Así podrás generar cartas de finiquito directamente desde el expediente.</p>
                                     </div>
                                 </div>
                             </div>
@@ -129,8 +155,8 @@ Manual de usuario
                                 </h2>
                                 <div id="collapseReportes" class="accordion-collapse collapse show" aria-labelledby="headingReportes" data-bs-parent="#reportesAccordion">
                                     <div class="accordion-body">
-                                        <p id="reportes">En la sección de <a href="<?= base_url('dashboard'); ?>">panel</a> encontrarás gráficas de comportamiento mensual. Sitúa el cursor sobre cada punto para ver cifras exactas y utiliza el selector de año para analizar periodos anteriores.</p>
-                                        <p>Para reportes ejecutivos, recurre a <a href="<?= base_url('reportes/historial'); ?>">Historial Préstamos</a>, donde podrás exportar información en PDF o Excel.</p>
+                                        <p id="reportes">En la sección de <a href="<?= base_url('dashboard'); ?>">panel</a> encontrarás gráficas de comportamiento mensual, tasa de mora y colocación. Sitúa el cursor sobre cada punto para ver cifras exactas y utiliza el selector de año para analizar periodos anteriores.</p>
+                                        <p>Activa los filtros por sucursal o ejecutivo para comparar desempeño y detectar desviaciones rápidamente. Los widgets resaltan alertas cuando la mora supera el umbral definido.</p>
                                     </div>
                                 </div>
                             </div>
@@ -142,39 +168,27 @@ Manual de usuario
                                 </h2>
                                 <div id="collapseRespaldo" class="accordion-collapse collapse" aria-labelledby="headingRespaldo" data-bs-parent="#reportesAccordion">
                                     <div class="accordion-body">
-                                        <p>Si tienes permisos administrativos, accede a <a href="<?= base_url('backup'); ?>">Respaldo</a> para generar copias de seguridad. Programa recordatorios recurrentes para asegurar la integridad de la información financiera.</p>
-                                        <p>Documenta los respaldos generados en el repositorio corporativo y verifica su integridad en ambientes de prueba.</p>
+                                        <p>Si tienes permisos administrativos, accede a <a href="<?= base_url('backup'); ?>">Respaldo</a> para generar copias de seguridad. Programa recordatorios recurrentes y almacena los archivos en la bóveda corporativa.</p>
+                                        <p>Documenta los respaldos generados y verifica su integridad en ambientes de prueba antes de liberarlos al área operativa.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingReportesOperativos">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReportesOperativos" aria-expanded="false" aria-controls="collapseReportesOperativos">
+                                        Reportes operativos y exportaciones
+                                    </button>
+                                </h2>
+                                <div id="collapseReportesOperativos" class="accordion-collapse collapse" aria-labelledby="headingReportesOperativos" data-bs-parent="#reportesAccordion">
+                                    <div class="accordion-body">
+                                        <p>Genera listados personalizados desde <a href="<?= base_url('reportes/historial'); ?>">Historial Préstamos</a> aplicando filtros de fecha, producto y estado. Puedes exportar a PDF o Excel para compartir con el comité de riesgos.</p>
+                                        <p>Para análisis profundos, descarga el archivo Excel y utiliza tablas dinámicas. Recuerda resguardar los informes en el repositorio autorizado y clasificar su nivel de confidencialidad.</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h4 class="mb-0">Recursos adicionales</h4>
-            </div>
-            <div class="card-body">
-                <p>Complementa tu aprendizaje con los siguientes recursos:</p>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="mb-1">Plantillas de seguimiento</h6>
-                            <p class="mb-0">Descarga formatos sugeridos para documentar visitas y compromisos de pago.</p>
-                        </div>
-                        <span class="badge bg-primary align-self-center" data-bs-toggle="tooltip" title="Muy pronto disponible">Beta</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="mb-1">Glosario de términos</h6>
-                            <p class="mb-0">Consulta definiciones clave sobre indicadores financieros y métricas del sistema.</p>
-                        </div>
-                        <a href="#reportes" class="btn btn-sm btn-outline-primary" data-scroll-target="reportes">Ir al glosario</a>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
@@ -185,11 +199,11 @@ Manual de usuario
             </div>
             <div class="card-body">
                 <nav class="nav flex-column manual-toc">
-                    <a class="nav-link px-0" href="#primeros-pasos" data-scroll-target="primeros-pasos">
-                        <i class="fa-solid fa-compass me-2"></i>Primeros pasos
+                    <a class="nav-link px-0" href="#creacion-clientes" data-scroll-target="creacion-clientes">
+                        <i class="fa-solid fa-user-plus me-2"></i>Creación de clientes
                     </a>
                     <a class="nav-link px-0" href="#gestion-prestamos" data-scroll-target="gestion-prestamos">
-                        <i class="fa-solid fa-hand-holding-dollar me-2"></i>Gestión de préstamos
+                        <i class="fa-solid fa-hand-holding-dollar me-2"></i>Gestión y creación de préstamos
                     </a>
                     <a class="nav-link px-0" href="#reportes" data-scroll-target="reportes">
                         <i class="fa-solid fa-chart-column me-2"></i>Reportes y análisis
