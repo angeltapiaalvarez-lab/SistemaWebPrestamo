@@ -107,7 +107,9 @@
                 </li>
             <?php }
             if (
-                verificar('abono prestamo', $_SESSION['permisos']) ||
+                verificar('historial pagos', $_SESSION['permisos']) ||
+                verificar('historial transacciones', $_SESSION['permisos']) ||
+                verificar('historial prestamos', $_SESSION['permisos']) ||
                 verificar('pdf prestamos', $_SESSION['permisos']) ||
                 verificar('excel prestamos', $_SESSION['permisos'])
             ) { ?>
@@ -120,11 +122,17 @@
                         <i class="fa-solid fa-chart-line mx-1"></i>
                         <span>Reportes</span></a>
                     <ul class="dropdown-menu">
-                        <?php if (verificar('abono prestamo', $_SESSION['permisos'])) { ?>
+                        <?php if (verificar('historial pagos', $_SESSION['permisos'])) { ?>
                             <li><a class="nav-link <?php echo ($active == 'pago') ? 'text-success' : ''; ?>" href="<?php echo base_url('pagos'); ?>">Historial de pagos</a></li>
+                        <?php }
+                        if (verificar('historial transacciones', $_SESSION['permisos'])) { ?>
                             <li><a class="nav-link <?php echo ($active == 'transaccion') ? 'text-success' : ''; ?>" href="<?php echo base_url('transacciones'); ?>">Historial de transacciones</a></li>
                         <?php }
-                        if (verificar('pdf prestamos', $_SESSION['permisos']) || verificar('excel prestamos', $_SESSION['permisos'])) { ?>
+                        if (
+                            verificar('historial prestamos', $_SESSION['permisos']) ||
+                            verificar('pdf prestamos', $_SESSION['permisos']) ||
+                            verificar('excel prestamos', $_SESSION['permisos'])
+                        ) { ?>
                             <li><a class="nav-link <?php echo ($active == 'reportesHistorial') ? 'text-success' : ''; ?>" href="<?php echo base_url('reportes/historial'); ?>">Historial Préstamos</a></li>
                         <?php } ?>
                     </ul>

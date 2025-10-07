@@ -24,7 +24,11 @@ class ReportesController extends BaseController
     }
     public function historial()
     {
-        if (!verificar('pdf prestamos', $this->session->permisos) && !verificar('excel prestamos', $this->session->permisos)) {
+        if (
+            !verificar('historial prestamos', $this->session->permisos) &&
+            !verificar('pdf prestamos', $this->session->permisos) &&
+            !verificar('excel prestamos', $this->session->permisos)
+        ) {
             return view('permisos');
         }
         $fechaFin = $this->request->getGet('fecha_fin');
