@@ -19,9 +19,6 @@ Manual de usuario
                     <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#manualSteps" role="button" aria-expanded="false" aria-controls="manualSteps">
                         <i class="fa-solid fa-list-check me-1"></i> Ver paso a paso
                     </a>
-                    <a class="btn btn-outline-secondary" href="#gestion-roles" data-scroll-target="gestion-roles" data-target-tab="pills-roles-tab">
-                        <i class="fa-solid fa-user-shield me-1"></i> Roles y permisos
-                    </a>
                 </div>
                 <div class="collapse mt-3" id="manualSteps">
                     <div class="card card-body border">
@@ -201,30 +198,32 @@ Manual de usuario
             </div>
         </div>
     </div>
-    <div class="col-lg-3 mt-4 mt-lg-0">
-        <div class="card position-sticky top-0">
-            <div class="card-header">
-                <h5 class="mb-0">Tabla de contenidos</h5>
-            </div>
-            <div class="card-body">
-                <nav class="nav flex-column manual-toc">
-                    <a class="nav-link px-0" href="#creacion-clientes" data-scroll-target="creacion-clientes">
-                        <i class="fa-solid fa-user-plus me-2"></i>Creación de clientes
-                    </a>
-                    <a class="nav-link px-0" href="#gestion-roles" data-scroll-target="gestion-roles" data-target-tab="pills-roles-tab">
-                        <i class="fa-solid fa-user-shield me-2"></i>Manejo de roles
-                    </a>
-                    <a class="nav-link px-0" href="#gestion-prestamos" data-scroll-target="gestion-prestamos">
-                        <i class="fa-solid fa-hand-holding-dollar me-2"></i>Gestión y creación de préstamos
-                    </a>
-                    <a class="nav-link px-0" href="#reportes" data-scroll-target="reportes">
-                        <i class="fa-solid fa-chart-column me-2"></i>Reportes y análisis
-                    </a>
-                </nav>
-                <hr>
-                <p class="small text-muted">Utiliza los enlaces para realizar un desplazamiento suave hacia cada apartado del manual.</p>
-            </div>
-        </div>
+</div>
+<button type="button" class="btn btn-primary rounded-circle manual-help-btn" data-bs-toggle="offcanvas" data-bs-target="#manualHelp" aria-controls="manualHelp" aria-label="Abrir ayuda">
+    <i class="fa-solid fa-circle-question"></i>
+</button>
+<div class="offcanvas offcanvas-end manual-help-offcanvas" tabindex="-1" id="manualHelp" aria-labelledby="manualHelpLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="manualHelpLabel">Tabla de contenidos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+        <nav class="nav flex-column manual-toc">
+            <a class="nav-link px-0" href="#creacion-clientes" data-scroll-target="creacion-clientes">
+                <i class="fa-solid fa-user-plus me-2"></i>Creación de clientes
+            </a>
+            <a class="nav-link px-0" href="#gestion-roles" data-scroll-target="gestion-roles" data-target-tab="pills-roles-tab">
+                <i class="fa-solid fa-user-shield me-2"></i>Manejo de roles
+            </a>
+            <a class="nav-link px-0" href="#gestion-prestamos" data-scroll-target="gestion-prestamos">
+                <i class="fa-solid fa-hand-holding-dollar me-2"></i>Gestión y creación de préstamos
+            </a>
+            <a class="nav-link px-0" href="#reportes" data-scroll-target="reportes">
+                <i class="fa-solid fa-chart-column me-2"></i>Reportes y análisis
+            </a>
+        </nav>
+        <hr>
+        <p class="small text-muted">Utiliza los enlaces para realizar un desplazamiento suave hacia cada apartado del manual.</p>
     </div>
 </div>
 <?= $this->endSection('content'); ?>
