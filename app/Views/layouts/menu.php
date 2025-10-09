@@ -40,11 +40,6 @@
                     <i class="fa-solid fa-chart-pie mx-1"></i>
                     <span>Panel</span></a>
             </li>
-            <li class="<?php echo ($active == 'manual') ? 'active' : ''; ?>">
-                <a href="<?= base_url('manual'); ?>" class="nav-link">
-                    <i class="fa-solid fa-book-open mx-1"></i>
-                    <span>Manual</span></a>
-            </li>
             <?php if (
                 verificar('actualizar empresa', $_SESSION['permisos'])
                 || verificar('listar usuarios', $_SESSION['permisos'])
