@@ -42,11 +42,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetId = link.getAttribute('data-scroll-target');
             const tabTriggerId = link.getAttribute('data-target-tab');
 
+            const closeParentOffcanvas = () => {
+                if (typeof bootstrap === 'undefined' || typeof bootstrap.Offcanvas === 'undefined') {
+                    return;
+                }
+                const offcanvasElement = link.closest('.offcanvas');
+                if (!offcanvasElement) {
+                    return;
+                }
+                const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+                if (offcanvasInstance) {
+                    offcanvasInstance.hide();
+                }
+            };
+
             const executeScroll = () => {
                 smoothScroll(targetId);
                 if (targetId) {
                     history.replaceState(null, '', `#${targetId}`);
                 }
+                closeParentOffcanvas();
             };
 
             if (tabTriggerId && showTab(tabTriggerId)) {
