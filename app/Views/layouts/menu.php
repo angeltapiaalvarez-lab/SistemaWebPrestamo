@@ -63,13 +63,6 @@
                     </ul>
                 </li>
             <?php }
-            if (verificar('listar roles', $_SESSION['permisos'])) { ?>
-                <li class="<?php echo ($active == 'rol') ? 'active' : ''; ?>">
-                    <a href="<?php echo base_url('roles'); ?>" class="nav-link">
-                        <i class="fa-solid fa-user-lock mx-1"></i>
-                        <span>Roles</span></a>
-                </li>
-            <?php }
             if (verificar('listar clientes', $_SESSION['permisos'])) { ?>
                 <li class="<?php echo ($active == 'cliente') ? 'active' : ''; ?>">
                     <a href="<?php echo base_url('clientes'); ?>" class="nav-link">
