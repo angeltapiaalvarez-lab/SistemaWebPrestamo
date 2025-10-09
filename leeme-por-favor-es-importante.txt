@@ -12,13 +12,10 @@ En la misma ruta del proyecto ejecuta las migraciones y seeders.
 	php spark migrate
 	php spark db:seed Main
 
-Accede en el navegador a http://localhost/prestamos/public/
+Accede en el navegador a http://localhost/sisprey/public/
 
-Correo: info@angelsifuentes.net
-Clave: admin123456789
-
-IMPORTANTE:
- Si cambias el nombre del proyecto cambia la base_url en el archivo .env
+Correo: angel.tapia78910@gmail.com
+Clave: hola123
 
 
 	

@@ -1,2 +1,0 @@
-Ejecutar las migraciones y los seeders.
-Ejecutar composer install - para instalar las dependencias utlizadas
