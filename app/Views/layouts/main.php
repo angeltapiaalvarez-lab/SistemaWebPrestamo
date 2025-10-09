@@ -15,7 +15,7 @@
         
         <?= $this->renderSection('modal'); ?>
 
-        <?= $this->include('layouts/paint.php'); ?>
+        <?= $this->include('layouts/help.php'); ?>
       </div>
       <?= $this->include('layouts/footer.php'); ?>
     </div>
