@@ -20,8 +20,12 @@ Manual de usuario
                             style="border: 0;"
                         ></iframe>
                     </div>
-                    <p class="text-muted mt-3 mb-0">
+                    <p class="text-muted mt-3">
                         El archivo se carga desde <code>public/<?= esc($manualRelativePath); ?></code>. Reemplázalo por la versión más reciente cuando sea necesario.
+                    </p>
+                    <p class="mb-0">
+                        Si necesitas abrir el documento en una pestaña nueva, haz clic en
+                        <a href="<?= esc($manualPdfUrl); ?>" target="_blank" rel="noopener noreferrer">este enlace directo al manual</a>.
                     </p>
                 <?php else : ?>
                     <div class="alert alert-warning mb-0" role="alert">
