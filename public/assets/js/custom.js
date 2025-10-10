@@ -106,26 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
     input.addEventListener('input', aplicarMascaraRuc);
   });
 
-  const manualTrigger = document.querySelector('.manual-help-btn[data-manual-url]');
-  const manualModalElement = document.getElementById('manualModal');
+  const manualTrigger = document.querySelector('.manual-help-btn[target="_blank"]');
 
-  if (manualTrigger && manualModalElement) {
-    const manualIframe = manualModalElement.querySelector('iframe');
-
+  if (manualTrigger) {
     manualTrigger.addEventListener('click', (event) => {
-      event.preventDefault();
-      const manualUrl = manualTrigger.getAttribute('data-manual-url');
+      const manualUrl = manualTrigger.getAttribute('href');
 
-      if (manualIframe && manualUrl) {
-        manualIframe.setAttribute('src', manualUrl);
-      }
-
-      $(manualModalElement).modal('show');
-    });
-
-    $(manualModalElement).on('hidden.bs.modal', () => {
-      if (manualIframe) {
-        manualIframe.removeAttribute('src');
+      if (manualUrl) {
+        event.preventDefault();
+        window.open(manualUrl, '_blank', 'noopener');
       }
     });
   }
