@@ -105,4 +105,28 @@ document.addEventListener('DOMContentLoaded', () => {
     input.setAttribute('maxlength', '16');
     input.addEventListener('input', aplicarMascaraRuc);
   });
+
+  const manualTrigger = document.querySelector('.manual-help-btn[data-manual-url]');
+  const manualModalElement = document.getElementById('manualModal');
+
+  if (manualTrigger && manualModalElement) {
+    const manualIframe = manualModalElement.querySelector('iframe');
+
+    manualTrigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      const manualUrl = manualTrigger.getAttribute('data-manual-url');
+
+      if (manualIframe && manualUrl) {
+        manualIframe.setAttribute('src', manualUrl);
+      }
+
+      $(manualModalElement).modal('show');
+    });
+
+    $(manualModalElement).on('hidden.bs.modal', () => {
+      if (manualIframe) {
+        manualIframe.removeAttribute('src');
+      }
+    });
+  }
 });
