@@ -36,6 +36,7 @@
           href="<?= esc($manualButtonHref); ?>"
           class="btn btn-primary rounded-circle manual-help-btn"
           aria-label="Abrir manual de ayuda"
+          title="Manual del sistema"
           <?= $manualButtonAttributes; ?>
         >
           <i class="fa-solid fa-circle-question"></i>
