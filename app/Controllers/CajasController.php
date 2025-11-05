@@ -7,6 +7,8 @@ use App\Models\CajasModel;
 
 class CajasController extends BaseController
 {
+    private const MASTER_CAJA_USER_ID = 1;
+
     private $cajas, $session;
     public function __construct()
     {
@@ -19,9 +21,10 @@ class CajasController extends BaseController
         if (!verificar('ver saldo', $this->session->permisos)) {
             return view('permisos');
         }
+        $idCaja = $this->resolveCajaUserId();
         $data['caja'] = $this->cajas->where([
             'estado' => '1',
-            'id_usuario' => $this->session->id_usuario
+            'id_usuario' => $idCaja
         ])->first();
         $data['active'] = 'caja';
         return view('cajas/index', $data);
@@ -39,15 +42,16 @@ class CajasController extends BaseController
     public function create()
     {
         if ($this->request->is('post') && verificar('ver saldo', $this->session->permisos)) {
+            $idCaja = $this->resolveCajaUserId();
             $data = [
                 'id_caja' => $this->request->getVar('id_caja'),
                 'monto_inicial' => $this->request->getVar('monto'),
                 'fecha_apertura' => date('Y-m-d H:i:s'),
-                'id_usuario' => $this->session->id_usuario
+                'id_usuario' => $idCaja
             ];
             $consulta = $this->cajas->where([
                 'estado' => '1',
-                'id_usuario' => $this->session->id_usuario
+                'id_usuario' => $idCaja
             ])->first();
             if (empty($consulta)) {
                 if ($this->cajas->insert($data) === false) {
@@ -110,7 +114,18 @@ class CajasController extends BaseController
         }else{
             $data = $this->cajas->calcularMovimientos($this->session->id_usuario);
             echo json_encode($data);
-        }        
+        }
         die();
+    }
+
+    private function resolveCajaUserId(): int
+    {
+        $sessionId = (int) $this->session->id_usuario;
+
+        if ($sessionId === self::MASTER_CAJA_USER_ID) {
+            return $sessionId;
+        }
+
+        return self::MASTER_CAJA_USER_ID;
     }
 }

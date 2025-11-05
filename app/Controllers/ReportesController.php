@@ -109,19 +109,21 @@ class ReportesController extends BaseController
     }
 
     public function filtroReportes($url) {
-        $id_usuario = $this->session->id_usuario;
+        $id_usuario = (int) $this->session->id_usuario;
+        $masterUserId = 1;
+        $usuarioWhere = ($id_usuario === $masterUserId) ? '' : " AND id_usuario = $id_usuario";
         if ($url === 'dia') {
-            $where = "TO_DAYS(fecha) = TO_DAYS(NOW()) AND id_usuario = $id_usuario AND estado = 1";
+            $where = "TO_DAYS(fecha) = TO_DAYS(NOW())$usuarioWhere AND estado = 1";
         } else if ($url === 'semana') {
-            $where = "DATE_SUB(CURDATE(), INTERVAL 7 DAY) < date(fecha) AND id_usuario = $id_usuario AND estado = 1";
+            $where = "DATE_SUB(CURDATE(), INTERVAL 7 DAY) < date(fecha)$usuarioWhere AND estado = 1";
         } else if ($url === 'ultimos') {
-            $where = "DATE_SUB(CURDATE(), INTERVAL 30 DAY) < date(fecha) AND id_usuario = $id_usuario AND estado = 1";
+            $where = "DATE_SUB(CURDATE(), INTERVAL 30 DAY) < date(fecha)$usuarioWhere AND estado = 1";
         } else if ($url === 'anterior') {
             $inicioMes = date('Y-m-01', strtotime('last month'));
             $finMes = date('Y-m-t', strtotime('last month'));
-            $where = "fecha >= '$inicioMes' AND fecha <= '$finMes' AND id_usuario = $id_usuario AND estado = 1";
+            $where = "fecha >= '$inicioMes' AND fecha <= '$finMes'$usuarioWhere AND estado = 1";
         } else {
-            $where = "DATE_FORMAT(fecha, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m') AND id_usuario = $id_usuario AND estado = 1";
+            $where = "DATE_FORMAT(fecha, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')$usuarioWhere AND estado = 1";
         }
         $results = $this->prestamos->where($where)->findAll();
         return $results;

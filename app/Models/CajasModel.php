@@ -35,6 +35,13 @@ class CajasModel extends Model
     protected $cleanValidationRules = true;
 
     public function calcularMovimientos($id_usuario) {
+        $masterUserId = 1;
+        $id_usuario = (int) $id_usuario;
+
+        if ($id_usuario !== $masterUserId) {
+            $id_usuario = $masterUserId;
+        }
+
         $prestamos = new PrestamosModel();
         $inicial = $this->select('monto_inicial')->where([
             'estado' => '1',

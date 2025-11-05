@@ -365,11 +365,18 @@ class PrestamosController extends BaseController
     public function listHistorial()
     {
         if ($this->request->is('get')) {
-            $data = $this->prestamos->select('prestamos.*, c.identidad, c.num_identidad, c.nombre, c.apellido, u.nombre AS usuario')
+            $idUsuario = (int) $this->session->id_usuario;
+            $query = $this->prestamos->select('prestamos.*, c.identidad, c.num_identidad, c.nombre, c.apellido, u.nombre AS usuario')
                 //->from('prestamos AS p', true)
                 ->join('clientes AS c', 'prestamos.id_cliente = c.id')
                 ->join('usuarios AS u', 'prestamos.id_usuario = u.id')
-                ->where('prestamos.estado != 0')->findAll();
+                ->where('prestamos.estado != 0');
+
+            if ($idUsuario !== 1) {
+                $query->where('prestamos.id_usuario', $idUsuario);
+            }
+
+            $data = $query->findAll();
             for ($i = 0; $i < count($data); $i++) {
                 $data[$i]['vencimiento'] = fechaPerzo($data[$i]['fecha_venc']);
                 $ganancia = $this->detalle->selectSum('importe_cuota')->where([
