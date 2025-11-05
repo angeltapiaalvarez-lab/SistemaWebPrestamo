@@ -88,8 +88,11 @@ class AdminController extends BaseController
     {
         $desde = $anio . '-01-01 00:00:00';
         $hasta = $anio . '-12-31 23:59:59';
-        $id_usuario = $this->session->id_usuario;
-        $where = "fecha BETWEEN '$desde' AND '$hasta' AND estado = 1 AND id_usuario = $id_usuario";
+        $id_usuario = (int) $this->session->id_usuario;
+        $where = "fecha BETWEEN '$desde' AND '$hasta' AND estado = 1";
+        if ($id_usuario !== 1) {
+            $where .= " AND id_usuario = $id_usuario";
+        }
         $data['total'] = $this->prestamos->select("
         SUM(IF(MONTH(fecha) = 1, importe, 0)) AS ene,
         SUM(IF(MONTH(fecha) = 2, importe, 0)) AS feb,
