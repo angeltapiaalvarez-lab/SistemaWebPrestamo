@@ -223,11 +223,12 @@ class PrestamosController extends BaseController
 
         $totalPrestamo = isset($data['prestamo']['importe']) ? (float) $data['prestamo']['importe'] : 0.0;
         $totalAPagar = $totalPrestamo + $totalInteresProgramado;
-        $saldoPendientePrestamo = max(0, $totalPrestamo - $pagado);
+        $totalRestante = max(0, $totalCuotasProgramado - $pagado);
+        $saldoPendientePrestamo = $totalRestante;
 
         $data['total_programado'] = $totalCuotasProgramado;
         $data['total_pagado'] = $pagado;
-        $data['total_restante'] = max(0, $totalCuotasProgramado - $pagado);
+        $data['total_restante'] = $totalRestante;
         $data['total_prestamo'] = $totalPrestamo;
         $data['total_a_pagar'] = $totalAPagar;
         $data['saldo_pendiente_prestamo'] = $saldoPendientePrestamo;
