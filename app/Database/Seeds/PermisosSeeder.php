@@ -8,63 +8,43 @@ class PermisosSeeder extends Seeder
 {
     public function run()
     {
-        $data[0] = [
-            'modulo'    => 'usuarios',
-            'campos'    => json_encode(['listar usuarios', 'nuevo usuario', 'editar usuario', 'eliminar usuario']),
-            'created_at'    => date('Y-m-d H:i:s'),
-            'updated_at'    => date('Y-m-d H:i:s'),
+        // -------------------------------------------------------------
+        // REGISTRO DINAMICO DE MÓDULOS DEL SISTEMA
+        // Para agregar un módulo nuevo, simplemente añade su nombre como llave
+        // y un arreglo [ ] con todos sus permisos textuales.
+        // -------------------------------------------------------------
+        $permisos = [
+            'usuarios'      => ['listar usuarios', 'nuevo usuario', 'editar usuario', 'eliminar usuario'],
+            'configuracion' => ['actualizar empresa', 'backup'],
+            'roles'         => ['listar roles', 'nuevo rol', 'editar rol', 'eliminar rol'],
+            'clientes'      => ['listar clientes', 'nuevo cliente', 'editar cliente', 'eliminar cliente'],
+            'prestamos'     => ['nuevo prestamo', 'historial prestamos', 'ver prestamo', 'eliminar prestamo', 'abono prestamo'],
+            'cajas'         => ['ver saldo'],
+            'reportes'      => ['pdf prestamos', 'excel prestamos', 'historial pagos', 'historial transacciones', 'historial prestamos'],
+            'pagos'         => ['historial pagos'],
+            'transacciones' => ['historial transacciones'],
         ];
-        $data[1] = [
-            'modulo'    => 'configuracion',
-            'campos'    => json_encode(['actualizar empresa', 'backup']),
-            'created_at'    => date('Y-m-d H:i:s'),
-            'updated_at'    => date('Y-m-d H:i:s'),
-        ];
-        $data[2] = [
-            'modulo'    => 'roles',
-            'campos'    => json_encode(['listar roles', 'nuevo rol', 'editar rol', 'eliminar rol']),
-            'created_at'    => date('Y-m-d H:i:s'),
-            'updated_at'    => date('Y-m-d H:i:s'),
-        ];
-        $data[3] = [
-            'modulo'    => 'clientes',
-            'campos'    => json_encode(['listar clientes', 'nuevo cliente', 'editar cliente', 'eliminar cliente']),
-            'created_at'    => date('Y-m-d H:i:s'),
-            'updated_at'    => date('Y-m-d H:i:s'),
-        ];
-        $data[4] = [
-            'modulo'    => 'prestamos',
-            'campos'    => json_encode(['nuevo prestamo', 'historial prestamos', 'ver prestamo', 'eliminar prestamo', 'abono prestamo']),
-            'created_at'    => date('Y-m-d H:i:s'),
-            'updated_at'    => date('Y-m-d H:i:s'),
-        ];
-        $data[5] = [
-            'modulo'    => 'cajas',
-            'campos'    => json_encode(['ver saldo']),
-            'created_at'    => date('Y-m-d H:i:s'),
-            'updated_at'    => date('Y-m-d H:i:s'),
-        ];
-        $data[6] = [
-            'modulo'    => 'reportes',
-            'campos'    => json_encode(['pdf prestamos', 'excel prestamos', 'historial pagos', 'historial transacciones', 'historial prestamos']),
-            'created_at'    => date('Y-m-d H:i:s'),
-            'updated_at'    => date('Y-m-d H:i:s'),
-        ];
-        $data[7] = [
-            'modulo'    => 'pagos',
-            'campos'    => json_encode(['historial pagos']),
-            'created_at'    => date('Y-m-d H:i:s'),
-            'updated_at'    => date('Y-m-d H:i:s'),
-        ];
-        $data[8] = [
-            'modulo'    => 'transacciones',
-            'campos'    => json_encode(['historial transacciones']),
-            'created_at'    => date('Y-m-d H:i:s'),
-            'updated_at'    => date('Y-m-d H:i:s'),
-        ];
-        for ($i=0; $i < count($data); $i++) { 
-            $this->db->table('permisos')->insert($data[$i]);
+
+        foreach ($permisos as $modulo => $campos) {
+            // Verificar si el módulo específico ya existe en DB para no duplicarlo,
+            // modelo Idempotente.
+            $existe = $this->db->table('permisos')->where('modulo', $modulo)->countAllResults();
+            
+            if ($existe == 0) {
+                // Inserción Pura
+                $this->db->table('permisos')->insert([
+                    'modulo'     => $modulo,
+                    'campos'     => json_encode($campos),
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+            } else {
+                // Actualizar silenciosamente para reflejar campos recién añadidos al código 
+                $this->db->table('permisos')->where('modulo', $modulo)->update([
+                    'campos'     => json_encode($campos),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            }
         }
-        
     }
 }

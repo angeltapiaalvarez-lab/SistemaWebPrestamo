@@ -1,5 +1,5 @@
 TENER ACTIVADO LAS EXTENSION NECESARIAS PARA CODEIGNITER 4.
-El proceso se hace en el video de materiales necesarias.
+
 
 Abrir CMD o TERMINAL. con la ruta del proyecto ejemplo:
 C:\xampp\htdocs\prestamos
