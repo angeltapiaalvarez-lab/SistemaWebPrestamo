@@ -94,7 +94,8 @@ class AdminController extends BaseController
         $desde = $anio . '-01-01 00:00:00';
         $hasta = $anio . '-12-31 23:59:59';
         $id_usuario = $this->session->id_usuario;
-        $where = "fecha BETWEEN '$desde' AND '$hasta' AND estado = 1 AND id_usuario = $id_usuario";
+        
+        $wherePrestamos = "fecha BETWEEN '$desde' AND '$hasta' AND estado != 0 AND id_usuario = $id_usuario";
         $data['total'] = $this->prestamos->select("
         SUM(IF(MONTH(fecha) = 1, importe, 0)) AS ene,
         SUM(IF(MONTH(fecha) = 2, importe, 0)) AS feb,
@@ -108,43 +109,51 @@ class AdminController extends BaseController
         SUM(IF(MONTH(fecha) = 10, importe, 0)) AS oct,
         SUM(IF(MONTH(fecha) = 11, importe, 0)) AS nov,
         SUM(IF(MONTH(fecha) = 12, importe, 0)) AS dic")
-            ->where($where)->first();
+            ->where($wherePrestamos)->first();
 
-        $data['ganancia'] = $this->prestamos->select("
-        SUM(IF(MONTH(fecha) = 1, importe * (tasa_interes / 100), 0)) AS ene,
-        SUM(IF(MONTH(fecha) = 2, importe * (tasa_interes / 100), 0)) AS feb,
-        SUM(IF(MONTH(fecha) = 3, importe * (tasa_interes / 100), 0)) AS mar,
-        SUM(IF(MONTH(fecha) = 4, importe * (tasa_interes / 100), 0)) AS abr,
-        SUM(IF(MONTH(fecha) = 5, importe * (tasa_interes / 100), 0)) AS may,
-        SUM(IF(MONTH(fecha) = 6, importe * (tasa_interes / 100), 0)) AS jun,
-        SUM(IF(MONTH(fecha) = 7, importe * (tasa_interes / 100), 0)) AS jul,
-        SUM(IF(MONTH(fecha) = 8, importe * (tasa_interes / 100), 0)) AS ago,
-        SUM(IF(MONTH(fecha) = 9, importe * (tasa_interes / 100), 0)) AS sep,
-        SUM(IF(MONTH(fecha) = 10, importe * (tasa_interes / 100), 0)) AS oct,
-        SUM(IF(MONTH(fecha) = 11, importe * (tasa_interes / 100), 0)) AS nov,
-        SUM(IF(MONTH(fecha) = 12, importe * (tasa_interes / 100), 0)) AS dic")
-            ->where($where)->first();
-        //calcular maximo
+        // Ingresos Reales:
+        $pagosModel = new \App\Models\PagosModel();
+        $wherePagos = "fecha_pago BETWEEN '$desde' AND '$hasta' AND id_usuario = $id_usuario";
+        $data['ganancia'] = $pagosModel->select("
+        SUM(IF(MONTH(fecha_pago) = 1, monto, 0)) AS ene,
+        SUM(IF(MONTH(fecha_pago) = 2, monto, 0)) AS feb,
+        SUM(IF(MONTH(fecha_pago) = 3, monto, 0)) AS mar,
+        SUM(IF(MONTH(fecha_pago) = 4, monto, 0)) AS abr,
+        SUM(IF(MONTH(fecha_pago) = 5, monto, 0)) AS may,
+        SUM(IF(MONTH(fecha_pago) = 6, monto, 0)) AS jun,
+        SUM(IF(MONTH(fecha_pago) = 7, monto, 0)) AS jul,
+        SUM(IF(MONTH(fecha_pago) = 8, monto, 0)) AS ago,
+        SUM(IF(MONTH(fecha_pago) = 9, monto, 0)) AS sep,
+        SUM(IF(MONTH(fecha_pago) = 10, monto, 0)) AS oct,
+        SUM(IF(MONTH(fecha_pago) = 11, monto, 0)) AS nov,
+        SUM(IF(MONTH(fecha_pago) = 12, monto, 0)) AS dic")
+            ->where($wherePagos)->first();
+
         $totales = [
-            $data['total']['ene'], $data['total']['feb'],
-            $data['total']['mar'], $data['total']['abr'],
-            $data['total']['may'], $data['total']['jun'],
-            $data['total']['jul'], $data['total']['ago'],
-            $data['total']['sep'], $data['total']['oct'],
-            $data['total']['nov'], $data['total']['dic'],
+            $data['total']['ene'] ?? 0, $data['total']['feb'] ?? 0,
+            $data['total']['mar'] ?? 0, $data['total']['abr'] ?? 0,
+            $data['total']['may'] ?? 0, $data['total']['jun'] ?? 0,
+            $data['total']['jul'] ?? 0, $data['total']['ago'] ?? 0,
+            $data['total']['sep'] ?? 0, $data['total']['oct'] ?? 0,
+            $data['total']['nov'] ?? 0, $data['total']['dic'] ?? 0,
         ];
         $ganancias = [
-            $data['ganancia']['ene'], $data['ganancia']['feb'],
-            $data['ganancia']['mar'], $data['ganancia']['abr'],
-            $data['ganancia']['may'], $data['ganancia']['jun'],
-            $data['ganancia']['jul'], $data['ganancia']['ago'],
-            $data['ganancia']['sep'], $data['ganancia']['oct'],
-            $data['ganancia']['nov'], $data['ganancia']['dic'],
+            $data['ganancia']['ene'] ?? 0, $data['ganancia']['feb'] ?? 0,
+            $data['ganancia']['mar'] ?? 0, $data['ganancia']['abr'] ?? 0,
+            $data['ganancia']['may'] ?? 0, $data['ganancia']['jun'] ?? 0,
+            $data['ganancia']['jul'] ?? 0, $data['ganancia']['ago'] ?? 0,
+            $data['ganancia']['sep'] ?? 0, $data['ganancia']['oct'] ?? 0,
+            $data['ganancia']['nov'] ?? 0, $data['ganancia']['dic'] ?? 0,
         ];
+        
+        $data['totales_year'] = array_sum($totales);
+        $data['ingresos_year'] = array_sum($ganancias);
+        
         $maxImporte = max(max($totales), max($ganancias));
-        $data['max'] = ['importe' => $maxImporte];
+        $data['max'] = ['importe' => ($maxImporte * 1.1) + 100];
+        
         echo json_encode($data);
-        die();
+        exit;
     }
 
     public function createBackup()

@@ -40,5 +40,5 @@ Gestion roles
 <?= $this->endSection('content'); ?>
 
 <?= $this->section('js'); ?>
-<script src="<?php echo base_url('assets/js/pages/roles.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/pages/roles.js?v=' . time()); ?>"></script>
 <?= $this->endSection('js'); ?>

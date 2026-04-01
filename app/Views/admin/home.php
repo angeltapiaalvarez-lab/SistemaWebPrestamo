@@ -121,9 +121,9 @@ Datos de la empresa
         <div class="row">
             <div class="col-12 col-sm-12 col-lg-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">Flujo Financiero Anual</h4>
                         <div class="d-flex">
-                            <h4>Reporte</h4>
                             <select class="form-select" id="year">
                                 <?php $anio = date('Y');
                                 for ($i = 2020; $i <= $anio; $i++) { ?>
@@ -135,6 +135,20 @@ Datos de la empresa
                         </div>
                     </div>
                     <div class="card-body">
+                        <div class="row mb-4 text-center">
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <div class="px-3 py-2 rounded bg-light border border-info shadow-sm">
+                                    <h6 class="text-info font-weight-bold mb-1"><i class="fas fa-hand-holding-usd me-1"></i> Capital Colocado (Préstamos)</h6>
+                                    <h3 class="mb-0 text-dark" id="kpi-prestamos">C$ 0.00</h3>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="px-3 py-2 rounded bg-light border border-success shadow-sm">
+                                    <h6 class="text-success font-weight-bold mb-1"><i class="fas fa-cash-register me-1"></i> Capital Recuperado (Abonos)</h6>
+                                    <h3 class="mb-0 text-dark" id="kpi-ingresos">C$ 0.00</h3>
+                                </div>
+                            </div>
+                        </div>
                         <div id="prestamos" class="chartsh"></div>
                     </div>
                 </div>
@@ -146,5 +160,5 @@ Datos de la empresa
 
 <?= $this->section('js'); ?>
 <script src="<?php echo base_url('assets/bundles/apexcharts/apexcharts.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/js/pages/home.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/pages/home.js?v=' . time()); ?>"></script>
 <?= $this->endSection('js'); ?>

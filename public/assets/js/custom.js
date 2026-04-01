@@ -6,27 +6,29 @@ const dom =
   "<'row'<'col-sm-5'i><'col-sm-7'p>>";
 const buttons = [
   {
-    //Botón para Excel
     extend: "excelHtml5",
     footer: true,
-    //Aquí es donde generas el botón personalizado
-    text: '<span class="badge bg-success"><i class="fas fa-file-excel"></i></span>',
+    text: '<span class="btn btn-success btn-sm text-white fw-bold px-3 py-1" style="background-color: #198754; border-color: #198754;"><i class="fas fa-file-excel mx-1"></i> Excel</span>',
+    className: "border-0 p-0 shadow-none bg-transparent",
   },
-  //Botón para print
+  {
+    extend: "pdfHtml5",
+    footer: true,
+    text: '<span class="btn btn-danger btn-sm text-white fw-bold px-3 py-1" style="background-color: #dc3545; border-color: #dc3545;"><i class="fas fa-file-pdf mx-1"></i> PDF</span>',
+    className: "border-0 p-0 shadow-none bg-transparent",
+    orientation: "landscape",
+    exportOptions: { columns: ":visible" }
+  },
   {
     extend: "print",
     footer: true,
-    text: '<span class="badge bg-dark"><i class="fas fa-print"></i></span>',
-  },
-  //Botón para cvs
-  {
-    extend: "csvHtml5",
-    footer: true,
-    text: '<span class="badge bg-success"><i class="fas fa-file-csv"></i></span>',
+    text: '<span class="btn btn-dark btn-sm text-white fw-bold px-3 py-1" style="background-color: #212529; border-color: #212529;"><i class="fas fa-print mx-1"></i> Imprimir</span>',
+    className: "border-0 p-0 shadow-none bg-transparent",
   },
   {
     extend: "colvis",
-    text: '<span class="badge bg-info"><i class="fas fa-columns"></i></span>',
+    text: '<span class="btn btn-info btn-sm text-dark fw-bold px-3 py-1" style="background-color: #0dcaf0; border-color: #0dcaf0;"><i class="fas fa-columns mx-1"></i> Columnas</span>',
+    className: "border-0 p-0 shadow-none bg-transparent",
     postfixButtons: ["colvisRestore"],
   },
 ];

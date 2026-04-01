@@ -44,5 +44,5 @@ Gestion usuarios
 <?= $this->endSection('content'); ?>
 
 <?= $this->section('js'); ?>
-<script src="<?php echo base_url('assets/js/pages/usuarios.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/pages/usuarios.js?v=' . time()); ?>"></script>
 <?= $this->endSection('js'); ?>
