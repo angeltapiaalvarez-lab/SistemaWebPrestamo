@@ -40,7 +40,7 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
 
     $routes->get('/admin', 'AdminController::index');
     $routes->get('/dashboard', 'AdminController::dashboard');
-    $routes->get('/manual', 'ManualController::index');
+    $routes->get('/ayuda', 'ManualController::index');
     $routes->get('/backup', 'AdminController::createBackup');
     $routes->get('/prestamosMes/(:num)', 'AdminController::prestamosMes/$1');
     $routes->put('/admin/(:num)', 'AdminController::update/$1');
@@ -67,7 +67,9 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
 
     $routes->get('/prestamos', 'PrestamosController::index');
     $routes->get('/prestamos/historial', 'PrestamosController::historial');
+    $routes->get('/prestamos/historial/(:any)', 'PrestamosController::historial/$1');
     $routes->get('/prestamos/listHistorial', 'PrestamosController::listHistorial');
+    $routes->get('/prestamos/listHistorial/(:any)', 'PrestamosController::listHistorial/$1');
     $routes->get('/prestamos/buscarCliente', 'PrestamosController::buscarCliente');
     $routes->get('/prestamos/(:num)/detail', 'PrestamosController::detail/$1');
     $routes->get('/prestamos/(:num)/reporte', 'PrestamosController::reporte/$1');
@@ -93,6 +95,11 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->get('/reportes/historial', 'ReportesController::historial');
     $routes->get('/reportesPdf', 'ReportesController::reportesPdf');
     $routes->get('/reportesExcel', 'ReportesController::reportesExcel');
+
+    // Reportes de Pagos
+    $routes->get('/reportes/pagos', 'ReportesController::pagos');
+    $routes->get('/reportesPdfPagos', 'ReportesController::reportesPdfPagos');
+    $routes->get('/reportesExcelPagos', 'ReportesController::reportesExcelPagos');
 
     $routes->get('/roles/list', 'RolesController::listar');
     $routes->resource('roles', ['controller' => 'RolesController']);

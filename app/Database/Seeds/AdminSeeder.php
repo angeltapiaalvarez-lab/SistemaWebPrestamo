@@ -10,7 +10,7 @@ class AdminSeeder extends Seeder
     {
         $data = [
             'identidad' => '401-091299-1011H',
-            'nombre'    => 'SisPrey',
+            'nombre'    => 'CrediAdmin',
             'telefono'    => '900897537',
             'correo'    => 'angel.tapia78910@gmail.com',
             'direccion'    => 'Nicaragua, Masaya',

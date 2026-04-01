@@ -1,14 +1,15 @@
 <?= $this->extend('layouts/main'); ?>
 <?= $this->section('title'); ?>
-Historial prestamos
+<?= $titulo_pagina ?? 'Historial préstamos' ?>
 <?= $this->endSection('title'); ?>
 
 <?= $this->section('content'); ?>
 <div class="card">
     <div class="card-header">
-        <h4>Historial prestamos</h4>
+        <h4><?= $titulo_pagina ?? 'Historial préstamos' ?></h4>
     </div>
     <div class="card-body">
+        <input type="hidden" id="tipo_historial" value="<?= $tipo ?? 'activos'; ?>">
         <input type="hidden" id="fecha_actual" value="<?php echo date('Y-m-d'); ?>">
         <?php if (!empty(session()->getFlashdata('respuesta'))) { ?>
             <div class="alert alert-<?php echo session()->getFlashdata('respuesta')['type']; ?>">

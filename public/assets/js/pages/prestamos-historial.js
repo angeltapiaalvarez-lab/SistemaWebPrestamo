@@ -1,9 +1,11 @@
 let tblPrestamos;
 const fecha_actual = document.querySelector("#fecha_actual");
 document.addEventListener("DOMContentLoaded", function () {
+  const tipo_historial = document.querySelector("#tipo_historial") ? document.querySelector("#tipo_historial").value : 'activos';
+  
   tblPrestamos = $("#tblPrestamos").DataTable({
     ajax: {
-      url: base_url + "prestamos/listHistorial",
+      url: base_url + "prestamos/listHistorial/" + tipo_historial,
       dataSrc: "",
     },
     columns: [
@@ -11,20 +13,23 @@ document.addEventListener("DOMContentLoaded", function () {
         data: null,
         render: function (data, type) {
           if (type === "display") {
-            return `<a class="btn btn-primary" href="${
+            let actions = `<a class="btn btn-primary" href="${
               base_url + "prestamos/" + data.id + "/detail"
-            }"><i class="fas fa-eye"></i></a>
-                        <form action="${
-                          base_url + "prestamos/" + data.id
-                        }" method="post" class="d-inline eliminar">
-                            <input type="hidden" name="${csrf_token.getAttribute(
-                              "content"
-                            )}" value="${csrf_hash.getAttribute(
-              "content"
-            )}" />    
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                        </form>`;
+            }"><i class="fas fa-eye"></i></a>`;
+            if (data.estado != 0) {
+                actions += ` <form action="${
+                              base_url + "prestamos/" + data.id
+                            }" method="post" class="d-inline eliminar">
+                                <input type="hidden" name="${csrf_token.getAttribute(
+                                  "content"
+                                )}" value="${csrf_hash.getAttribute(
+                  "content"
+                )}" />    
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </form>`;
+            }
+            return actions;
           }
           return data;
         },
@@ -75,12 +80,14 @@ document.addEventListener("DOMContentLoaded", function () {
         render: function (data, type) {
           if (type === "display") {
             if(data.estado == 1){
-              return `<span class="badge bg-success">Activo</span>`;
-            }else{
+              return `<span class="badge bg-primary">Activo</span>`;
+            }else if(data.estado == 2) {
               return `<span class="badge bg-success">
               <i class="fas fa-check-circle"></i> Completado</span>`;
+            } else {
+              return `<span class="badge bg-danger">
+              <i class="fas fa-ban"></i> Anulado</span>`;
             }
-            
           }
           return data;
         },

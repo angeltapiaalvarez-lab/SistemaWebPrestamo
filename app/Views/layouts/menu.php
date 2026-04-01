@@ -30,8 +30,7 @@
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
             <a href="<?php echo base_url('dashboard'); ?>">
-                <img alt="image" src="<?= base_url('assets/img/logo.png'); ?>" class="header-logo" />
-                <span class="logo-name">SisPrey</span>
+                <img alt="Sistema Préstamo" src="<?= base_url('assets/img/logo.svg'); ?>" class="header-logo" style="width: 200px; max-width: 100%; height: auto; margin-top: 15px;" />
             </a>
         </div>
         <ul class="sidebar-menu">
@@ -80,16 +79,19 @@
                 verificar('nuevo prestamo', $_SESSION['permisos'])
                 || verificar('historial prestamos', $_SESSION['permisos'])
             ) { ?>
-                <li class="dropdown <?php echo ($active == 'prestamo') ? 'active' : ''; ?>">
+                <li class="dropdown <?php echo (strpos($active, 'prestamo') !== false) ? 'active' : ''; ?>">
                     <a href="#" class="menu-toggle nav-link has-dropdown">
                         <i class="fa-regular fa-credit-card mx-1"></i>
                         <span>Préstamos</span></a>
                     <ul class="dropdown-menu">
                         <?php if (verificar('nuevo prestamo', $_SESSION['permisos'])) { ?>
-                            <li><a class="nav-link" href="<?php echo base_url('prestamos'); ?>">Nuevo</a></li>
+                            <li><a class="nav-link" href="<?php echo base_url('prestamos'); ?>">Nuevo Préstamo</a></li>
                         <?php }
                         if (verificar('historial prestamos', $_SESSION['permisos'])) { ?>
-                            <li><a class="nav-link" href="<?php echo base_url('prestamos/historial'); ?>">Historial</a></li>
+                            <li><a class="nav-link <?php echo (isset($active) && $active == 'prestamo_activos') ? 'text-success' : ''; ?>" href="<?php echo base_url('prestamos/historial/activos'); ?>">Activos</a></li>
+                            <li><a class="nav-link <?php echo (isset($active) && $active == 'prestamo_vencidos') ? 'text-danger' : ''; ?>" href="<?php echo base_url('prestamos/historial/vencidos'); ?>">Vencidos</a></li>
+                            <li><a class="nav-link <?php echo (isset($active) && $active == 'prestamo_cancelados') ? 'text-success' : ''; ?>" href="<?php echo base_url('prestamos/historial/cancelados'); ?>">Cancelados</a></li>
+                            <li><a class="nav-link <?php echo (isset($active) && $active == 'prestamo_anulados') ? 'text-danger' : ''; ?>" href="<?php echo base_url('prestamos/historial/anulados'); ?>">Anulados</a></li>
                         <?php } ?>
                     </ul>
                 </li>
@@ -107,24 +109,24 @@
                 verificar('historial prestamos', $_SESSION['permisos'])
             ) { ?>
                 <li class="dropdown <?php echo (
-                                            $active == 'pago' ||
                                             $active == 'transaccion' ||
-                                            $active == 'reportesHistorial'
+                                            $active == 'reportesHistorial' ||
+                                            $active == 'reportesPagos'
                                         ) ? 'active' : ''; ?>">
                     <a href="#" class="menu-toggle nav-link has-dropdown">
                         <i class="fa-solid fa-chart-line mx-1"></i>
                         <span>Reportes</span></a>
                     <ul class="dropdown-menu">
-                        <?php if (verificar('historial pagos', $_SESSION['permisos'])) { ?>
-                            <li><a class="nav-link <?php echo ($active == 'pago') ? 'text-success' : ''; ?>" href="<?php echo base_url('pagos'); ?>">Historial de pagos</a></li>
-                        <?php }
-                        if (verificar('historial transacciones', $_SESSION['permisos'])) { ?>
+                        <?php if (verificar('historial transacciones', $_SESSION['permisos'])) { ?>
                             <li><a class="nav-link <?php echo ($active == 'transaccion') ? 'text-success' : ''; ?>" href="<?php echo base_url('transacciones'); ?>">Historial de transacciones</a></li>
                         <?php }
                         if (
                             verificar('historial prestamos', $_SESSION['permisos'])
                         ) { ?>
                             <li><a class="nav-link <?php echo ($active == 'reportesHistorial') ? 'text-success' : ''; ?>" href="<?php echo base_url('reportes/historial'); ?>">Historial Préstamos</a></li>
+                        <?php } ?>
+                        <?php if (verificar('historial pagos', $_SESSION['permisos'])) { ?>
+                            <li><a class="nav-link <?php echo ($active == 'reportesPagos') ? 'text-success' : ''; ?>" href="<?php echo base_url('reportes/pagos'); ?>">Historial de pagos</a></li>
                         <?php } ?>
                     </ul>
                 </li>

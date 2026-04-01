@@ -12,7 +12,7 @@ En la misma ruta del proyecto ejecuta las migraciones y seeders.
 	php spark migrate
 	php spark db:seed Main
 
-Accede en el navegador a http://localhost/sisprey/public/
+Accede en el navegador a http://localhost/crediadmin/public/
 
 Correo: angel.tapia78910@gmail.com
 Clave: hola123

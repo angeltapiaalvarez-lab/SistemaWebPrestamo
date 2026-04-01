@@ -3,15 +3,14 @@
 Gestion clientes
 <?= $this->endSection('title'); ?>
 
-<?= $this->section('content');
-
-if (verificar('nuevo cliente', $_SESSION['permisos'])) { ?>
-    <a href="<?php echo base_url('clientes/new'); ?>" class="btn btn-primary mb-2">Nuevo</a>
-<?php } ?>
+<?= $this->section('content'); ?>
 
 <div class="card">
-    <div class="card-header">
+    <div class="card-header d-flex justify-content-between align-items-center">
         <h4>Gestion clientes</h4>
+        <?php if (verificar('nuevo cliente', $_SESSION['permisos'])) { ?>
+            <a href="<?php echo base_url('clientes/new'); ?>" class="btn btn-success"><i class="fas fa-plus"></i> Agregar nuevo cliente</a>
+        <?php } ?>
     </div>
     <div class="card-body">
         <?php if (!empty(session()->getFlashdata('respuesta'))) { ?>

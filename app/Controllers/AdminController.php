@@ -218,9 +218,12 @@ class AdminController extends BaseController
                             ]);
                         }
                     } else {
+                        $mensajeError = (!class_exists('ZipArchive')) 
+                            ? 'ERROR: EXtensión ZIP de PHP no habilitada en tu servidor XAMPP.' 
+                            : 'ERROR AL CREAR ZIP';
                         return redirect()->to(base_url('dashboard'))->with('respuesta', [
                             'type' => 'danger',
-                            'msg' => 'ERROR AL CREAR ZIP'
+                            'msg' => $mensajeError
                         ]);
                     }
                 } else {
@@ -242,6 +245,9 @@ class AdminController extends BaseController
 
     public function crearZip($ruta, $zipFilename)
     {
+        if (!class_exists('ZipArchive')) {
+            return false;
+        }
         $zip = new ZipArchive();
 
         // Abre el archivo ZIP en modo de creación

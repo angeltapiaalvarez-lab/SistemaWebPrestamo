@@ -489,23 +489,45 @@ class PrestamosController extends BaseController
         }
     }
 
-    public function historial()
+    public function historial($tipo = 'activos')
     {
         if (!verificar('historial prestamos', $this->session->permisos)) {
             return view('permisos');
         }
-        $data['active'] = 'prestamo';
+        $data['active'] = 'prestamo_' . $tipo;
+        $data['tipo'] = $tipo;
+
+        $titulos = [
+            'activos' => 'Préstamos Activos',
+            'vencidos' => 'Préstamos Vencidos (Mora)',
+            'cancelados' => 'Préstamos Cancelados',
+            'anulados' => 'Préstamos Anulados'
+        ];
+        $data['titulo_pagina'] = $titulos[$tipo] ?? 'Historial de Préstamos';
+
         return view('prestamos/historial', $data);
     }
 
-    public function listHistorial()
+    public function listHistorial($tipo = 'activos')
     {
         if ($this->request->is('get')) {
-            $data = $this->prestamos->select('prestamos.*, c.identidad, c.num_identidad, c.nombre, c.apellido, u.nombre AS usuario')
+            $builder = $this->prestamos->select('prestamos.*, c.identidad, c.num_identidad, c.nombre, c.apellido, u.nombre AS usuario')
                 //->from('prestamos AS p', true)
                 ->join('clientes AS c', 'prestamos.id_cliente = c.id')
-                ->join('usuarios AS u', 'prestamos.id_usuario = u.id')
-                ->where('prestamos.estado != 0')->findAll();
+                ->join('usuarios AS u', 'prestamos.id_usuario = u.id');
+
+            if ($tipo === 'activos') {
+                $builder->where('prestamos.estado', 1);
+            } elseif ($tipo === 'vencidos') {
+                $fechaAnterior = date('Y-m-d', strtotime('-1 days'));
+                $builder->where('prestamos.estado', 1)->where('prestamos.fecha_venc <=', $fechaAnterior);
+            } elseif ($tipo === 'cancelados') {
+                $builder->where('prestamos.estado', 2);
+            } elseif ($tipo === 'anulados') {
+                $builder->where('prestamos.estado', 0);
+            }
+
+            $data = $builder->findAll();
             foreach ($data as $index => $row) {
                 $data[$index]['vencimiento'] = fechaPerzo($row['fecha_venc']);
                 $ganancia = $this->detalle->selectSum('importe_cuota')->where([

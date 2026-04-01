@@ -13,7 +13,7 @@
       $manualFullPath = FCPATH . $manualRelativePath;
       $manualExists = is_file($manualFullPath);
       $manualPdfUrl = $manualExists ? base_url($manualRelativePath) : null;
-      $manualButtonHref = base_url('manual');
+      $manualButtonHref = base_url('ayuda');
       $manualButtonAttributes = '';
 
       if ($manualExists && $manualPdfUrl) {
@@ -31,7 +31,7 @@
 
         <?= $this->include('layouts/paint.php'); ?>
       </div>
-      <?php if ($currentUri->getSegment(1) !== 'manual') : ?>
+      <?php if ($currentUri->getSegment(1) !== 'ayuda') : ?>
         <a
           href="<?= esc($manualButtonHref); ?>"
           class="btn btn-primary rounded-circle manual-help-btn"

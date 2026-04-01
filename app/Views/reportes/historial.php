@@ -15,16 +15,27 @@ Historial de préstamos
             </div>
         <?php } ?>
         <form class="row g-3" method="get" action="<?= base_url('reportes/historial'); ?>">
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <label class="form-label">Cliente (Opcional)</label>
+                <select name="id_cliente" class="form-control">
+                    <option value="">Todos</option>
+                    <?php if(isset($clientes)) { foreach ($clientes as $c) { ?>
+                        <option value="<?= $c['id']; ?>" <?= (isset($id_cliente) && $id_cliente == $c['id']) ? 'selected' : ''; ?>>
+                            <?= $c['nombre'] . ' ' . $c['apellido']; ?>
+                        </option>
+                    <?php } } ?>
+                </select>
+            </div>
+            <div class="col-md-3">
                 <label class="form-label">Fecha inicio</label>
                 <input type="date" name="fecha_inicio" class="form-control" value="<?= $fecha_inicio; ?>" required>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label class="form-label">Fecha fin</label>
                 <input type="date" name="fecha_fin" class="form-control" value="<?= $fecha_fin; ?>" required>
             </div>
-            <div class="col-md-4 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary">Generar</button>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Generar</button>
             </div>
         </form>
         <?php if ($mensaje != '') { ?>

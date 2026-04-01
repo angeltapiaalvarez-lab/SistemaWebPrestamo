@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\AdminModel;
 use App\Models\ClientesModel;
 use App\Models\PrestamosModel;
+use App\Models\PagosModel;
 
 use Dompdf\Dompdf;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -33,12 +34,15 @@ class ReportesController extends BaseController
         }
         $fechaFin = $this->request->getGet('fecha_fin');
         $fechaInicio = $this->request->getGet('fecha_inicio');
+        $id_cliente = $this->request->getGet('id_cliente');
         if (empty($fechaInicio) || empty($fechaFin)) {
             $fechaFin = date('Y-m-d');
             $fechaInicio = date('Y-m-d', strtotime('-30 days'));
         }
         $data['fecha_inicio'] = $fechaInicio;
         $data['fecha_fin'] = $fechaFin;
+        $data['id_cliente'] = $id_cliente;
+        $data['clientes'] = $this->clientes->select('id, nombre, apellido, identidad')->findAll();
         $data['active'] = 'reportesHistorial';
         $data['prestamos'] = [];
         $data['mensaje'] = '';
@@ -46,7 +50,7 @@ class ReportesController extends BaseController
         if ($fechaInicio > $fechaFin) {
             $data['mensaje'] = 'Rango de fechas inválido.';
         } else {
-            $data['prestamos'] = $this->filtroReportes($fechaInicio, $fechaFin);
+            $data['prestamos'] = $this->filtroReportes($fechaInicio, $fechaFin, $id_cliente);
             if (empty($data['prestamos'])) {
                 $data['mensaje'] = 'No hay datos para el rango seleccionado.';
             } else {
@@ -73,13 +77,14 @@ class ReportesController extends BaseController
         }
         $fechaInicio = $this->request->getGet('fecha_inicio');
         $fechaFin = $this->request->getGet('fecha_fin');
+        $id_cliente = $this->request->getGet('id_cliente');
         if ($fechaInicio > $fechaFin) {
             return redirect()->to(base_url('reportes/historial'))->with('respuesta', [
                 'type' => 'warning',
                 'msg' => 'Rango de fechas inválido'
             ]);
         }
-        $data['prestamos'] = $this->filtroReportes($fechaInicio, $fechaFin);
+        $data['prestamos'] = $this->filtroReportes($fechaInicio, $fechaFin, $id_cliente);
         if (empty($data['prestamos'])) {
             return redirect()->to(base_url('reportes/historial'))->with('respuesta', [
                 'type' => 'warning',
@@ -135,13 +140,14 @@ class ReportesController extends BaseController
 
         $fechaInicio = $this->request->getGet('fecha_inicio');
         $fechaFin = $this->request->getGet('fecha_fin');
+        $id_cliente = $this->request->getGet('id_cliente');
         if ($fechaInicio > $fechaFin) {
             return redirect()->to(base_url('reportes/historial'))->with('respuesta', [
                 'type' => 'warning',
                 'msg' => 'Rango de fechas inválido'
             ]);
         }
-        $results = $this->filtroReportes($fechaInicio, $fechaFin);
+        $results = $this->filtroReportes($fechaInicio, $fechaFin, $id_cliente);
         if (empty($results)) {
             return redirect()->to(base_url('reportes/historial'))->with('respuesta', [
                 'type' => 'warning',
@@ -210,12 +216,221 @@ class ReportesController extends BaseController
         $writer->save('php://output');
     }
 
-    public function filtroReportes($fechaInicio = null, $fechaFin = null) {
+    public function filtroReportes($fechaInicio = null, $fechaFin = null, $id_cliente = '') {
         $id_usuario = $this->session->id_usuario;
-        $builder = $this->prestamos->where('id_usuario', $id_usuario)->where('estado', 1);
+        $builder = $this->prestamos->where('id_usuario', $id_usuario);
         if ($fechaInicio && $fechaFin) {
             $builder->where('fecha >=', $fechaInicio)->where('fecha <=', $fechaFin);
         }
+        if (!empty($id_cliente)) {
+            $builder->where('id_cliente', $id_cliente);
+        }
         return $builder->findAll();
+    }
+
+    public function pagos()
+    {
+        if (!verificar('historial pagos', $this->session->permisos)) {
+            return view('permisos');
+        }
+        $fechaFin = $this->request->getGet('fecha_fin');
+        $fechaInicio = $this->request->getGet('fecha_inicio');
+        $id_cliente = $this->request->getGet('id_cliente');
+        
+        if (empty($fechaInicio) || empty($fechaFin)) {
+            $fechaFin = date('Y-m-d');
+            $fechaInicio = date('Y-m-d', strtotime('-30 days'));
+        }
+        $data['fecha_inicio'] = $fechaInicio;
+        $data['fecha_fin'] = $fechaFin;
+        $data['id_cliente'] = $id_cliente;
+        $data['clientes'] = $this->clientes->select('id, nombre, apellido, identidad')->findAll();
+        $data['active'] = 'reportesPagos';
+        $data['pagos'] = [];
+        $data['mensaje'] = '';
+        $data['totales_moneda'] = [];
+
+        if ($fechaInicio > $fechaFin) {
+            $data['mensaje'] = 'Rango de fechas inválido.';
+        } else {
+            $data['pagos'] = $this->filtroReportesPagos($fechaInicio, $fechaFin, $id_cliente);
+            if (empty($data['pagos'])) {
+                $data['mensaje'] = 'No hay datos para el rango seleccionado.';
+            } else {
+                foreach ($data['pagos'] as &$pago) {
+                    $moneda = $pago['moneda'] ?? 'NIO';
+                    $pago['monto_formateado'] = format_currency($pago['monto'], $moneda);
+                    $pago['moneda_label'] = currency_name($moneda) . ' (' . $moneda . ')';
+                    if (!isset($data['totales_moneda'][$moneda])) {
+                        $data['totales_moneda'][$moneda] = 0;
+                    }
+                    $data['totales_moneda'][$moneda] += (float) $pago['monto'];
+                }
+            }
+        }
+        return view('reportes/pagos', $data);
+    }
+
+    public function reportesPdfPagos()
+    {
+        if (!verificar('historial pagos', $this->session->permisos)) {
+            return view('permisos');
+        }
+        $fechaInicio = $this->request->getGet('fecha_inicio');
+        $fechaFin = $this->request->getGet('fecha_fin');
+        $id_cliente = $this->request->getGet('id_cliente');
+
+        if ($fechaInicio > $fechaFin) {
+            return redirect()->to(base_url('reportes/pagos'))->with('respuesta', [
+                'type' => 'warning',
+                'msg' => 'Rango de fechas inválido'
+            ]);
+        }
+        $data['pagos'] = $this->filtroReportesPagos($fechaInicio, $fechaFin, $id_cliente);
+        if (empty($data['pagos'])) {
+            return redirect()->to(base_url('reportes/pagos'))->with('respuesta', [
+                'type' => 'warning',
+                'msg' => 'No hay datos para el rango seleccionado'
+            ]);
+        }
+        
+        $data['titulo'] = 'Historial de pagos';
+        $data['totales_moneda'] = [];
+        
+        foreach ($data['pagos'] as &$pago) {
+            $moneda = $pago['moneda'] ?? 'NIO';
+            $pago['monto_formateado'] = format_currency($pago['monto'], $moneda);
+            $pago['moneda_label'] = currency_name($moneda) . ' (' . $moneda . ')';
+            if (!isset($data['totales_moneda'][$moneda])) {
+                $data['totales_moneda'][$moneda] = 0;
+            }
+            $data['totales_moneda'][$moneda] += (float) $pago['monto'];
+        }
+        
+        $data['empresa'] = $this->empresa->first();
+        $data['usuario'] = $this->session->nombre;
+        $data['generado'] = date('Y-m-d H:i:s');
+        
+        $dompdf = new Dompdf();
+        ob_start();
+        echo view('reportes/pagos_pdf', $data);
+        $html = ob_get_clean();
+
+        $options = $dompdf->getOptions();
+        $options->set('isJavascriptEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $dompdf->setOptions($options);
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'vertical');
+        $this->response->setHeader('Content-Type', 'application/pdf');
+        $dompdf->render();
+
+        $nombre = 'historial_pagos_' . date('Ymd') . '.pdf';
+        $dompdf->stream($nombre, ['Attachment' => false]);
+    }
+
+    public function reportesExcelPagos()
+    {
+        if (!verificar('historial pagos', $this->session->permisos)) {
+            return view('permisos');
+        }
+
+        $fechaInicio = $this->request->getGet('fecha_inicio');
+        $fechaFin = $this->request->getGet('fecha_fin');
+        $id_cliente = $this->request->getGet('id_cliente');
+
+        if ($fechaInicio > $fechaFin) {
+            return redirect()->to(base_url('reportes/pagos'))->with('respuesta', [
+                'type' => 'warning',
+                'msg' => 'Rango de fechas inválido'
+            ]);
+        }
+        $results = $this->filtroReportesPagos($fechaInicio, $fechaFin, $id_cliente);
+        if (empty($results)) {
+            return redirect()->to(base_url('reportes/pagos'))->with('respuesta', [
+                'type' => 'warning',
+                'msg' => 'No hay datos para el rango seleccionado'
+            ]);
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->getProperties()->setCreator('Angel')->setTitle('Historial Pagos');
+        $spreadsheet->setActiveSheetIndex(0);
+
+        $hojaActiva = $spreadsheet->getActiveSheet();
+        $hojaActiva->getStyle('A1:F1')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('FFFF0000');
+
+        $hojaActiva->getColumnDimension('A')->setWidth('15'); // Recibo
+        $hojaActiva->getColumnDimension('B')->setWidth('40'); // Cliente
+        $hojaActiva->getColumnDimension('C')->setWidth('15'); // Prestamo
+        $hojaActiva->getColumnDimension('D')->setWidth('20'); // Monto
+        $hojaActiva->getColumnDimension('E')->setWidth('20'); // Metodo
+        $hojaActiva->getColumnDimension('F')->setWidth('25'); // Fecha
+
+        $hojaActiva->setCellValue('A1', 'RECIBO');
+        $hojaActiva->setCellValue('B1', 'CLIENTE');
+        $hojaActiva->setCellValue('C1', 'PRÉSTAMO M.');
+        $hojaActiva->setCellValue('D1', 'MONTO ABONADO');
+        $hojaActiva->setCellValue('E1', 'MÉTODO DE PAGO');
+        $hojaActiva->setCellValue('F1', 'FECHA DEL PAGO');
+
+        $fila = 2;
+        $totales = [];
+        
+        foreach ($results as $pago) {
+            $hojaActiva->setCellValue('A' . $fila, $pago['id']);
+            $hojaActiva->setCellValue('B' . $fila, $pago['cliente_nombre'] . ' ' . $pago['cliente_apellido']);
+            $hojaActiva->setCellValue('C' . $fila, $pago['prestamo'] . ' (' . $pago['moneda'] . ')');
+            $hojaActiva->setCellValue('D' . $fila, $pago['monto']);
+            $hojaActiva->setCellValue('E' . $fila, $pago['metodo']);
+            $hojaActiva->setCellValue('F' . $fila, date('Y-m-d H:i:s', strtotime($pago['fecha_pago'])));
+            
+            $moneda = $pago['moneda'] ?? 'NIO';
+            if (!isset($totales[$moneda])) {
+                $totales[$moneda] = 0;
+            }
+            $totales[$moneda] += (float) $pago['monto'];
+            $fila++;
+        }
+        
+        foreach ($totales as $codigo => $valor) {
+            $hojaActiva->setCellValue('A' . $fila, 'Total ' . currency_name($codigo) . ' (' . $codigo . ')');
+            $hojaActiva->setCellValue('D' . $fila, $valor);
+            $fila++;
+        }
+        
+        $fila += 1;
+        $hojaActiva->setCellValue('A' . $fila, 'Generado por: ' . $this->session->nombre);
+        $hojaActiva->setCellValue('B' . $fila, 'Fecha: ' . date('Y-m-d H:i:s'));
+
+        header('Content-Type: application/vnd.ms-excel');
+        $nombre = 'historial_pagos_' . date('Ymd') . '.xls';
+        header('Content-Disposition: attachment;filename="' . $nombre . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xls');
+        $writer->save('php://output');
+    }
+
+    public function filtroReportesPagos($fechaInicio = null, $fechaFin = null, $id_cliente = '') {
+        $id_usuario = $this->session->id_usuario;
+        $pagosModel = new \App\Models\PagosModel();
+        
+        $builder = $pagosModel->select('pagos.*, p.id AS prestamo, p.moneda, d.cuota, c.nombre AS cliente_nombre, c.apellido AS cliente_apellido')
+                              ->join('detalle_prestamos AS d', 'pagos.id_detalle_prestamo = d.id')
+                              ->join('prestamos AS p', 'd.id_prestamo = p.id')
+                              ->join('clientes AS c', 'p.id_cliente = c.id')
+                              ->where('pagos.id_usuario', $id_usuario);
+                              
+        if ($fechaInicio && $fechaFin) {
+            $builder->where('DATE(pagos.fecha_pago) >=', $fechaInicio)->where('DATE(pagos.fecha_pago) <=', $fechaFin);
+        }
+        if (!empty($id_cliente)) {
+            $builder->where('p.id_cliente', $id_cliente);
+        }
+        return $builder->orderBy('pagos.fecha_pago', 'DESC')->findAll();
     }
 }
